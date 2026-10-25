@@ -237,6 +237,14 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, script: EpisodeScript,
     return out
 
 
+def flow_project(s: Settings, kural_number: int) -> dict:
+    """The Flow project for this kural's adhikaram (one project per 10 episodes)."""
+    from .kurals import KuralStore
+    adh = KuralStore(s.path("kurals")).get(kural_number)["adhikaram"]
+    url = (s["flow"].get("projects") or {}).get(adh["number"])
+    return {"adhikaram": adh["number"], "name": adh["name_ta"], "url": url}
+
+
 def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, pool: int = 0) -> dict:
     """Write flow/jobs.json + flow/README.md: everything a Flow session must make, and where to save it.
     `pool`: monthly plan credits to add on top of day 1's daily credits (0 = daily credits only)."""
@@ -281,11 +289,18 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
     fdir.mkdir(parents=True, exist_ok=True)
     (fdir / "jobs.json").write_text(json.dumps(sheet, ensure_ascii=False, indent=1), "utf-8")
     n = episode_id.lstrip("K0")
+    project = flow_project(s, script.kural_number)
+    sheet["flow_project"] = project["url"]
+    (fdir / "jobs.json").write_text(json.dumps(sheet, ensure_ascii=False, indent=1), "utf-8")
+    project_line = (f"Use the Flow project for adhikaram {project['adhikaram']} ({project['name']}): {project['url']}"
+                    if project["url"] else
+                    f"**No Flow project yet for adhikaram {project['adhikaram']} ({project['name']}).** Ask the user to "
+                    f"create one in Flow named \"{project['adhikaram']} · {project['name']}\" and send its link, then add "
+                    f"it under `flow.projects` in config.yaml. Do not make anything until it is set.")
     lines = [
         f"# Flow jobs for {episode_id}", "",
-        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo)."
-        + (f" Use this Flow project: {s['flow']['project_url']}" if s["flow"].get("project_url") else "")
-        + " Work in this order:", "",
+        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo). " + project_line,
+        "", "Work in this order:", "",
         "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
         f"3. **Image review.** Run `python studio.py continuity-sheet {n}` and follow the continuity-review skill "

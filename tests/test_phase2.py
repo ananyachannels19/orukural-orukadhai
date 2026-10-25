@@ -263,3 +263,9 @@ def test_gemini_tts_retries_a_hung_request(studio, tmp_path, monkeypatch):
     out = tmp_path / "x.mp3"
     voice._gemini(studio, "Charon", "வணக்கம்", out)
     assert len(calls) == 2 and out.exists()
+
+
+def test_flow_project_per_adhikaram(studio):
+    assert visuals.flow_project(studio, 301)["url"].startswith("https://flow.google.com/project/")
+    other = visuals.flow_project(studio, 151)  # adhikaram 16, no project yet
+    assert other["adhikaram"] == 16 and other["url"] is None

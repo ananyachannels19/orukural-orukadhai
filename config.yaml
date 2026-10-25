@@ -104,8 +104,10 @@ video:
 
 flow:
   # Google AI Plus: 50 credits every day (use them or lose them) plus 200 a month.
-  # Every image and clip is made inside this Flow project.
-  project_url: https://flow.google.com/project/b7755f8b-6f52-4abf-8563-86ab7a09d09d
+  # One Flow project per adhikaram (10 episodes), keyed by adhikaram number.
+  # Add the next link before starting a new adhikaram; the flow sheet reminds you.
+  projects:
+    31: https://flow.google.com/project/b7755f8b-6f52-4abf-8563-86ab7a09d09d   # வெகுளாமை
   daily_credits: 50
   monthly_credits: 200
   # `flow-sheet N --use-monthly` adds this many monthly credits to day 1 so one episode
