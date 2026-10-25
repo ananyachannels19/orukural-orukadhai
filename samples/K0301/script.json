@@ -1,0 +1,288 @@
+{
+ "dry_run": false,
+ "model": "hand-written sample (no API key in this environment)",
+ "cost_usd": 0.0,
+ "cached": false,
+ "kural_id": "K0301",
+ "errors": [],
+ "warnings": [],
+ "script": {
+  "kural_number": 301,
+  "story_title_ta": "குட்டி மேல விழுந்த கோபம்",
+  "story_title_en": "The anger that landed on the puppy",
+  "logline_en": "Scolded by his PT sir in front of the class, Kavin says nothing, then comes home and takes it all out on the street puppy at Thatha's gate, until Thatha asks one quiet question.",
+  "originality_note_en": "A school scolding redirected onto a street puppy at Thatha's gate turns 'anger shown only where it can land' into a moment every child and parent recognises.",
+  "meaning_ta": "கோபம் பலிக்கும் இடத்தில், அதாவது நம்மைவிட பலவீனமானவர்களிடம், அதை அடக்குபவனே உண்மையில் கோபத்தை அடக்குபவன். பலிக்காத இடத்தில் அடக்கினால் என்ன, அடக்காவிட்டால் என்ன?",
+  "meaning_en": "Holding back anger only counts where your anger would actually land, on someone weaker than you. Holding it back where it can't touch anyone proves nothing.",
+  "hooks": [
+   {
+    "style": "question",
+    "on_screen_ta": "உன் கோபம் யார் மேல பாயுது?",
+    "narration_ta": "உங்க கோபம் எப்பவும் யார் மேல பாயுது, கவனிச்சிருக்கீங்களா?"
+   },
+   {
+    "style": "tense_moment",
+    "on_screen_ta": "போ இங்கிருந்து!",
+    "narration_ta": "போ! போ இங்கிருந்து!"
+   },
+   {
+    "style": "surprising_line",
+    "on_screen_ta": "கத்தினது தைரியம் இல்ல",
+    "narration_ta": "கவின் இன்னைக்கு கத்தினான். ஆனா அது தைரியம் இல்ல."
+   }
+  ],
+  "chosen_hook": 1,
+  "segments": [
+   {
+    "beat": "hook",
+    "start_s": 0,
+    "end_s": 3,
+    "speaker": "kavin",
+    "narration_ta": "போ! போ இங்கிருந்து!",
+    "on_screen_ta": "போ இங்கிருந்து!"
+   },
+   {
+    "beat": "story",
+    "start_s": 3,
+    "end_s": 8,
+    "speaker": "narrator",
+    "narration_ta": "ஸ்கூல்ல பி.டி. சார் எல்லார் முன்னாடியும் திட்டினப்போ, கவின் வாயே திறக்கல.",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 8,
+    "end_s": 15,
+    "speaker": "narrator",
+    "narration_ta": "ஆனா வீட்டுக்கு வந்ததும், வாலாட்டி ஓடி வந்த குட்டி மேல அந்தக் கோபம் முழுசும் கொட்டினான்.",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 15,
+    "end_s": 19,
+    "speaker": "thatha",
+    "narration_ta": "என்ன, ஸ்கூல்ல யாராவது திட்டினாங்களா? அவங்க கிட்ட ஏன் கத்தல?",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 19,
+    "end_s": 22,
+    "speaker": "kavin",
+    "narration_ta": "அவர் பி.டி. சார், தாத்தா! அவர் கிட்ட எப்படி?",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 22,
+    "end_s": 25,
+    "speaker": "thatha",
+    "narration_ta": "இந்தக் குட்டி கிட்ட மட்டும் முடிஞ்சுதா?",
+    "on_screen_ta": "இந்தக் குட்டி கிட்ட மட்டும்?"
+   },
+   {
+    "beat": "kural",
+    "start_s": 25,
+    "end_s": 33,
+    "speaker": "thatha",
+    "narration_ta": "வள்ளுவர் என்ன சொல்றார் தெரியுமா? செல்லிடத்துக் காப்பான் சினங்காப்பான், அல்லிடத்துக் காக்கின்என் காவாக்கா லென்?",
+    "on_screen_ta": "செல்லிடத்துக் காப்பான் சினங்காப்பான் அல்லிடத்துக்\nகாக்கின்என் காவாக்கா லென்?"
+   },
+   {
+    "beat": "lesson",
+    "start_s": 33,
+    "end_s": 40,
+    "speaker": "thatha",
+    "narration_ta": "கோபம் பலிக்கிற இடத்துல அடக்குறது தான் வீரம். பதில் பேச முடியாதவங்க மேல காட்டுறது இல்ல.",
+    "on_screen_ta": "பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல"
+   },
+   {
+    "beat": "tease",
+    "start_s": 40,
+    "end_s": 43,
+    "speaker": "narrator",
+    "narration_ta": "பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்!",
+    "on_screen_ta": "குறள் #302 ➜"
+   }
+  ],
+  "shots": [
+   {
+    "n": 1,
+    "beat": "hook",
+    "start_s": 0,
+    "end_s": 3,
+    "characters": [
+     "kavin"
+    ],
+    "location": "Thatha's front gate",
+    "action_en": "A small brown-and-white street puppy bounds toward Kavin wagging its tail; Kavin stamps his foot and shouts, and the puppy freezes mid-step.",
+    "camera_en": "Wide, low angle from the puppy's height, Kavin framed in the gateway.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, soft golden-hour light, gentle film grain, shallow depth of field. Low angle from ground level at the iron gate of an old Tamil Nadu town house with a red-oxide verandah and a neem tree. A small brown-and-white street puppy with one floppy ear runs toward the camera, tail wagging. Behind it in the gateway stands Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack with a yellow keychain, mid-stamp with an angry face. No text, no letters, no logos.",
+    "motion_prompt_en": "The puppy bounds two steps forward, then stops dead and flattens its ears as Kavin stamps his foot and shouts; slight camera shake on the stamp."
+   },
+   {
+    "n": 2,
+    "beat": "story",
+    "start_s": 3,
+    "end_s": 8,
+    "characters": [
+     "kavin"
+    ],
+    "location": "school ground",
+    "action_en": "Kavin stands with head down in a line of classmates while an adult's pointing hand and whistle fill the foreground.",
+    "camera_en": "Over-the-shoulder from the unseen PT teacher; only his hand and whistle cord visible, slow push-in on Kavin.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, harsh midday light, gentle film grain. A dusty Tamil Nadu school ground with a line of children in light-blue shirts. In the foreground, out of focus, an adult man's hand points sharply with a whistle on a cord; his face is not shown. In focus in the middle of the line, Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack, looks down at his shoes, jaw clenched, ears red. No text, no letters, no logos.",
+    "motion_prompt_en": "The pointing hand jabs twice; classmates glance sideways at Kavin; slow push-in toward Kavin's lowered face."
+   },
+   {
+    "n": 3,
+    "beat": "story",
+    "start_s": 8,
+    "end_s": 11,
+    "characters": [
+     "kavin"
+    ],
+    "location": "street to Thatha's house",
+    "action_en": "Kavin walks home fast, kicking a pebble hard, fists clenched on his backpack straps.",
+    "camera_en": "Tracking shot at knee height, pebble skittering toward the lens.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, late-afternoon light, gentle film grain. A narrow Tamil Nadu town street with colourful houses and a tea shop in the distance. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack with a yellow keychain, walks toward the camera scowling, gripping his backpack straps, one foot kicking a pebble. No text, no letters, no logos.",
+    "motion_prompt_en": "Kavin strides forward and kicks the pebble, which skitters past the camera; camera tracks backward with him."
+   },
+   {
+    "n": 4,
+    "beat": "story",
+    "start_s": 11,
+    "end_s": 15,
+    "characters": [
+     "kavin"
+    ],
+    "location": "Thatha's front gate",
+    "action_en": "The puppy runs to greet Kavin; he throws his bag down and shouts; the puppy yelps and scrambles under the thinnai.",
+    "camera_en": "Medium shot, quick whip-pan following the puppy under the verandah.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain, shallow depth of field. The front yard of an old Tamil Nadu house with a red-oxide raised verandah (thinnai) and a neem tree. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, throws his red backpack to the ground, mouth open shouting. A small brown-and-white street puppy with one floppy ear cowers, about to dart under the verandah. No text, no letters, no logos.",
+    "motion_prompt_en": "The backpack hits the ground with a puff of dust; the puppy scrambles under the verandah; camera whip-pans to follow it."
+   },
+   {
+    "n": 5,
+    "beat": "story",
+    "start_s": 15,
+    "end_s": 19,
+    "characters": [
+     "thatha"
+    ],
+    "location": "Thatha's thinnai",
+    "action_en": "Thatha, sitting on the thinnai with a newspaper, slowly lowers it and looks at Kavin over his glasses.",
+    "camera_en": "Medium close-up, static, Thatha centred.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain, shallow depth of field. Thatha, a slim slightly stooped 72-year-old Tamil grandfather with silver hair combed back, short white beard, round steel-rimmed glasses, thin sandal-paste line on his forehead, white veshti and cream half-sleeve shirt, sits on a red-oxide verandah with a wooden walking stick beside him, lowering a folded newspaper and looking calmly over his glasses. A brass lamp and neem leaves in the soft background. No text, no letters, no logos.",
+    "motion_prompt_en": "Thatha slowly lowers the newspaper onto his lap and tilts his head, eyebrows raised kindly; neem leaves sway behind him."
+   },
+   {
+    "n": 6,
+    "beat": "story",
+    "start_s": 19,
+    "end_s": 25,
+    "characters": [
+     "kavin",
+     "thatha"
+    ],
+    "location": "Thatha's thinnai",
+    "action_en": "Kavin answers defensively, then follows Thatha's glance down to the puppy trembling under the thinnai.",
+    "camera_en": "Two-shot, then tilt down to the puppy's frightened eyes in the dark gap under the verandah.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain. Two-shot at an old Tamil Nadu house verandah: Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, stands with arms crossed looking away; Thatha, a slim 72-year-old Tamil grandfather with silver hair, short white beard, round steel-rimmed glasses, white veshti, cream half-sleeve shirt, sits on the red-oxide verandah gazing down. In the lower frame, in the shadow under the verandah, a small brown-and-white puppy with one floppy ear peeks out with frightened eyes. No text, no letters, no logos.",
+    "motion_prompt_en": "Kavin uncrosses his arms as his eyes drift down; camera slowly tilts down to the puppy's trembling face in the shadow."
+   },
+   {
+    "n": 7,
+    "beat": "kural",
+    "start_s": 25,
+    "end_s": 29,
+    "characters": [
+     "thatha",
+     "kavin"
+    ],
+    "location": "Thatha's thinnai",
+    "action_en": "Thatha recites the kural slowly; Kavin sits down beside him, listening.",
+    "camera_en": "Wide, warm, slow push-in; lamp glow on Thatha's face.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, deep golden sunset light, brass oil lamp glowing, gentle film grain. Thatha, a slim 72-year-old Tamil grandfather with silver hair combed back, short white beard, round steel-rimmed glasses, sandal-paste line on forehead, white veshti, cream half-sleeve shirt, brown shawl, sits on a red-oxide verandah speaking gently with one hand raised. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, sits beside him looking up. Neem tree silhouette behind. Clean empty space in the upper third of the frame. No text, no letters, no logos.",
+    "motion_prompt_en": "Very slow push-in; Thatha's hand moves gently as he speaks; the lamp flame flickers."
+   },
+   {
+    "n": 8,
+    "beat": "kural",
+    "start_s": 29,
+    "end_s": 33,
+    "characters": [
+     "kavin"
+    ],
+    "location": "Thatha's thinnai",
+    "action_en": "Close-up of Kavin as the words sink in; his eyes soften and glisten.",
+    "camera_en": "Close-up, static, lamp light on one side of his face.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, sunset light with warm brass-lamp glow on one side, gentle film grain, shallow depth of field. Close-up of Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, small gap in his front teeth, light-blue school shirt, listening quietly, his angry expression melting into guilt, eyes slightly wet. Clean empty space in the upper third of the frame. No text, no letters, no logos.",
+    "motion_prompt_en": "Kavin blinks slowly and swallows; his eyebrows relax; subtle lamp flicker on his cheek."
+   },
+   {
+    "n": 9,
+    "beat": "lesson",
+    "start_s": 33,
+    "end_s": 40,
+    "characters": [
+     "kavin",
+     "thatha"
+    ],
+    "location": "Thatha's thinnai",
+    "action_en": "Kavin kneels by the verandah and holds out a biscuit; the puppy creeps out and licks his fingers; Thatha smiles behind them.",
+    "camera_en": "Low medium shot at the puppy's height, Thatha soft in the background.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, last golden light of sunset, gentle film grain, shallow depth of field. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, kneels at the edge of a red-oxide verandah holding out a biscuit. A small brown-and-white puppy with one floppy ear creeps out from the shadow under the verandah toward his hand. Behind, softly out of focus, Thatha, a 72-year-old Tamil grandfather with silver hair, white beard, round glasses, white veshti, smiles. Clean empty space in the upper third of the frame. No text, no letters, no logos.",
+    "motion_prompt_en": "The puppy inches out, sniffs, then licks Kavin's fingers and wags its tail; Kavin breaks into a small gap-toothed smile."
+   },
+   {
+    "n": 10,
+    "beat": "tease",
+    "start_s": 40,
+    "end_s": 43,
+    "characters": [
+     "kavin"
+    ],
+    "location": "Thatha's front gate",
+    "action_en": "The puppy bounds happily toward the gate with Kavin laughing behind it, mirroring the opening shot's framing.",
+    "camera_en": "Wide, low angle from ground level at the gate, same framing as shot 1.",
+    "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, soft golden-hour light, gentle film grain, shallow depth of field. Low angle from ground level at the iron gate of an old Tamil Nadu town house with a red-oxide verandah and a neem tree, same composition as the opening shot. A small brown-and-white street puppy with one floppy ear runs toward the camera, tail wagging. Behind it in the gateway, Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, runs after it laughing. No text, no letters, no logos.",
+    "motion_prompt_en": "The puppy bounds toward the camera and Kavin chases it laughing; the clip ends with the puppy mid-stride at the gate, matching the first frame."
+   }
+  ],
+  "lesson_ta": "பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல",
+  "tease_ta": "பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்!",
+  "loop_note_en": "The final shot repeats the opening composition (puppy running at the gate, low angle), so on replay the same puppy-run cuts straight into Kavin's shout. The tease asks about anger at elders, and the hook answers with anger at the weakest, which pulls a second viewing.",
+  "youtube": {
+   "title": "குறள் 301 | கோபம் யார் மேல பாயுது? | Thirukkural Story on Anger #Shorts",
+   "description_intro_ta": "பள்ளியில் திட்டு வாங்கிய கவின், வீட்டில் ஒரு குட்டி நாய் மேல் கோபத்தைக் கொட்டுகிறான். தாத்தா கேட்ட ஒரே கேள்வி அவனை யோசிக்க வைக்கிறது.\nநம் கோபம் எப்போதும் யார் மேல் விழுகிறது?",
+   "tags": [
+    "திருக்குறள்",
+    "thirukkural",
+    "thirukkural story",
+    "kural 301",
+    "குறள் 301",
+    "வெகுளாமை",
+    "restraining anger",
+    "thirukkural on anger",
+    "கோபம்",
+    "செல்லிடத்துக் காப்பான்",
+    "tamil moral stories",
+    "tamil shorts",
+    "thatha kavin",
+    "orukural orukadhai"
+   ],
+   "pinned_comment_ta": "நீங்க கடைசியா கோபப்பட்டது யார் மேல? உங்களைவிட பெரியவரா, சின்னவரா? 👇"
+  },
+  "instagram": {
+   "caption_ta": "திட்டு வாங்கியது ஸ்கூல்ல. கோபம் விழுந்தது ஒரு குட்டி நாய் மேல. 🐶\nகுறள் 301: கோபம் பலிக்கும் இடத்தில் அடக்குவதே உண்மையான அடக்கம்.\n\nஉங்க கோபம் அதிகம் யார் மேல விழுது? கமெண்ட்ல சொல்லுங்க 👇",
+   "hashtags": [
+    "#திருக்குறள்",
+    "#thirukkural",
+    "#ஒருகுறள்ஒருகதை",
+    "#கோபம்"
+   ]
+  }
+ }
+}

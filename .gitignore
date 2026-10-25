@@ -1,0 +1,25 @@
+# secrets
+.env
+*.client_secret.json
+client_secret*.json
+token*.json
+credentials/
+
+# downloaded source datasets (contain modern commentaries we must not redistribute)
+data/sources/
+
+# generated media and caches (big, reproducible from cache/ledger)
+episodes/*/
+!episodes/.gitkeep
+cache/
+review/*
+!review/.gitkeep
+assets/music/*
+!assets/music/README.md
+logs/
+
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.DS_Store

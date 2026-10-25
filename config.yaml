@@ -1,0 +1,107 @@
+# orukural-studio configuration. Secrets live in .env, never here.
+
+series:
+  name_ta: "ஒரு குறள் • ஒரு கதை"
+  name_en: "Orukural Orukadhai"
+  youtube_handle: "@orukural.orukadhai"
+  instagram_handle: "orukural.orukadhai"
+  language: ta
+
+schedule:
+  timezone: Asia/Kolkata
+  post_days: [mon, wed, sat]
+  post_time: "19:30"
+  episodes_per_week: 3
+  weekly_job_day: sun
+
+# Order of adhikarams to work through. One adhikaram (10 kurals) at a time,
+# popular everyday themes first. Anything not listed comes after, in book order.
+adhikaram_order:
+  - 31   # வெகுளாமை — anger
+  - 16   # பொறையுடைமை — patience
+  - 79   # நட்பு — friendship
+  - 62   # ஆள்வினையுடைமை — hard work
+  - 10   # இனியவை கூறல் — kind speech
+  - 76   # பொருள் செயல்வகை — wealth
+  - 11   # செய்ந்நன்றியறிதல் — gratitude
+  - 40   # கல்வி — education
+  - 63   # இடுக்கண் அழியாமை — resilience
+  - 80   # நட்பாராய்தல் — choosing friends
+  - 61   # மடி இன்மை — laziness
+  - 30   # வாய்மை — truth
+  - 17   # அழுக்காறாமை — envy
+  - 8    # அன்புடைமை — love
+  - 49   # காலமறிதல் — timing
+  - 65   # சொல்வன்மை — speech
+  - 1    # கடவுள் வாழ்த்து — (series start, kural #001 already posted)
+
+episode:
+  target_seconds: [35, 45]
+  aspect: "9:16"
+  resolution: [1080, 1920]
+  # beats, in seconds from the start
+  structure:
+    hook: [0, 3]
+    story: [3, 25]
+    kural: [25, 35]
+    lesson_and_tease: [35, 45]
+  shots_per_episode: [6, 10]
+  # Tamil narration pace used to sanity-check script length before paying for voice.
+  # Measured in Tamil letters (grapheme clusters) per second; tune after phase 2.
+  narration_letters_per_second: 11
+
+characters_file: data/characters.yaml
+lessons_file: data/lessons_learned.md
+pronunciation_file: data/pronunciation_fixes.yaml
+
+script:
+  provider: anthropic
+  model: claude-sonnet-5-5
+  effort: high               # low | medium | high | xhigh | max
+  max_tokens: 16000
+  # On a safety decline the API re-runs the request on Anthropic's recommended
+  # fallback model inside the same call. Set to false to turn off.
+  server_side_fallback: true
+  hooks: 3
+  hashtags: [3, 5]
+  fixed_hashtags: ["#திருக்குறள்", "#thirukkural", "#ஒருகுறள்ஒருகதை"]
+
+# Phase 2 fills these in after checking the current Gemini / ElevenLabs docs.
+images:
+  provider: gemini
+  model: null
+video:
+  provider: gemini
+  model: null
+  clip_seconds: [4, 8]
+voice:
+  provider: elevenlabs
+  voice_id: null
+  model: null
+
+budget:
+  currency: USD
+  per_episode_cap: 3.00       # hard stop before any paid call that would exceed it
+  weekly_cap: 10.00
+  # Rough per-call estimates used by the guard before the real cost is known.
+  estimates:
+    script_call: 0.15
+
+review_gate: true             # REVIEW_GATE in .env overrides this
+dry_run: false                # DRY_RUN in .env or --dry-run overrides this
+
+paths:
+  kurals: data/kurals.json
+  episodes: episodes
+  cache: cache
+  review: review
+  reports: reports
+  ledger: logs/spend.jsonl
+
+monetization:
+  links:
+    youtube_channel: "https://www.youtube.com/@orukural.orukadhai"
+    link_in_bio: "{{LINK_IN_BIO}}"
+    ebook: "{{EBOOK_LINK}}"
+    merch: "{{MERCH_LINK}}"
+    memberships: "{{MEMBERSHIPS_LINK}}"

@@ -1,0 +1,6 @@
+# Respellings sent to the voice model in place of the written form, so classical
+# words in the kural are spoken correctly. Only the narration text changes;
+# subtitles and on-screen text keep the original spelling.
+# Add entries after listening to each take, e.g.
+#   "காவாக்கா லென்": "காவாக்கால் என்"
+fixes: {}

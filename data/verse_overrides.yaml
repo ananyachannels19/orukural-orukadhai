@@ -1,0 +1,32 @@
+# Verse corrections applied on top of the primary source (tk120404/thirukkural).
+# Every entry here is a kural where the two sources disagree after normalising
+# spaces and punctuation. `chosen` says which reading we kept and why.
+# A = tk120404/thirukkural (GitHub), B = thirukkural-cl kural.db (PyPI 1.1).
+# Lines are separated by " / ". Please eyeball the ones marked review: true.
+24:   {line1: "உரனென்னும் தோட்டியான் ஓரைந்தும் காப்பான்", line2: "வரனென்னும் வைப்பிற்கோர் வித்து.", chosen: A, why: "B has a typo (வித்தது)"}
+46:   {line1: "அறத்தாற்றின் இல்வாழ்க்கை ஆற்றின் புறத்தாற்றில்", line2: "போஒய்ப் பெறுவ தெவன்?", chosen: A, why: "standard reading"}
+49:   {line1: "அறனெனப் பட்டதே இல்வாழ்க்கை அஃதும்", line2: "பிறன்பழிப்ப தில்லாயின் நன்று.", chosen: A, why: "B has a typo (அறனென்ப்)"}
+90:   {line1: "மோப்பக் குழையும் அனிச்சம் முகந்திரிந்து", line2: "நோக்கக் குழையும் விருந்து.", chosen: B, why: "A has a typo (குநழ்யும்)"}
+143:  {line1: "விளிந்தாரின் வேறல்லர் மன்ற தெளிந்தாரில்", line2: "தீமை புரிந்தொழுகு வார்.", chosen: neither, why: "A splits the sandhi, B has a typo; standard sandhi form", review: true}
+208:  {line1: "தீயவை செய்தார் கெடுதல் நிழல்தன்னை", line2: "வீயாது அடியுறைந் தற்று.", chosen: neither, why: "A has a typo (அஇஉறைந்); standard form அடியுறைந்", review: true}
+254:  {line1: "அருளல்ல தியாதெனிற் கொல்லாமை கோறல்", line2: "பொருளல்ல தவ்வூன் தினல்.", chosen: B, why: "standard sandhi form"}
+301:  {line1: "செல்லிடத்துக் காப்பான் சினங்காப்பான் அல்லிடத்துக்", line2: "காக்கின்என் காவாக்கா லென்?", chosen: B, why: "standard sandhi form"}
+346:  {line1: "யானென தென்னுஞ் செருக்கறுப்பான் வானோர்க்", line2: "குயர்ந்த உலகம் புகும்.", chosen: B, why: "A splits words across the classical form"}
+483:  {line1: "அருவினை யென்ப உளவோ கருவியான்", line2: "காலம் அறிந்து செயின்.", chosen: B, why: "A has a stray character"}
+599:  {line1: "பரியது கூர்ங்கோட்டது ஆயினும் யானை", line2: "வெரூஉம் புலிதாக் குறின்.", chosen: B, why: "A has a stray character"}
+666:  {line1: "எண்ணிய எண்ணியாங் கெய்துப எண்ணியார்", line2: "திண்ணியர் ஆகப் பெறின்.", chosen: neither, why: "A modernises to எய்துவர், B truncates to எய்து; classical form எய்துப", review: true}
+735:  {line1: "பல்குழுவும் பாழ்செய்யும் உட்பகையும் வேந்தலைக்கும்", line2: "கொல்குறும்பும் இல்லது நாடு.", chosen: A, why: "B has a typo (இல்லத)"}
+851:  {line1: "இகலென்ப எல்லா உயிர்க்கும் பகலென்னும்", line2: "பண்பின்மை பாரிக்கும் நோய்.", chosen: B, why: "A has a stray character"}
+913:  {line1: "பொருட்பெண்டிர் பொய்ம்மை முயக்கம் இருட்டறையில்", line2: "ஏதில் பிணந்தழீஇ அற்று.", chosen: B, why: "A has a stray character"}
+957:  {line1: "குடிப்பிறந்தார் கண்விளங்கும் குற்றம் விசும்பின்", line2: "மதிக்கண் மறுப்போல் உயர்ந்து.", chosen: B, why: "A has a stray character"}
+976:  {line1: "சிறியார் உணர்ச்சியுள் இல்லை பெரியாரைப்", line2: "பேணிக்கொள் வேமென்னும் நோக்கு.", chosen: B, why: "standard sandhi form"}
+1117: {line1: "அறுவாய் நிறைந்த அவிர்மதிக்குப் போல", line2: "மறுவுண்டோ மாதர் முகத்து.", chosen: B, why: "A repeats a syllable"}
+1118: {line1: "மாதர் முகம்போல் ஒளிவிட வல்லையேல்", line2: "காதலை வாழி மதி.", chosen: B, why: "A has a stray character"}
+1192: {line1: "வாழ்வார்க்கு வானம் பயந்தற்றால் வீழ்வார்க்கு", line2: "வீழ்வார் அளிக்கும் அளி.", chosen: B, why: "A has a stray character"}
+1321: {line1: "இல்லை தவறவர்க்கு ஆயினும் ஊடுதல்", line2: "வல்லது அவர்அளிக்கு மாறு.", chosen: B, why: "A has a stray character"}
+# Below: both sources agree, but print the verse with a word layout that breaks
+# the 4 + 3 seer pattern (or share a likely error). Fixed by hand.
+42:   {line1: "துறந்தார்க்கும் துவ்வா தவர்க்கும் இறந்தார்க்கும்", line2: "இல்வாழ்வான் என்பான் துணை.", chosen: neither, why: "both sources join துவ்வாதவர்க்கும்; split into seers for display"}
+60:   {line1: "மங்கலம் என்ப மனைமாட்சி மற்றதன்", line2: "நன்கலம் நன்மக்கட் பேறு.", chosen: neither, why: "both sources split மற்றதன்"}
+74:   {line1: "அன்புஈனும் ஆர்வம் உடைமை அதுஈனும்", line2: "நண்பென்னும் நாடாச் சிறப்பு.", chosen: neither, why: "both sources split நண்பென்னும்"}
+689:  {line1: "விடுமாற்றம் வேந்தர்க்கு உரைப்பான் வடுமாற்றம்", line2: "வாய்சோரா வன்க ணவன்.", chosen: neither, why: "both sources read வாய்சேரா; standard reading is வாய்சோரா (does not let slip)", review: true}

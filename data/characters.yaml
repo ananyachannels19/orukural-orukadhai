@@ -1,0 +1,59 @@
+# Fixed character sheet. Every script and every image prompt reads this file,
+# so the series looks and sounds like one world. Change it rarely and on purpose:
+# changing a look means regenerating the character reference images.
+
+world:
+  setting: >
+    A small town near Kumbakonam, Tamil Nadu, today. Thatha's house has a red-oxide
+    floor, a thinnai (raised verandah), a neem tree in the yard, a brass kuthuvilakku,
+    and a shelf of old books. Kavin's school, the tea shop at the corner, the bus stand
+    and the temple tank are the other recurring places.
+  visual_style: >
+    Warm, painterly 3D animation look, soft golden-hour light, gentle film grain,
+    expressive faces, shallow depth of field. Consistent across all episodes.
+    No text inside generated images (we add Tamil text ourselves).
+  palette: [terracotta, turmeric yellow, neem green, temple-lamp gold, indigo night]
+
+characters:
+  thatha:
+    name_ta: "தாத்தா"
+    name: Thatha (Sundaram)
+    role: Kavin's grandfather, retired Tamil teacher; knows every kural by heart.
+    age: 72
+    look: >
+      Slim, slightly stooped, silver hair combed back, short white beard, round
+      steel-rimmed glasses, thin sandal-paste line on the forehead. Always in a white
+      veshti and a cream half-sleeve shirt, a brown shawl in the evenings. Carries a
+      worn wooden walking stick. Kind crinkled eyes.
+    voice_and_manner: >
+      Calm, never preachy. Asks a question instead of giving an answer. Uses gentle
+      humour. Says the kural slowly, then explains it in everyday Tamil.
+    catchphrase_ta: "வள்ளுவர் என்ன சொல்றார் தெரியுமா?"
+  kavin:
+    name_ta: "கவின்"
+    name: Kavin
+    role: Thatha's grandson, the viewer's stand-in. Curious, impulsive, big-hearted.
+    age: 10
+    look: >
+      Thin, energetic, short messy black hair with a cowlick, big expressive eyes,
+      small gap in his front teeth. School days: light-blue shirt, navy shorts, a red
+      backpack with a yellow keychain. Home: an orange T-shirt with a small rocket print.
+    voice_and_manner: >
+      Talks fast in casual spoken Tamil, gets angry or excited quickly, learns by the
+      end of every episode, and sometimes catches Thatha out with a clever question.
+  supporting:
+    - id: amma
+      name_ta: "அம்மா"
+      look: "Kavin's mother, late 30s, cotton saree, hair in a plait, works at the bank."
+    - id: meena
+      name_ta: "மீனா"
+      look: "Kavin's best friend, 10, two plaits with red ribbons, green school pinafore, very sharp."
+    - id: murugan_anna
+      name_ta: "முருகன் அண்ணா"
+      look: "Runs the corner tea shop, 30s, thin moustache, checked lungi, towel on shoulder."
+
+rules:
+  - Thatha and Kavin appear in every episode. Use at most one supporting character.
+  - Kavin makes the mistake or faces the problem; Thatha never lectures, he asks.
+  - Stories are original everyday situations, set today, never retellings of famous folk tales.
+  - No real people, brands, politics, religion-vs-religion conflict, or violence beyond a raised voice.
