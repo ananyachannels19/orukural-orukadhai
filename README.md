@@ -75,6 +75,25 @@ python studio.py render 301 --dry-run  # whole pipeline with placeholder cards a
 - **Visuals** (`orukural/visuals.py`): reference images for characters, places and props are attached to every shot image (see Consistency above). `video.animate: all` (default) makes a clip for every shot; `key` would animate only the first, last and highest `motion_priority` shots, and `none` none.
 - **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Shots are shown as made, with no pan, zoom or punch-in (`assembly.punch_in: 1.0`). Narration is mixed over a track from `assets/music/` (ducked under speech) and loudness-normalised to −14 LUFS. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
 
+## Studio Live (watch every step)
+
+```bash
+python studio.py live                  # opens http://localhost:8765 and updates every 2 s
+python studio.py live --host 0.0.0.0   # also reachable from a phone on the same Wi-Fi
+```
+
+One page shows the episode's ten stages, what is running right now (with a stall timer), each shot's image and clip as they land (hover to play, click for the prompt and every try), Flow credits, the free TTS quota with its reset time, paid spend, failures and retries with what was done about them, and the posting calendar. It only reads files; nothing on it changes the pipeline.
+
+Most of it comes from what is already on disk (episode folders, `continuity_review.json`, `flow/jobs.json`, `logs/spend.jsonl`). Failures, retries and Flow credits come from `logs/events.jsonl`, written by `orukural.live.emit()` in the pipeline, and by the Flow session on the Mac with:
+
+```bash
+python studio.py event 301 clips start --shot 2 --attempt 3 --detail "Making shot 2 clip"
+python studio.py event 301 clips done  --shot 2 --credits 12 --credits-left 219 --detail "Shot 2 clip made"
+python studio.py event 301 clips blocked --shot 2 --detail "Flow showed an unusual activity check"
+```
+
+Statuses: `start`, `done`, `fail`, `retry`, `wait`, `blocked` (shows as "Needs you" until work on that step goes on), `info`.
+
 ## Consistency (characters, places, props, dialogue)
 
 An episode has 10 separately generated shots, so anything left to chance drifts: a shawl appears, the puppy's ear switches sides, the light goes back from sunset to afternoon. Consistency is built in at three layers (`orukural/continuity.py`):

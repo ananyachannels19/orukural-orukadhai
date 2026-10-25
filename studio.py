@@ -19,6 +19,11 @@ Phase 2 commands:
   python studio.py assemble 301          cut and mix → episodes/K0301/render/K0301_draft.mp4
   python studio.py render 301            voice + visuals + assemble in one go
 
+Studio Live:
+  python studio.py live                  live dashboard of every step on http://localhost:8765
+  python studio.py event 301 clips done --shot 2 --credits 12 --detail "Shot 2 clip made"
+                                         log a step (used by the Flow session on the Mac)
+
 Add --dry-run to any command to run it without paid API calls.
 """
 
@@ -29,7 +34,7 @@ import collections
 import subprocess
 import sys
 
-from orukural import config
+from orukural import config, live
 from orukural.kurals import STATUSES, KuralStore, verse_text
 from orukural.ledger import Ledger
 
@@ -206,6 +211,18 @@ def cmd_spend(s, args):
           else "no spend logged yet")
 
 
+def cmd_live(s, args):
+    live.serve(s, args.host, args.port, open_browser=not args.no_browser)
+
+
+def cmd_event(s, args):
+    store = KuralStore(s.path("kurals"))
+    e = live.emit(s, store.get(args.kural)["id"], args.stage, args.status, args.detail or "",
+                  shot=args.shot, attempt=args.attempt, credits=args.credits, credits_left=args.credits_left,
+                  requests=args.requests, seconds=args.seconds)
+    print(e or "could not write logs/events.jsonl")
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="studio.py", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--dry-run", action="store_true", default=None, help="no paid API calls")
@@ -258,6 +275,25 @@ def main(argv=None):
         c.add_argument("--shots", help="visuals only: comma-separated shot numbers to (re)make")
         c.add_argument("--dry-run", action="store_true", default=None, dest="sub_dry_run")
         c.set_defaults(fn=fn)
+
+    lv = sub.add_parser("live", help="live dashboard of every pipeline step, served from this machine")
+    lv.add_argument("--port", type=int, default=8765)
+    lv.add_argument("--host", default="127.0.0.1", help="0.0.0.0 to open it from a phone on the same Wi-Fi")
+    lv.add_argument("--no-browser", action="store_true")
+    lv.set_defaults(fn=cmd_live)
+
+    ev = sub.add_parser("event", help="log one step to logs/events.jsonl for the live dashboard")
+    ev.add_argument("kural")
+    ev.add_argument("stage", choices=[k for k, _ in live.STAGES])
+    ev.add_argument("status", choices=live.STATUSES)
+    ev.add_argument("--detail", help="one line a person can read: what happened, and what was done about it")
+    ev.add_argument("--shot", type=int)
+    ev.add_argument("--attempt", type=int)
+    ev.add_argument("--credits", type=int, help="Flow credits this step spent")
+    ev.add_argument("--credits-left", type=int, help="credits Flow shows as left")
+    ev.add_argument("--requests", type=int, help="TTS requests this step used")
+    ev.add_argument("--seconds", type=float)
+    ev.set_defaults(fn=cmd_event)
 
     sp = sub.add_parser("spend")
     sp.add_argument("episode", nargs="?")

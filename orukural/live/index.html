@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Live</title>
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">கு</div>
+      <div>
+        <div class="muted small">Orukural Studio</div>
+        <h1 id="title">Loading…</h1>
+      </div>
+    </div>
+    <div class="top-right">
+      <label class="select"><span class="sr">Episode</span><select id="episode"></select></label>
+      <label class="check"><input type="checkbox" id="dry"> Dry run</label>
+      <span id="live" class="pill">Connecting</span>
+      <span id="updated" class="muted small mono"></span>
+    </div>
+  </header>
+
+  <section class="panel stages" id="stages" aria-label="Pipeline stages"></section>
+
+  <div class="row">
+    <section class="panel now" aria-label="Happening now">
+      <div class="now-media" id="now-media"></div>
+      <div class="now-body">
+        <div class="eyebrow" id="now-eyebrow">Happening now</div>
+        <h2 class="now-title" id="now-title"></h2>
+        <div class="muted" id="now-sub"></div>
+        <div class="timer"><span class="mono" id="now-elapsed"></span><span class="mono muted" id="now-limit"></span></div>
+        <div class="bar"><div id="now-bar"></div></div>
+        <div class="tiles" id="tiles"></div>
+        <div id="alerts"></div>
+        <div id="draft"></div>
+      </div>
+    </section>
+    <aside class="side" aria-label="Budgets">
+      <div class="panel" id="flow"></div>
+      <div class="panel" id="tts"></div>
+      <div class="panel spend" id="spend"></div>
+    </aside>
+  </div>
+
+  <section class="panel" aria-label="Shot board">
+    <div class="head"><h2>Shot board</h2><span class="muted small">Hover a shot to play its clip. Click for the prompt and every try.</span></div>
+    <div class="shots" id="shots"></div>
+  </section>
+
+  <div class="row">
+    <section class="panel log" aria-label="Activity">
+      <div class="head"><h2>What happened</h2><span class="muted small">Steps, failures, retries, fixes</span></div>
+      <div id="log"></div>
+    </section>
+    <section class="panel cal" aria-label="Calendar">
+      <div class="head"><h2>Coming up</h2></div>
+      <div id="cal"></div>
+    </section>
+  </div>
+</div>
+
+<dialog id="shot-dialog">
+  <form method="dialog" class="dlg-close"><button aria-label="Close">Close</button></form>
+  <div id="shot-detail"></div>
+</dialog>
+
+<script src="/app.js"></script>
+</body>
+</html>
