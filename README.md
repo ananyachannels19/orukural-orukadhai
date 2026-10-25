@@ -53,11 +53,11 @@ Until the channel earns, nothing in the weekly run costs money:
 |---|---|---|
 | Script | Claude writes it in the weekly Claude session (`script.provider: session`) | Anthropic API, ~$0.10 |
 | Images | Google Flow via flow-mcp on your Mac (`images.provider: flow`) | Gemini `gemini-nano-banana-2.1`, ~$0.05 each |
-| Clips | Google Flow, 50 free credits a day; 4 clips ≈ 33 credits (`video.provider: flow`) | Gemini `gemini-omni-1.1-flash`, ~$0.10/s |
+| Clips | Google Flow, 50 free credits a day; one episode (10 clips) ≈ 85 credits, made over 2 days (`video.provider: flow`) | Gemini `gemini-omni-1.1-flash`, ~$0.10/s |
 | Voice | Google Cloud TTS free tier, Chirp 3 HD Tamil voices (`voice.provider: google_tts`) | ElevenLabs `eleven_v4` (paid plan for commercial use) |
 | Assembly | FFmpeg, local | – |
 
-Flow has no API we can call from Python, so the hand-off is file based: `studio.py flow-sheet 301` writes `episodes/K0301/flow/README.md` with every image and clip to make, the prompt, the reference images to attach, and the exact path to save it to. A Claude Code session on your Mac with flow-mcp works through that list. `studio.py visuals 301` then collects the files. Any shot without a clip gets a pan/zoom over its still, so running out of Flow credits never blocks an episode.
+Flow has no API we can call from Python, so the hand-off is file based: `studio.py flow-sheet 301` writes `episodes/K0301/flow/README.md` with every image and clip to make, the prompt, the reference images to attach, and the exact path to save it to. A Claude Code session on your Mac with flow-mcp works through that list. `studio.py visuals 301` then collects the files. Every shot is a real Flow clip, and the sheet groups the clips into days that fit the 50 daily credits ("Day 1", "Day 2"). There is no pan or zoom anywhere: if a clip is still missing, `assemble` stops and lists the shots still waiting (`assembly.missing_clip: wait`), and you finish them after the credits reset. With 3 episodes a week at about 2 days of credits each, Flow clips are made almost every day, not only on Sunday.
 
 ## Commands (phase 2)
 
@@ -69,8 +69,8 @@ python studio.py render 301 --dry-run  # whole pipeline with placeholder cards a
 ```
 
 - **Voice** (`orukural/voice.py`): each script segment is voiced on its own. Narrator, Thatha and Kavin can have separate voices (`speaker_voices`). `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only.
-- **Visuals** (`orukural/visuals.py`): Thatha and Kavin reference images live in `assets/characters/` and are attached to every shot image so the faces stay the same. `video.animate: key` animates the first shot, the last shot and the highest `motion_priority` shots up to `max_animated_shots`.
-- **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Story shots over 3.5 s are cut wide → punch-in. Narration is mixed over a track from `assets/music/` (ducked under speech) and loudness-normalised to −14 LUFS. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
+- **Visuals** (`orukural/visuals.py`): Thatha and Kavin reference images live in `assets/characters/` and are attached to every shot image so the faces stay the same. `video.animate: all` (default) makes a clip for every shot; `key` would animate only the first, last and highest `motion_priority` shots, and `none` none.
+- **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Shots are shown as made, with no pan, zoom or punch-in (`assembly.punch_in: 1.0`). Narration is mixed over a track from `assets/music/` (ducked under speech) and loudness-normalised to −14 LUFS. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
 
 ## Script generation
 

@@ -81,6 +81,8 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
 
     monkeypatch.setattr(voice.requests, "post", fake_post)
 
+    studio.raw["video"]["animate"] = "key"  # 4 paid clips, the rest held stills
+    studio.raw["assembly"]["missing_clip"] = "still"
     store = KuralStore(studio.path("kurals"))
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     ep = studio.path("episodes") / "K0301"
@@ -100,6 +102,8 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
 
 def test_key_mode_picks_first_last_and_priorities(studio):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    assert visuals.animated_shots(studio, sc) == set(range(1, 11))  # default: every shot
+    studio.raw["video"]["animate"] = "key"
     assert visuals.animated_shots(studio, sc) == {1, 10, 4, 6}
     studio.raw["video"]["animate"] = "none"
     assert visuals.animated_shots(studio, sc) == set()
@@ -128,8 +132,13 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
 
     sheet = visuals.flow_sheet(studio, ep, sc, "K0301")
     kinds = [j["kind"] for j in sheet["jobs"]]
-    assert kinds.count("character_ref") == 2 and kinds.count("image") == 10 and kinds.count("clip") == 4
-    assert sheet["clip_credits"] <= studio["flow"]["daily_credits"]
+    assert kinds.count("character_ref") == 2 and kinds.count("image") == 10 and kinds.count("clip") == 10
+    daily = studio["flow"]["daily_credits"]
+    per_day = {}
+    for j in sheet["jobs"]:
+        if j["kind"] == "clip":
+            per_day[j["day"]] = per_day.get(j["day"], 0) + j["credits"]
+    assert sheet["clip_days"] == len(per_day) >= 2 and max(per_day.values()) <= daily
 
     with pytest.raises(SystemExit):  # nothing made in Flow yet
         visuals.generate(studio, ep, sc, "K0301")
@@ -137,7 +146,7 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
     for n in range(1, 11):
         _png(ep / "images" / f"shot{n:02d}.jpg")
     (ep / "clips").mkdir()
-    _mp4(ep / "clips" / "shot01.mp4")  # only one clip made: the rest fall back to pan/zoom
+    _mp4(ep / "clips" / "shot01.mp4")  # day 1 only partly done
     (studio.root / "assets" / "characters").mkdir(parents=True, exist_ok=True)
     for cid in ("thatha", "kavin"):
         _png(studio.root / "assets" / "characters" / f"{cid}.png")
@@ -149,5 +158,10 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
     assert [sent[i]["name"] for i in (0, 1, 3)] == [
         "ta-IN-Chirp3-HD-Puck", "ta-IN-Chirp3-HD-Charon", "ta-IN-Chirp3-HD-Iapetus"]
     assert all(v["languageCode"] == "ta-IN" for v in sent)
+    with pytest.raises(SystemExit, match="waiting for clips"):  # never zooms over a still: waits for credits
+        assemble.assemble(studio, ep, sc, "K0301")
+    for n in range(2, 11):  # next day's credits
+        _mp4(ep / "clips" / f"shot{n:02d}.mp4")
+    visuals.generate(studio, ep, sc, "K0301")
     t = assemble.assemble(studio, ep, sc, "K0301")
-    assert [x["source"] for x in t["shots"]].count("clip") == 1
+    assert [x["source"] for x in t["shots"]].count("clip") == 10

@@ -47,13 +47,9 @@ def _encode(s: Settings) -> list[str]:
             "-pix_fmt", "yuv420p", "-r", str(s["assembly"]["fps"])]
 
 
-def _still_piece(s: Settings, image: Path, seconds: float, zoom_in: bool, punch: float, out: Path) -> None:
-    fps = s["assembly"]["fps"]
-    frames = max(1, round(seconds * fps))
-    step = 0.10 / frames
-    z = f"min({punch}+{step:.6f}*on,{punch + 0.10})" if zoom_in else f"max({punch + 0.10}-{step:.6f}*on,{punch})"
-    vf = (f"scale={media.W * 2}:{media.H * 2}:force_original_aspect_ratio=increase,crop={media.W * 2}:{media.H * 2},"
-          f"zoompan=z='{z}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)':d={frames}:s={media.W}x{media.H}:fps={fps},setsar=1")
+def _still_piece(s: Settings, image: Path, seconds: float, punch: float, out: Path) -> None:
+    """A held still: no pan, no zoom."""
+    vf = f"{media.fill_frame(punch)},fps={s['assembly']['fps']}"
     media.run(["-loop", "1", "-i", str(image), "-t", f"{seconds:.3f}", "-vf", vf, *_encode(s), str(out)])
 
 
@@ -67,9 +63,10 @@ def _clip_piece(s: Settings, clip: Path, offset: float, seconds: float, punch: f
 def _pieces_for(s: Settings, shot: Shot, start: float, end: float) -> list[tuple[float, float]]:
     """(offset into source, length, punch) cuts for one shot."""
     d = end - start
-    if shot.beat == "story" and d > s["assembly"]["split_story_shots_over"]:
+    punch = s["assembly"]["punch_in"]
+    if punch > 1.0 and shot.beat == "story" and d > s["assembly"]["split_story_shots_over"]:
         half = d / 2
-        return [(0.0, half, 1.0), (half, d - half, s["assembly"]["punch_in"])]
+        return [(0.0, half, 1.0), (half, d - half, punch)]
     return [(0.0, d, 1.0)]
 
 
@@ -119,6 +116,11 @@ def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) 
     if missing:
         raise SystemExit(f"no images for shots {missing}; run `studio.py visuals {episode_id}` first")
 
+    waiting = [n for n in visuals.get("animated", []) if not by_n[n]["clip"]]
+    if waiting and s["assembly"]["missing_clip"] == "wait":
+        raise SystemExit(f"{episode_id}: waiting for clips for shots {waiting}. Make them in Flow when the daily "
+                         f"credits reset (`studio.py flow-sheet {episode_id}`), then run visuals and assemble again.")
+
     segs, anchors = real_timeline(s, script, voice)
     total = segs[-1]["end"]
     rdir = ep_dir / "render"
@@ -135,8 +137,7 @@ def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) 
             if v["clip"]:
                 _clip_piece(s, ep_dir / "clips" / v["clip"], off, length, punch, out)
             else:
-                _still_piece(s, ep_dir / "images" / v["image"], length, zoom_in=(sh.n + j) % 2 == 1,
-                             punch=punch, out=out)
+                _still_piece(s, ep_dir / "images" / v["image"], length, punch=punch, out=out)
             pieces.append(out)
         shot_rows.append({"n": sh.n, "beat": sh.beat, "start": round(start, 3), "end": round(end, 3),
                           "source": "clip" if v["clip"] else "still", "cuts": j + 1})

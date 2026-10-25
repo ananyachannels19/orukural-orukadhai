@@ -3,8 +3,8 @@
 Providers (config `images.provider` / `video.provider`):
   flow    Google Flow, driven by flow-mcp on your Mac. `studio.py flow-sheet N` writes a job
           list; the Flow session saves files to the listed paths; `studio.py visuals N`
-          collects them. Free images; clips use Flow's daily free credits. A shot without a
-          clip simply gets a pan/zoom over its still, so missing credits never block a week.
+          collects them. Free images; clips use Flow's daily free credits, spread over as
+          many days as an episode needs. No pan/zoom stand-ins: assembly waits for clips.
   gemini  Gemini API (paid): images `gemini-nano-banana-2.1`, video `gemini-omni-1.1-flash`
           through the Interactions API (checked 25 Oct 2026).
 Generated clip audio is always discarded at assembly; our narration and music replace it.
@@ -229,7 +229,7 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, image: Pat
     out.parent.mkdir(parents=True, exist_ok=True)
     if s.dry_run:
         media.run(["-loop", "1", "-i", str(image), "-t", str(secs), "-vf",
-                   f"{media.fill_frame()},zoompan=z='1+0.002*on':d=1:s={media.W}x{media.H}:fps=24",
+                   f"{media.fill_frame()},fps=24",
                    "-c:v", "libx264", "-pix_fmt", "yuv420p", str(out)])
         return out
     prompt = (f"{shot.motion_prompt_en.strip()} Camera: {shot.camera_en.strip()} "
@@ -270,7 +270,8 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
                 f" Keep each character's face, hair, body and clothes exactly as in the reference images "
                 f"({', '.join(used)})." if used else ""),
         })
-    credits = 0
+    credits, day, day_used = 0, 1, 0
+    daily = s["flow"]["daily_credits"]
     table = {int(k): v for k, v in s["flow"]["credits_per_clip"].items()}
     for n in sorted(animated_shots(s, script)):
         sh = next(x for x in script.shots if x.n == n)
@@ -278,15 +279,18 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
             continue
         secs = min(table, key=lambda k: (k < clip_seconds(s, sh), abs(k - clip_seconds(s, sh))))
         credits += table[secs]
+        if day_used + table[secs] > daily:  # spread clips over days as Flow's free credits reset
+            day, day_used = day + 1, 0
+        day_used += table[secs]
         jobs.append({
-            "kind": "clip", "shot": n, "priority": sh.motion_priority,
+            "kind": "clip", "shot": n, "day": day, "priority": sh.motion_priority,
             "save_as": rel(ep_dir / "clips" / f"shot{n:02d}.mp4"),
             "start_frame": rel(ep_dir / "images" / f"shot{n:02d}.png"),
             "model": s["flow"]["video_model"], "seconds": secs, "aspect_ratio": "9:16", "credits": table[secs],
             "prompt": (f"{sh.motion_prompt_en.strip()} Camera: {sh.camera_en.strip()} Keep the characters exactly as "
                        f"they look in the start frame. One continuous shot, no cuts, no text, no dialogue."),
         })
-    sheet = {"episode_id": episode_id, "clip_credits": credits, "daily_credits": s["flow"]["daily_credits"],
+    sheet = {"episode_id": episode_id, "clip_credits": credits, "daily_credits": daily, "clip_days": day if credits else 0,
              "jobs": jobs}
     fdir = ep_dir / "flow"
     fdir.mkdir(parents=True, exist_ok=True)
@@ -295,14 +299,14 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         f"# Flow jobs for {episode_id}", "",
         "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo).",
         "Do images first: clips start from the saved shot image. Attach the listed reference images.",
-        f"Clips need {credits} credits; the free plan has {s['flow']['daily_credits']} a day. If credits run out, "
-        "stop: shots without a clip get a pan/zoom, and the rest can be made tomorrow.",
+        f"Clips need {credits} credits over {sheet['clip_days']} day(s); the free plan has {daily} a day. Make only "
+        "the clips for today's day number; if credits run out early, stop and continue after the reset. Never buy credits.",
         "Then run `python studio.py visuals " + episode_id.lstrip("K0") + "` to collect everything.", "",
     ]
     for j in jobs:
         head = {"character_ref": f"Character reference → `{j['save_as']}`",
                 "image": f"Shot {j.get('shot')} image → `{j['save_as']}`",
-                "clip": f"Shot {j.get('shot')} clip ({j.get('seconds')} s, {j.get('credits')} credits) → `{j['save_as']}`"}[j["kind"]]
+                "clip": f"Day {j.get('day')} · shot {j.get('shot')} clip ({j.get('seconds')} s, {j.get('credits')} credits) → `{j['save_as']}`"}[j["kind"]]
         lines += [f"## {head}", ""]
         if j.get("reference_images"):
             lines.append("References: " + ", ".join(f"`{r}`" for r in j["reference_images"]))

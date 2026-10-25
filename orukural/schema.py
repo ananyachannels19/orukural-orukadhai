@@ -38,7 +38,7 @@ class Shot(BaseModel):
     image_prompt_en: str = Field(description="Prompt for the still image (first frame), no text in image")
     motion_prompt_en: str = Field(description="Prompt for the 3–8 s image-to-video clip")
     motion_priority: int = Field(
-        default=5, description="1 (most needs real motion) to 5 (a slow pan over the still is enough)")
+        default=5, description="1 (clip made first, carries the story) to 5 (calm shot, made last)")
 
 
 class YouTubeMeta(BaseModel):

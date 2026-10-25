@@ -90,11 +90,11 @@ images:
 
 video:
   provider: flow              # flow | gemini
-  # Which shots get real AI motion. The rest get a slow pan/zoom over the still.
-  #   all  — every shot
+  # Which shots get a real AI clip.
+  #   all  — every shot (default: no pan/zoom over stills anywhere)
   #   key  — the first shot, the last shot, then the highest-priority shots up to max_animated_shots
   #   none — stills only
-  animate: key
+  animate: all
   max_animated_shots: 4
   clip_seconds: [4, 8]
   # gemini (paid API)
@@ -141,8 +141,13 @@ music:
 
 assembly:
   fps: 30
-  punch_in: 1.25              # zoom factor for the second cut of a split story shot
-  split_story_shots_over: 3.5 # seconds; longer story shots are cut wide → punch-in
+  # No zooms or pans: a punch-in is a cut to a tighter crop of the same clip. 1.0 = off.
+  punch_in: 1.0
+  split_story_shots_over: 3.5 # seconds; only used when punch_in > 1.0
+  # A shot that should have a clip but doesn't yet:
+  #   wait  — stop and list the missing clips (make them after Flow credits reset)
+  #   still — hold the still image without any movement
+  missing_clip: wait
   crf: 18
 
 budget:

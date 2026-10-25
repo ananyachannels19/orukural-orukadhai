@@ -164,7 +164,7 @@
     },
     "motion_priority": {
      "default": 5,
-     "description": "1 (most needs real motion) to 5 (a slow pan over the still is enough)",
+     "description": "1 (clip made first, carries the story) to 5 (calm shot, made last)",
      "title": "Motion Priority",
      "type": "integer"
     }
