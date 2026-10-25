@@ -66,18 +66,56 @@ script:
   hashtags: [3, 5]
   fixed_hashtags: ["#திருக்குறள்", "#thirukkural", "#ஒருகுறள்ஒருகதை"]
 
-# Phase 2 fills these in after checking the current Gemini / ElevenLabs docs.
+# Model IDs and prices checked against ai.google.dev and elevenlabs.io on 25 Oct 2026.
+# Veo 3.1 preview models were shut down on 22 Oct 2026; Gemini Omni Flash replaces them.
 images:
   provider: gemini
-  model: null
+  model: gemini-nano-banana-2.1
+  image_size: 2K              # 1K | 2K | 4K (uppercase K)
+  price_per_image: {1K: 0.0336, 2K: 0.0504, 4K: 0.113}
+  characters_dir: assets/characters   # generated once by `studio.py characters`, then committed
+
 video:
   provider: gemini
-  model: null
-  clip_seconds: [4, 8]
+  model: gemini-omni-1.1-flash
+  resolution: 720p            # 360p | 720p | 1080p (upscaled) | 4k (upscaled); we scale to 1080x1920 ourselves
+  price_per_second: 0.10      # 720p standard rate; re-check before switching resolution
+  clip_seconds: [3, 10]       # what the model can produce per clip
+  # Which shots get real AI motion. The rest get a slow pan/zoom over the still.
+  #   all  — every shot
+  #   key  — the first shot, the last shot, then the highest-priority shots up to max_animated_shots
+  #   none — stills only
+  animate: key
+  max_animated_shots: 5
+
 voice:
   provider: elevenlabs
-  voice_id: null
-  model: null
+  model: eleven_v4            # Tamil-capable; eleven_multilingual_v2 is the fallback
+  language_code: ta
+  output_format: mp3_44100_128
+  price_per_1k_chars: 0.08
+  # One fixed narrator voice for the series. Listen to the previews in your ElevenLabs
+  # voice library and change it before the first real episode. Library voices must be
+  # added to "My Voices" before the API can use them.
+  voice_id: a49ffQsGpRBw28CL67GF        # Yazhini – calm, expressive Tamil storyteller
+  # Optional: separate voices for dialogue. Leave empty to use voice_id for everyone.
+  speaker_voices:
+    thatha: 5RvT42yho9PKXu2vTVf5        # Mohanlal – natural, calm narrator
+    kavin: null                         # no child voice yet; design one in ElevenLabs Voice Design
+  stability: 0.5
+  similarity_boost: 0.8
+  gap_seconds: 0.15           # silence between spoken segments
+
+music:
+  dir: assets/music
+  volume_db: -20              # music bed level under the narration
+  duck: true                  # dip the music further while someone is speaking
+
+assembly:
+  fps: 30
+  punch_in: 1.25              # zoom factor for the second cut of a split story shot
+  split_story_shots_over: 3.5 # seconds; longer story shots are cut wide → punch-in
+  crf: 18
 
 budget:
   currency: USD
@@ -86,6 +124,7 @@ budget:
   # Rough per-call estimates used by the guard before the real cost is known.
   estimates:
     script_call: 0.15
+    character_ref: 0.06
 
 review_gate: true             # REVIEW_GATE in .env overrides this
 dry_run: false                # DRY_RUN in .env or --dry-run overrides this

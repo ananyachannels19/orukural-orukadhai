@@ -7,7 +7,7 @@ Production pipeline for **ஒரு குறள் • ஒரு கதை** (O
 | Phase | What | State |
 |---|---|---|
 | 1 | Repo, config, `data/kurals.json`, script generator | ✅ done, sample in `samples/K0301/` |
-| 2 | Voice, images, clips, assembly → sample MP4 | next |
+| 2 | Voice, images, clips, assembly → sample MP4 | ✅ built and tested in dry-run; real sample needs API keys |
 | 3 | Subtitles, branding, long-form compilation builder | |
 | 4 | YouTube + Instagram publishing (private/test) | |
 | 5 | Weekly scheduler, review gate, analytics | |
@@ -44,6 +44,20 @@ Each episode folder holds `script.json` (the machine-readable script every later
 - **`data/lessons_learned.md`**: read into every script prompt; the weekly analytics step (phase 5) rewrites its "From analytics" section.
 - **`data/pronunciation_fixes.yaml`**: respellings for the voice model (phase 2).
 - **`orukural/ledger.py`**: every paid call goes through it. It returns a cached result if the same inputs already succeeded, refuses a call that would push an episode over `budget.per_episode_cap`, and logs real spend to `logs/spend.jsonl`.
+
+## Commands (phase 2)
+
+```bash
+python studio.py characters            # once: Thatha + Kavin reference images → assets/characters/ (commit them)
+python studio.py render 301            # voice → visuals → assemble → episodes/K0301/render/K0301_draft.mp4
+python studio.py visuals 301 --shots 4 --force   # remake one shot you don't like (paid again)
+python studio.py render 301 --dry-run  # whole pipeline with placeholder cards and silence, $0
+```
+
+- **Voice** (`orukural/voice.py`): ElevenLabs `eleven_v4` with `language_code: ta`. Each script segment is voiced on its own, with the neighbouring lines as context, and the API's character timings are saved for phase 3 subtitles. `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only. Dialogue lines can use separate voices (`voice.speaker_voices`); anything unset uses the narrator.
+- **Images** (`orukural/visuals.py`): Gemini `gemini-nano-banana-2.1` through the Interactions API, 9:16 at 2K. Every shot image gets the character reference images attached, so Thatha and Kavin look the same in every episode.
+- **Clips**: Gemini `gemini-omni-1.1-flash` image-to-video, 720p, clip length asked to match the shot. `video.animate` picks which shots get real motion (`key`: first, last and the highest `motion_priority` shots up to `max_animated_shots`; `all`; `none`). Other shots get a slow pan/zoom over the still. Clip audio is always thrown away.
+- **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Story shots over 3.5 s are cut wide → punch-in. Narration is mixed over a track from `assets/music/` (picked per episode, ducked under speech) and loudness-normalised to −14 LUFS for YouTube/Instagram. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
 
 ## Script generation
 

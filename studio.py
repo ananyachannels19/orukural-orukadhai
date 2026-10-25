@@ -9,6 +9,13 @@ Phase 1 commands:
   python studio.py script-check 301      re-check a hand-edited episodes/K0301/script.json
   python studio.py spend [K0301]         spend log
 
+Phase 2 commands:
+  python studio.py characters [--force]  generate Thatha/Kavin reference images (once; commit them)
+  python studio.py voice 301             narration, one file per segment
+  python studio.py visuals 301 [--shots 2,5]   stills for every shot, clips for the animated ones
+  python studio.py assemble 301          cut and mix → episodes/K0301/render/K0301_draft.mp4
+  python studio.py render 301            voice + visuals + assemble in one go
+
 Add --dry-run to any command to run it without paid API calls.
 """
 
@@ -74,6 +81,71 @@ def cmd_script_check(s, args):
     return _report(scriptgen.revalidate(s, store, args.kural))
 
 
+def _episode(s, ref):
+    import json
+    from orukural.schema import EpisodeScript
+    store = KuralStore(s.path("kurals"))
+    k = store.get(ref)
+    ep_dir = s.path("episodes") / k["id"]
+    f = ep_dir / "script.json"
+    if not f.exists():
+        raise SystemExit(f"no script for #{k['number']}; run `studio.py script {k['number']}` first")
+    payload = json.loads(f.read_text("utf-8"))
+    if payload.get("errors"):
+        raise SystemExit(f"{k['id']} script has errors; fix them and run script-check first")
+    return k, ep_dir, EpisodeScript.model_validate(payload["script"])
+
+
+def cmd_characters(s, args):
+    from orukural import visuals
+    for cid, path in visuals.character_refs(s, force=args.force).items():
+        print(f"{cid}: {path.relative_to(s.root)}")
+
+
+def cmd_voice(s, args):
+    from orukural import voice
+    k, ep_dir, sc = _episode(s, args.kural)
+    m = voice.generate(s, ep_dir, sc, k["id"], force=args.force)
+    for seg in m["segments"]:
+        lo, hi = seg["planned"]
+        flag = "  ← longer than planned" if seg["seconds"] > hi - lo + 0.3 else ""
+        print(f"  {seg['file']:<22} {seg['seconds']:5.2f}s (planned {hi - lo:.1f}s){flag}")
+    cost = "dry run" if m["dry_run"] else f"${m['cost_usd']:.3f}"
+    print(f"voice: {cost}")
+
+
+def cmd_visuals(s, args):
+    from orukural import visuals
+    k, ep_dir, sc = _episode(s, args.kural)
+    only = {int(x) for x in args.shots.split(",")} if args.shots else None
+    m = visuals.generate(s, ep_dir, sc, k["id"], force=args.force, only=only)
+    print(f"animated shots: {m['animated']}")
+    for sh in m["shots"]:
+        print(f"  shot {sh['n']:>2}: {sh['image']}" + (f" + {sh['clip']}" if sh["clip"] else " (pan/zoom)"))
+
+
+def cmd_assemble(s, args):
+    from orukural import assemble
+    k, ep_dir, sc = _episode(s, args.kural)
+    t = assemble.assemble(s, ep_dir, sc, k["id"])
+    note = "" if t["within_target"] else "  ← outside the 35–45 s target"
+    print(f"{ep_dir.relative_to(s.root)}/render/{t['output']}: {t['total_seconds']:.1f}s{note}"
+          f" · music: {t['music'] or 'none (add files to assets/music)'}")
+    if not t["dry_run"] and k["status"] in ("planned", "scripted"):
+        store = KuralStore(s.path("kurals"))
+        store.set(k["number"], status="rendered")
+        store.save()
+
+
+def cmd_render(s, args):
+    cmd_voice(s, args)
+    cmd_visuals(s, args)
+    cmd_assemble(s, args)
+    ledger = Ledger(s.path("ledger"), s.path("cache"), s["budget"]["per_episode_cap"])
+    k = KuralStore(s.path("kurals")).get(args.kural)
+    print(f"episode spend so far: ${ledger.spent(k['id']):.2f} of ${ledger.cap:.2f}")
+
+
 def cmd_spend(s, args):
     ledger = Ledger(s.path("ledger"), s.path("cache"), s["budget"]["per_episode_cap"])
     rows = [e for e in ledger.entries() if not args.episode or e["episode_id"] == args.episode]
@@ -109,6 +181,18 @@ def main(argv=None):
     ck = sub.add_parser("script-check")
     ck.add_argument("kural")
     ck.set_defaults(fn=cmd_script_check)
+
+    ch = sub.add_parser("characters", help="generate the character reference images")
+    ch.add_argument("--force", action="store_true")
+    ch.set_defaults(fn=cmd_characters)
+
+    for name, fn in (("voice", cmd_voice), ("visuals", cmd_visuals), ("assemble", cmd_assemble), ("render", cmd_render)):
+        c = sub.add_parser(name)
+        c.add_argument("kural")
+        c.add_argument("--force", action="store_true", help="ignore the cache and pay again")
+        c.add_argument("--shots", help="visuals only: comma-separated shot numbers to (re)make")
+        c.add_argument("--dry-run", action="store_true", default=None, dest="sub_dry_run")
+        c.set_defaults(fn=fn)
 
     sp = sub.add_parser("spend")
     sp.add_argument("episode", nargs="?")

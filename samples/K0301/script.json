@@ -119,7 +119,8 @@
     "action_en": "A small brown-and-white street puppy bounds toward Kavin wagging its tail; Kavin stamps his foot and shouts, and the puppy freezes mid-step.",
     "camera_en": "Wide, low angle from the puppy's height, Kavin framed in the gateway.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, soft golden-hour light, gentle film grain, shallow depth of field. Low angle from ground level at the iron gate of an old Tamil Nadu town house with a red-oxide verandah and a neem tree. A small brown-and-white street puppy with one floppy ear runs toward the camera, tail wagging. Behind it in the gateway stands Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack with a yellow keychain, mid-stamp with an angry face. No text, no letters, no logos.",
-    "motion_prompt_en": "The puppy bounds two steps forward, then stops dead and flattens its ears as Kavin stamps his foot and shouts; slight camera shake on the stamp."
+    "motion_prompt_en": "The puppy bounds two steps forward, then stops dead and flattens its ears as Kavin stamps his foot and shouts; slight camera shake on the stamp.",
+    "motion_priority": 1
    },
    {
     "n": 2,
@@ -133,7 +134,8 @@
     "action_en": "Kavin stands with head down in a line of classmates while an adult's pointing hand and whistle fill the foreground.",
     "camera_en": "Over-the-shoulder from the unseen PT teacher; only his hand and whistle cord visible, slow push-in on Kavin.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, harsh midday light, gentle film grain. A dusty Tamil Nadu school ground with a line of children in light-blue shirts. In the foreground, out of focus, an adult man's hand points sharply with a whistle on a cord; his face is not shown. In focus in the middle of the line, Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack, looks down at his shoes, jaw clenched, ears red. No text, no letters, no logos.",
-    "motion_prompt_en": "The pointing hand jabs twice; classmates glance sideways at Kavin; slow push-in toward Kavin's lowered face."
+    "motion_prompt_en": "The pointing hand jabs twice; classmates glance sideways at Kavin; slow push-in toward Kavin's lowered face.",
+    "motion_priority": 3
    },
    {
     "n": 3,
@@ -147,7 +149,8 @@
     "action_en": "Kavin walks home fast, kicking a pebble hard, fists clenched on his backpack straps.",
     "camera_en": "Tracking shot at knee height, pebble skittering toward the lens.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, late-afternoon light, gentle film grain. A narrow Tamil Nadu town street with colourful houses and a tea shop in the distance. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack with a yellow keychain, walks toward the camera scowling, gripping his backpack straps, one foot kicking a pebble. No text, no letters, no logos.",
-    "motion_prompt_en": "Kavin strides forward and kicks the pebble, which skitters past the camera; camera tracks backward with him."
+    "motion_prompt_en": "Kavin strides forward and kicks the pebble, which skitters past the camera; camera tracks backward with him.",
+    "motion_priority": 4
    },
    {
     "n": 4,
@@ -161,7 +164,8 @@
     "action_en": "The puppy runs to greet Kavin; he throws his bag down and shouts; the puppy yelps and scrambles under the thinnai.",
     "camera_en": "Medium shot, quick whip-pan following the puppy under the verandah.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain, shallow depth of field. The front yard of an old Tamil Nadu house with a red-oxide raised verandah (thinnai) and a neem tree. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, throws his red backpack to the ground, mouth open shouting. A small brown-and-white street puppy with one floppy ear cowers, about to dart under the verandah. No text, no letters, no logos.",
-    "motion_prompt_en": "The backpack hits the ground with a puff of dust; the puppy scrambles under the verandah; camera whip-pans to follow it."
+    "motion_prompt_en": "The backpack hits the ground with a puff of dust; the puppy scrambles under the verandah; camera whip-pans to follow it.",
+    "motion_priority": 1
    },
    {
     "n": 5,
@@ -175,7 +179,8 @@
     "action_en": "Thatha, sitting on the thinnai with a newspaper, slowly lowers it and looks at Kavin over his glasses.",
     "camera_en": "Medium close-up, static, Thatha centred.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain, shallow depth of field. Thatha, a slim slightly stooped 72-year-old Tamil grandfather with silver hair combed back, short white beard, round steel-rimmed glasses, thin sandal-paste line on his forehead, white veshti and cream half-sleeve shirt, sits on a red-oxide verandah with a wooden walking stick beside him, lowering a folded newspaper and looking calmly over his glasses. A brass lamp and neem leaves in the soft background. No text, no letters, no logos.",
-    "motion_prompt_en": "Thatha slowly lowers the newspaper onto his lap and tilts his head, eyebrows raised kindly; neem leaves sway behind him."
+    "motion_prompt_en": "Thatha slowly lowers the newspaper onto his lap and tilts his head, eyebrows raised kindly; neem leaves sway behind him.",
+    "motion_priority": 4
    },
    {
     "n": 6,
@@ -190,7 +195,8 @@
     "action_en": "Kavin answers defensively, then follows Thatha's glance down to the puppy trembling under the thinnai.",
     "camera_en": "Two-shot, then tilt down to the puppy's frightened eyes in the dark gap under the verandah.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain. Two-shot at an old Tamil Nadu house verandah: Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, stands with arms crossed looking away; Thatha, a slim 72-year-old Tamil grandfather with silver hair, short white beard, round steel-rimmed glasses, white veshti, cream half-sleeve shirt, sits on the red-oxide verandah gazing down. In the lower frame, in the shadow under the verandah, a small brown-and-white puppy with one floppy ear peeks out with frightened eyes. No text, no letters, no logos.",
-    "motion_prompt_en": "Kavin uncrosses his arms as his eyes drift down; camera slowly tilts down to the puppy's trembling face in the shadow."
+    "motion_prompt_en": "Kavin uncrosses his arms as his eyes drift down; camera slowly tilts down to the puppy's trembling face in the shadow.",
+    "motion_priority": 2
    },
    {
     "n": 7,
@@ -205,7 +211,8 @@
     "action_en": "Thatha recites the kural slowly; Kavin sits down beside him, listening.",
     "camera_en": "Wide, warm, slow push-in; lamp glow on Thatha's face.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, deep golden sunset light, brass oil lamp glowing, gentle film grain. Thatha, a slim 72-year-old Tamil grandfather with silver hair combed back, short white beard, round steel-rimmed glasses, sandal-paste line on forehead, white veshti, cream half-sleeve shirt, brown shawl, sits on a red-oxide verandah speaking gently with one hand raised. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, sits beside him looking up. Neem tree silhouette behind. Clean empty space in the upper third of the frame. No text, no letters, no logos.",
-    "motion_prompt_en": "Very slow push-in; Thatha's hand moves gently as he speaks; the lamp flame flickers."
+    "motion_prompt_en": "Very slow push-in; Thatha's hand moves gently as he speaks; the lamp flame flickers.",
+    "motion_priority": 5
    },
    {
     "n": 8,
@@ -219,7 +226,8 @@
     "action_en": "Close-up of Kavin as the words sink in; his eyes soften and glisten.",
     "camera_en": "Close-up, static, lamp light on one side of his face.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, sunset light with warm brass-lamp glow on one side, gentle film grain, shallow depth of field. Close-up of Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, small gap in his front teeth, light-blue school shirt, listening quietly, his angry expression melting into guilt, eyes slightly wet. Clean empty space in the upper third of the frame. No text, no letters, no logos.",
-    "motion_prompt_en": "Kavin blinks slowly and swallows; his eyebrows relax; subtle lamp flicker on his cheek."
+    "motion_prompt_en": "Kavin blinks slowly and swallows; his eyebrows relax; subtle lamp flicker on his cheek.",
+    "motion_priority": 3
    },
    {
     "n": 9,
@@ -234,7 +242,8 @@
     "action_en": "Kavin kneels by the verandah and holds out a biscuit; the puppy creeps out and licks his fingers; Thatha smiles behind them.",
     "camera_en": "Low medium shot at the puppy's height, Thatha soft in the background.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, last golden light of sunset, gentle film grain, shallow depth of field. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, kneels at the edge of a red-oxide verandah holding out a biscuit. A small brown-and-white puppy with one floppy ear creeps out from the shadow under the verandah toward his hand. Behind, softly out of focus, Thatha, a 72-year-old Tamil grandfather with silver hair, white beard, round glasses, white veshti, smiles. Clean empty space in the upper third of the frame. No text, no letters, no logos.",
-    "motion_prompt_en": "The puppy inches out, sniffs, then licks Kavin's fingers and wags its tail; Kavin breaks into a small gap-toothed smile."
+    "motion_prompt_en": "The puppy inches out, sniffs, then licks Kavin's fingers and wags its tail; Kavin breaks into a small gap-toothed smile.",
+    "motion_priority": 2
    },
    {
     "n": 10,
@@ -248,7 +257,8 @@
     "action_en": "The puppy bounds happily toward the gate with Kavin laughing behind it, mirroring the opening shot's framing.",
     "camera_en": "Wide, low angle from ground level at the gate, same framing as shot 1.",
     "image_prompt_en": "Vertical 9:16 frame. Warm painterly 3D animation style, soft golden-hour light, gentle film grain, shallow depth of field. Low angle from ground level at the iron gate of an old Tamil Nadu town house with a red-oxide verandah and a neem tree, same composition as the opening shot. A small brown-and-white street puppy with one floppy ear runs toward the camera, tail wagging. Behind it in the gateway, Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, runs after it laughing. No text, no letters, no logos.",
-    "motion_prompt_en": "The puppy bounds toward the camera and Kavin chases it laughing; the clip ends with the puppy mid-stride at the gate, matching the first frame."
+    "motion_prompt_en": "The puppy bounds toward the camera and Kavin chases it laughing; the clip ends with the puppy mid-stride at the gate, matching the first frame.",
+    "motion_priority": 1
    }
   ],
   "lesson_ta": "பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல",

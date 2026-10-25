@@ -34,6 +34,7 @@ Each shot becomes one generated still image and then one 4–8 second image-to-v
 
 - `image_prompt_en`: a complete, self-contained English prompt for the first frame. Restate each character's fixed look from the sheet in a few words every time, plus location, light, framing, and the series visual style. Never ask for text, letters, logos or subtitles in the image.
 - `motion_prompt_en`: what moves during the clip (character action, camera move). Simple, physically plausible motion.
+- `motion_priority`: 1 to 5. Only some shots get real AI motion; the others get a slow pan/zoom over the still. Give 1 to shots whose action carries the story (the hook moment, a key reaction, the turn), 5 to calm shots that work as a held frame.
 - Keep locations to two or three per episode.
 
 ## Metadata
