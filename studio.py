@@ -122,7 +122,9 @@ def cmd_voice_test(s, args):
     name, cfg = voice.provider_cfg(s)
     voices = args.voices.split(",") if args.voices else [
         f"ta-IN-Chirp3-HD-{v}" for v in ("Charon", "Iapetus", "Puck", "Orus", "Kore", "Aoede", "Leda", "Sulafat")
-    ] if name == "google_tts" else [cfg["voice_id"]]
+    ] if name == "google_tts" else [
+        "Charon", "Iapetus", "Puck", "Orus", "Kore", "Aoede", "Algieba", "Sulafat"
+    ] if name == "gemini_tts" else [cfg["voice_id"]]
     outs = voice.voice_test(s, args.text, voices, s.root / "review" / "voice_test")
     for o in outs:
         print(o.relative_to(s.root))

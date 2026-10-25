@@ -121,12 +121,23 @@ continuity:
   require_review: true
 
 voice:
-  provider: google_tts        # google_tts | elevenlabs
+  provider: gemini_tts        # gemini_tts | google_tts | elevenlabs
   language_code: ta
   gap_seconds: 0.15           # silence between spoken segments
+  gemini_tts:
+    # Free on a Google AI Studio API key: no billing, no card (checked 25 Oct 2026).
+    # Free-tier inputs/outputs may be used by Google to improve its models; fine for
+    # public story scripts. Outputs are ours to use commercially (Gemini API terms).
+    model: gemini-3.8-flash-tts
+    voice: Charon                        # narrator; try others with `studio.py voice-test`
+    speaker_voices:
+      thatha: Iapetus
+      kavin: Puck
+    language: ta-IN
+    price_per_1k_chars: 0.0
   google_tts:
-    # Free tier: 1M Chirp 3 HD characters a month; we use ~10k. Needs billing enabled
-    # on the Google Cloud project, but stays at $0 inside the free tier.
+    # Free tier: 1M Chirp 3 HD characters a month, but Google Cloud billing must be
+    # enabled first (in India that asks for a prepayment), so it is not the default.
     voice: ta-IN-Chirp3-HD-Charon        # narrator; try others with `studio.py voice-test`
     speaker_voices:
       thatha: ta-IN-Chirp3-HD-Iapetus

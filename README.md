@@ -17,7 +17,7 @@ Production pipeline for **ஒரு குறள் • ஒரு கதை** (O
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # then fill in your keys yourself; .env is gitignored
+cp .env.example .env        # then add GEMINI_API_KEY yourself (free at aistudio.google.com/apikey); .env is gitignored
 python studio.py status
 ```
 
@@ -54,7 +54,7 @@ Until the channel earns, nothing in the weekly run costs money:
 | Script | Claude writes it in the weekly Claude session (`script.provider: session`) | Anthropic API, ~$0.10 |
 | Images | Google Flow via flow-mcp on your Mac (`images.provider: flow`) | Gemini `gemini-nano-banana-2.1`, ~$0.05 each |
 | Clips | Google Flow on Google AI Plus: 50 credits a day + 200 a month; one episode (10 clips) ≈ 85 credits (`video.provider: flow`) | Gemini `gemini-omni-1.1-flash`, ~$0.10/s |
-| Voice | Google Cloud TTS free tier, Chirp 3 HD Tamil voices (`voice.provider: google_tts`) | ElevenLabs `eleven_v4` (paid plan for commercial use) |
+| Voice | Gemini TTS `gemini-3.8-flash-tts` on a free AI Studio key, no billing or card (`voice.provider: gemini_tts`) | Google Cloud TTS Chirp 3 HD (needs Cloud billing), or ElevenLabs `eleven_v4` (paid plan for commercial use) |
 | Assembly | FFmpeg, local | – |
 
 Flow has no API we can call from Python, so the hand-off is file based: `studio.py flow-sheet 301` writes `episodes/K0301/flow/README.md` with every image and clip to make, the prompt, the reference images to attach, and the exact path to save it to. A Claude Code session on your Mac with flow-mcp works through that list. `studio.py visuals 301` then collects the files. Every shot is a real Flow clip, and the sheet groups the clips into days that fit the 50 daily credits ("Day 1", "Day 2"). There is no pan or zoom anywhere: if a clip is still missing, `assemble` stops and lists the shots still waiting (`assembly.missing_clip: wait`), and you finish them after the credits reset. With 3 episodes a week at about 2 days of credits each, Flow clips are made almost every day, not only on Sunday.

@@ -1,7 +1,8 @@
 """Phase 2: Tamil narration, one audio file per script segment.
 
 Providers (config `voice.provider`):
-  google_tts  Google Cloud Text-to-Speech, Chirp 3 HD Tamil voices. Free tier covers us.
+  gemini_tts  Gemini TTS on a free Google AI Studio key (no billing). Default.
+  google_tts  Google Cloud Text-to-Speech, Chirp 3 HD Tamil voices. Needs Cloud billing.
   elevenlabs  ElevenLabs eleven_v4. Paid plan needed for commercial use.
 
 Each segment is voiced on its own so we keep exact per-beat timing. Word timings for
@@ -14,6 +15,7 @@ import base64
 import json
 import os
 import re
+import time
 from pathlib import Path
 
 import requests
@@ -47,7 +49,7 @@ def provider_cfg(s: Settings) -> tuple[str, dict]:
 
 def voice_for(s: Settings, speaker: str) -> str:
     name, cfg = provider_cfg(s)
-    default = cfg["voice"] if name == "google_tts" else cfg["voice_id"]
+    default = cfg["voice_id"] if name == "elevenlabs" else cfg["voice"]
     vid = (cfg.get("speaker_voices") or {}).get(speaker) or default
     if not vid:
         raise SystemExit(f"no voice set for {speaker!r} in config.yaml voice.{name}")
@@ -80,6 +82,43 @@ def _google(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float,
     out.write_bytes(base64.b64decode(r.json()["audioContent"]))
     return {"file": str(out), "alignment": None}, len(text) / 1000 * cfg["price_per_1k_chars"], {
         "provider": "google_tts", "model": voice, "chars": len(text)}
+
+
+def _gemini_client():
+    from google import genai
+    if not os.environ.get("GEMINI_API_KEY"):
+        raise SystemExit("GEMINI_API_KEY is not set. Make a free key at aistudio.google.com/apikey, add it to .env, "
+                         "or run with --dry-run.")
+    return genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+
+
+def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float, dict]:
+    cfg = s["voice"]["gemini_tts"]
+    client = _gemini_client()
+    for attempt in range(5):
+        try:
+            interaction = client.interactions.create(
+                model=cfg["model"],
+                input=[{"type": "text", "text": text}],
+                response_format={"type": "audio", "mime_type": "audio/wav"},
+                generation_config={"speech_config": {"voice": voice, "language": cfg["language"]}},
+            )
+            break
+        except Exception as e:  # free tier: back off on rate limits instead of failing the episode
+            if "429" not in str(e) and "RESOURCE_EXHAUSTED" not in str(e) or attempt == 4:
+                raise
+            time.sleep(20 * (attempt + 1))
+    audio = interaction.output_audio
+    if not audio or not audio.data:
+        raise RuntimeError(f"no audio returned for {out.name}")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    wav = out.with_suffix(".wav")
+    wav.write_bytes(base64.b64decode(audio.data))
+    media.run(["-i", str(wav), "-c:a", "libmp3lame", "-q:a", "2", str(out)])
+    wav.unlink()
+    return {"file": str(out), "alignment": None}, 0.0, {
+        "provider": "gemini_tts", "model": cfg["model"], "voice": voice, "chars": len(text),
+        "interaction_id": getattr(interaction, "id", None)}
 
 
 def _eleven(s: Settings, voice_id: str, text: str, prev: str, nxt: str, out: Path) -> tuple[dict, float, dict]:
@@ -117,7 +156,10 @@ def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text:
     name, cfg = provider_cfg(s)
     vid = voice_for(s, speaker)
     cache_file = s.path("cache") / "voice_audio" / cache_name
-    if name == "google_tts":
+    if name == "gemini_tts":
+        inputs = {"provider": name, "model": cfg["model"], "voice": vid, "text": text}
+        call = lambda: _gemini(s, vid, text, cache_file)  # noqa: E731
+    elif name == "google_tts":
         inputs = {"provider": name, "voice": vid, "rate": cfg["speaking_rate"], "text": text}
         call = lambda: _google(s, vid, text, cache_file)  # noqa: E731
     else:
@@ -168,13 +210,16 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
 
 
 def voice_test(s: Settings, text: str, voices: list[str], out_dir: Path) -> list[Path]:
-    """Say one line in several voices so you can pick by ear (free on Google TTS)."""
+    """Say one line in several voices so you can pick by ear (free on Gemini TTS and Google TTS)."""
     name, _ = provider_cfg(s)
     ledger = Ledger(s.path("ledger"), s.path("cache"), s["budget"]["per_episode_cap"])
     outs = []
     for v in voices:
         out = out_dir / f"{v}.mp3"
-        if name == "google_tts":
+        if name == "gemini_tts":
+            res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"tts": name, "voice": v, "text": text},
+                             estimate_usd=0.0, call=lambda: _gemini(s, v, text, s.path("cache") / "voice_test" / out.name))
+        elif name == "google_tts":
             res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"voice": v, "text": text},
                              estimate_usd=0.0, call=lambda: _google(s, v, text, s.path("cache") / "voice_test" / out.name))
         else:

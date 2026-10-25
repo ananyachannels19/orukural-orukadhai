@@ -215,3 +215,26 @@ def test_continuity_checks_catch_breaks(studio):
     assert "more than one supporting character" in text and "no outfit in continuity for meena" in text
     assert "dialogue mentions குட்டி (puppy) but no shot shows it" in text
     assert "thatha speaks but is not on screen" in text
+
+
+def test_gemini_tts_free_voice(studio, tmp_path, monkeypatch):
+    studio.raw["voice"]["provider"] = "gemini_tts"
+    wav = tmp_path / "a.wav"
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "sine=d=1.2", "-ar", "24000",
+                    "-ac", "1", str(wav)], check=True)
+    sent = []
+
+    class Interactions:
+        def create(self, **kw):
+            sent.append(kw)
+            return SimpleNamespace(id="a1", output_audio=SimpleNamespace(data=base64.b64encode(wav.read_bytes()).decode()))
+
+    monkeypatch.setattr(voice, "_gemini_client", lambda: SimpleNamespace(interactions=Interactions()))
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    ep = studio.path("episodes") / "K0301"
+    m = voice.generate(studio, ep, sc, "K0301")
+    assert len(sent) == 9 and m["cost_usd"] == 0
+    assert sent[0]["model"] == "gemini-3.8-flash-tts" and sent[0]["response_format"]["type"] == "audio"
+    # seg 1 is Kavin, seg 2 the narrator, seg 4 Thatha
+    assert [sent[i]["generation_config"]["speech_config"]["voice"] for i in (0, 1, 3)] == ["Puck", "Charon", "Iapetus"]
+    assert all(abs(x["seconds"] - 1.2) < 0.2 for x in m["segments"])
