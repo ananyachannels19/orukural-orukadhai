@@ -43,7 +43,7 @@
 
 ## Continuity
 
-- **thatha_gate**:  *Light:* Golden hour, low warm sun from the left, long soft shadows across the sand. *Blocking:* Camera looks from the yard out to the gate; the street is behind the gate, the thinnai is behind the camera on the right.
+- **thatha_gate**:  *Light:* Golden hour, low warm sun from the left, long soft shadows across the sand (shots 1 and 4); by shot 10 it is the last orange sunset glow, matching the thinnai scene, still warm enough to mirror shot 1. *Blocking:* Camera looks from the yard out to the gate; the street is behind the gate, the thinnai is behind the camera on the right.
 - **school_ground**: Morning assembly lines on the sand. *Light:* Harsh midday sun from above, short shadows. *Blocking:* The PT teacher stands on the left (only his arm and whistle are seen), the line of children runs left to right.
 - **town_street**:  *Light:* Late-afternoon sun from behind Kavin, warm. *Blocking:* Kavin walks towards the camera, the tea shop is far behind him.
 - **thatha_thinnai**: A folded Tamil newspaper and Thatha's walking stick rest by his chair. *Light:* Golden hour turning to sunset over the scene; the brass lamp in the niche is lit from shot 7 on. *Blocking:* Thatha sits in his cane chair on the right, facing left; Kavin stands or sits on the left facing him; the gap under the thinnai, where the puppy hides, is at the bottom left.
