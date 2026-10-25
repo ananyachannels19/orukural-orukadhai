@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-from . import continuity, media
+from . import continuity, live, media
 from .config import Settings
 from .ledger import Ledger
 from .schema import EpisodeScript, Shot
@@ -318,6 +318,10 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         "tile in the Flow project (search or scroll the picker by flow name). Upload or generate only if it is truly "
         "missing, and then only once. **Delete failed tiles** (failed generations with no usable result); never "
         "delete a successful image or clip without the user's say-so.",
+        "",
+        f"**Log every job for the live dashboard:** `python studio.py event {n} <stage> <status> --shot N --attempt K "
+        "--credits C --credits-left L --detail \"...\"`, with stage refs/images/image_check/clips/clip_check and "
+        "status start/done/fail/retry/blocked. Log credits_left from Flow after every clip.",
         "", "Work in this order:", "",
         "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
@@ -375,9 +379,14 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
                 clip = shot_clip(s, ep_dir, episode_id, script, sh, img, force=force)
         shots.append({"n": sh.n, "image": img.name, "clip": clip.name if clip else None})
     if missing:
+        if not s.dry_run:
+            live.emit(s, episode_id, "images", "blocked", f"no image yet for shots {missing}")
         raise SystemExit(f"{episode_id}: no image yet for shots {missing}. Run `studio.py flow-sheet "
                          f"{episode_id}` and make them in Flow first.")
     manifest = {"dry_run": s.dry_run, "animated": sorted(animate),
                 "animated_made": [x["n"] for x in shots if x["clip"]], "shots": shots}
     (ep_dir / "visuals.json").write_text(json.dumps(manifest, indent=1), "utf-8")
+    if not s.dry_run:
+        live.emit(s, episode_id, "clips", "info",
+                  f"collected {len(shots)} images, {len(manifest['animated_made'])}/{len(animate)} clips")
     return manifest

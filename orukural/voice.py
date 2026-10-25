@@ -21,7 +21,7 @@ from pathlib import Path
 import requests
 import yaml
 
-from . import media
+from . import live, media
 from .config import Settings
 from .ledger import Ledger
 from .schema import EpisodeScript, tamil_letters
@@ -207,7 +207,14 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
             media.silence(out, max(0.6, tamil_letters(text) / s["episode"]["narration_letters_per_second"]))
             alignment, cached = None, False
         else:
-            res = synthesize(s, ledger, episode_id, seg.speaker, text, prev, nxt, f"{episode_id}_{out.name}", force)
+            try:
+                res = synthesize(s, ledger, episode_id, seg.speaker, text, prev, nxt, f"{episode_id}_{out.name}", force)
+            except Exception as e:
+                quota = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
+                live.emit(s, episode_id, "voice", "wait" if quota else "fail", f"line {i + 1}: {str(e)[:200]}")
+                raise
+            if not res.cached:
+                live.emit(s, episode_id, "voice", "done", f"line {i + 1} ({seg.speaker})", requests=1)
             out.write_bytes(Path(res.value["file"]).read_bytes())
             alignment, cached = res.value.get("alignment"), res.cached
             spent += res.cost_usd

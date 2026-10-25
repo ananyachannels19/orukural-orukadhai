@@ -15,7 +15,7 @@ import json
 from bisect import bisect_right
 from pathlib import Path
 
-from . import continuity, media
+from . import continuity, live, media
 from .config import Settings
 from .schema import EpisodeScript, Shot
 
@@ -108,6 +108,22 @@ def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music:
 
 
 def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) -> dict:
+    if s.dry_run:
+        return _assemble(s, ep_dir, script, episode_id)
+    live.emit(s, episode_id, "render", "start")
+    try:
+        t = _assemble(s, ep_dir, script, episode_id)
+    except SystemExit as e:
+        live.emit(s, episode_id, "render", "blocked", str(e)[:300])
+        raise
+    except Exception as e:
+        live.emit(s, episode_id, "render", "fail", str(e)[:300])
+        raise
+    live.emit(s, episode_id, "render", "done", t["output"], seconds=t["total_seconds"])
+    return t
+
+
+def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) -> dict:
     media.require_ffmpeg()
     voice = json.loads((ep_dir / "voice" / "voice.json").read_text("utf-8"))
     visuals = json.loads((ep_dir / "visuals.json").read_text("utf-8"))
