@@ -84,18 +84,28 @@ def _google(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float,
         "provider": "google_tts", "model": voice, "chars": len(text)}
 
 
-def _gemini_client():
+def _gemini_client(timeout_s: float = 90):
     from google import genai
     if not os.environ.get("GEMINI_API_KEY"):
         raise SystemExit("GEMINI_API_KEY is not set. Make a free key at aistudio.google.com/apikey, add it to .env, "
                          "or run with --dry-run.")
-    return genai.Client(api_key=os.environ["GEMINI_API_KEY"])
+    # A hard timeout: on the free tier a throttled request can otherwise hang with no error.
+    return genai.Client(api_key=os.environ["GEMINI_API_KEY"], http_options={"timeout": int(timeout_s * 1000)})
+
+
+_last_call = [0.0]
 
 
 def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float, dict]:
     cfg = s["voice"]["gemini_tts"]
-    client = _gemini_client()
-    for attempt in range(5):
+    client = _gemini_client(cfg.get("timeout_seconds", 90))
+    tries = cfg.get("retries", 5)
+    for attempt in range(tries):
+        # Free tier allows only a few requests a minute: keep calls spaced out.
+        wait = cfg.get("seconds_between_calls", 0) - (time.monotonic() - _last_call[0])
+        if wait > 0:
+            time.sleep(wait)
+        _last_call[0] = time.monotonic()
         try:
             interaction = client.interactions.create(
                 model=cfg["model"],
@@ -104,10 +114,14 @@ def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float,
                 generation_config={"speech_config": {"voice": voice, "language": cfg["language"]}},
             )
             break
-        except Exception as e:  # free tier: back off on rate limits instead of failing the episode
-            if "429" not in str(e) and "RESOURCE_EXHAUSTED" not in str(e) or attempt == 4:
-                raise
-            time.sleep(20 * (attempt + 1))
+        except Exception as e:  # rate limit or a hung request: back off and try again
+            msg = str(e)
+            retryable = any(k in msg for k in ("429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE")) \
+                or "timeout" in type(e).__name__.lower() or "timed out" in msg.lower()
+            if not retryable or attempt == tries - 1:
+                raise RuntimeError(f"Gemini TTS failed for {out.name} after {attempt + 1} tries: {msg[:300]}") from e
+            print(f"  voice: {type(e).__name__}, waiting {60 * (attempt + 1)} s (free-tier limit?)", flush=True)
+            time.sleep(60 * (attempt + 1))
     audio = interaction.output_audio
     if not audio or not audio.data:
         raise RuntimeError(f"no audio returned for {out.name}")

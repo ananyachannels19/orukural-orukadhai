@@ -219,6 +219,7 @@ def test_continuity_checks_catch_breaks(studio):
 
 def test_gemini_tts_free_voice(studio, tmp_path, monkeypatch):
     studio.raw["voice"]["provider"] = "gemini_tts"
+    studio.raw["voice"]["gemini_tts"]["seconds_between_calls"] = 0
     wav = tmp_path / "a.wav"
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "sine=d=1.2", "-ar", "24000",
                     "-ac", "1", str(wav)], check=True)
@@ -229,7 +230,7 @@ def test_gemini_tts_free_voice(studio, tmp_path, monkeypatch):
             sent.append(kw)
             return SimpleNamespace(id="a1", output_audio=SimpleNamespace(data=base64.b64encode(wav.read_bytes()).decode()))
 
-    monkeypatch.setattr(voice, "_gemini_client", lambda: SimpleNamespace(interactions=Interactions()))
+    monkeypatch.setattr(voice, "_gemini_client", lambda *a: SimpleNamespace(interactions=Interactions()))
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     ep = studio.path("episodes") / "K0301"
     m = voice.generate(studio, ep, sc, "K0301")
@@ -238,3 +239,27 @@ def test_gemini_tts_free_voice(studio, tmp_path, monkeypatch):
     # seg 1 is Kavin, seg 2 the narrator, seg 4 Thatha
     assert [sent[i]["generation_config"]["speech_config"]["voice"] for i in (0, 1, 3)] == ["Puck", "Charon", "Iapetus"]
     assert all(abs(x["seconds"] - 1.2) < 0.2 for x in m["segments"])
+
+
+def test_gemini_tts_retries_a_hung_request(studio, tmp_path, monkeypatch):
+    studio.raw["voice"]["provider"] = "gemini_tts"
+    studio.raw["voice"]["gemini_tts"]["seconds_between_calls"] = 0
+    wav = tmp_path / "a.wav"
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "sine=d=1", str(wav)], check=True)
+    calls = []
+
+    class ReadTimeout(Exception):
+        pass
+
+    class Interactions:
+        def create(self, **kw):
+            calls.append(1)
+            if len(calls) == 1:
+                raise ReadTimeout("The read operation timed out")
+            return SimpleNamespace(id="a", output_audio=SimpleNamespace(data=base64.b64encode(wav.read_bytes()).decode()))
+
+    monkeypatch.setattr(voice, "_gemini_client", lambda *a: SimpleNamespace(interactions=Interactions()))
+    monkeypatch.setattr(voice.time, "sleep", lambda s: None)
+    out = tmp_path / "x.mp3"
+    voice._gemini(studio, "Charon", "வணக்கம்", out)
+    assert len(calls) == 2 and out.exists()

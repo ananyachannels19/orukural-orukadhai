@@ -135,6 +135,11 @@ voice:
       kavin: Puck
     language: ta-IN
     price_per_1k_chars: 0.0
+    # The free tier allows only a few requests a minute and can hang instead of
+    # answering 429, so calls are spaced out and cut off after a timeout, then retried.
+    seconds_between_calls: 21
+    timeout_seconds: 90
+    retries: 5
   google_tts:
     # Free tier: 1M Chirp 3 HD characters a month, but Google Cloud billing must be
     # enabled first (in India that asks for a prepayment), so it is not the default.
