@@ -74,3 +74,19 @@ def test_server_serves_media_but_nothing_else(studio, tmp_path):
                 urllib.request.urlopen(base + bad)
     finally:
         server.shutdown()
+
+
+def test_credits_per_video_and_total(studio, tmp_path):
+    ep = tmp_path / "episodes" / "K0301"
+    (ep / "clips").mkdir()
+    for n in (1, 3):
+        (ep / "clips" / f"shot{n:02d}.mp4").write_bytes(b"mp4")
+    live.emit(studio, "K0301", "clips", "done", "shot 3", shot=3, credits=12)
+    live.emit(studio, "K0301", "clips", "fail", "shot 3 rejected", shot=3, credits=12)
+    c = live.state(studio)["credits"]
+    row = c["episodes"][0]
+    shots = json.loads((ep / "script.json").read_text())["script"]["shots"]
+    est1 = live._clip_credits(studio, shots[0])
+    assert row["used"] == est1 + 24 and row["estimated"]   # shot 1 unlogged: planned price
+    assert row["clips_made"] == 2 and row["planned"] == sum(live._clip_credits(studio, sh) for sh in shots)
+    assert c["total"] == row["used"] and c["today"] == row["used"]

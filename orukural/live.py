@@ -210,6 +210,59 @@ def _stages(ep: _Episode, kural: dict) -> list[dict]:
     return out
 
 
+def _clip_credits(s: Settings, shot: dict) -> int:
+    """Flow credits one shot's clip costs, picked the way the flow sheet picks a clip length."""
+    lo, hi = s["video"]["clip_seconds"]
+    want = int(min(hi, max(lo, -(-(float(shot.get("end_s", 0)) - float(shot.get("start_s", 0))) // 1))))
+    table = {int(k): v for k, v in s["flow"]["credits_per_clip"].items()}
+    return table[min(table, key=lambda k: (k < want, abs(k - want)))]
+
+
+def _shot_credits(ep: _Episode, n: int, shot: dict) -> tuple[int, bool]:
+    """(credits, estimated): logged credits for this shot, else the planned price of a clip that exists."""
+    logged = sum(int(e.get("credits") or 0) for e in ep.events if e.get("shot") == n)
+    if logged:
+        return logged, False
+    if n in ep.animated() and (ep.dir / "clips" / f"shot{n:02d}.mp4").exists():
+        return _clip_credits(ep.s, shot), True
+    return 0, False
+
+
+def _credits(s: Settings) -> dict:
+    """Flow credits per video and in total. Logged credits win; clips made before logging
+    started are counted at their planned price and marked as estimates."""
+    now = _now()
+    rows, total, month, today = [], 0, 0, 0
+    for e in episodes(s):
+        ep = _Episode(s, e["id"])
+        anim = ep.animated()
+        used, est, planned, made = 0, False, 0, 0
+        for sh in ep.shots:
+            n = int(sh["n"])
+            c, guessed = _shot_credits(ep, n, sh)
+            used, est = used + c, est or guessed
+            if n in anim:
+                planned += _clip_credits(s, sh)
+                made += (ep.dir / "clips" / f"shot{n:02d}.mp4").exists()
+            if guessed:  # date an estimate by when its clip landed
+                d = dt.datetime.fromtimestamp((ep.dir / "clips" / f"shot{n:02d}.mp4").stat().st_mtime).astimezone()
+                month += c if (d.year, d.month) == (now.year, now.month) else 0
+                today += c if d.date() == now.date() else 0
+        unshot = sum(int(x.get("credits") or 0) for x in ep.events if x.get("shot") is None)  # e.g. a backfill
+        used += unshot
+        for x in ep.events:
+            c, d = int(x.get("credits") or 0), _ts(x).astimezone(now.tzinfo)
+            month += c if (d.year, d.month) == (now.year, now.month) else 0
+            today += c if d.date() == now.date() else 0
+        total += used
+        rows.append({"id": e["id"], "title": e["title"], "used": used, "estimated": est, "planned": planned,
+                     "clips_made": made, "clips_total": len(anim), "extra": max(0, used - planned) if made == len(anim) else None})
+    done = [r for r in rows if r["clips_total"] and r["clips_made"] == r["clips_total"]]
+    return {"episodes": rows, "total": total, "month": month, "today": today,
+            "per_video": round(sum(r["used"] for r in done) / len(done)) if done else None,
+            "monthly_allowance": s["flow"]["daily_credits"] * 30 + s["flow"]["monthly_credits"]}
+
+
 def _shot_cards(ep: _Episode) -> list[dict]:
     anim = ep.animated()
     cards = []
@@ -217,6 +270,7 @@ def _shot_cards(ep: _Episode) -> list[dict]:
         n = int(sh["n"])
         image = _find(ep.dir / "images" / f"shot{n:02d}", IMAGE_EXT)
         clip = ep.dir / "clips" / f"shot{n:02d}.mp4"
+        credits, estimated = _shot_credits(ep, n, sh)
         evs = [e for e in ep.events if e.get("shot") == n]
         live_evs = [e for e in evs if e.get("status") != "info"]
         words = str(sh.get("image_prompt_en", "")).split()
@@ -226,7 +280,7 @@ def _shot_cards(ep: _Episode) -> list[dict]:
             "image": ep.url(image), "clip": ep.url(clip) if n in anim else None, "animated": n in anim,
             "image_verdict": ep.verdict("images", n), "clip_verdict": ep.verdict("clips", n),
             "tries": sum(1 for e in evs if e.get("status") in ("retry", "fail", "blocked")),
-            "credits": sum(int(e.get("credits") or 0) for e in evs),
+            "credits": credits, "credits_estimated": estimated,
             "running": bool(live_evs) and live_evs[-1].get("status") in ("start", "retry")
                        and (_now() - _ts(live_evs[-1])).total_seconds() < RUNNING_FOR,
             "events": evs[-6:],
@@ -333,7 +387,7 @@ def state(s: Settings, episode_id: str | None = None, dry_run: bool = False) -> 
     episode_id = episode_id or (eps[0]["id"] if eps else None)
     store = KuralStore(s.path("kurals"))
     out = {"generated_at": _now().isoformat(timespec="seconds"), "episodes": eps, "episode": None,
-           "budgets": _budgets(s), "calendar": _calendar(s, store, episode_id),
+           "budgets": _budgets(s), "credits": _credits(s), "calendar": _calendar(s, store, episode_id),
            "post_time": s["schedule"].get("post_time"), "dry_run": dry_run}
     if not episode_id:
         return out
@@ -354,7 +408,7 @@ def state(s: Settings, episode_id: str | None = None, dry_run: bool = False) -> 
         "events": list(reversed(ep.events[-40:])),
         "started_at": started[0]["ts"] if started else None,
         "retries": sum(1 for e in ep.events if e.get("status") in ("retry", "fail", "blocked")),
-        "credits_spent": sum(int(e.get("credits") or 0) for e in ep.events),
+        "credits_spent": next((r["used"] for r in out["credits"]["episodes"] if r["id"] == episode_id), 0),
         "draft": ep.url(draft),
         "notes_md": (ep.dir / "flow" / "notes.md").read_text("utf-8")[-4000:]
                     if (ep.dir / "flow" / "notes.md").exists() else "",

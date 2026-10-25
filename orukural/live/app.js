@@ -81,6 +81,7 @@ function render(s) {
   renderStages(ep);
   renderNow(ep);
   renderBudgets(s.budgets);
+  renderCredits(s.credits);
   renderShots(ep);
   renderLog(ep);
   renderCal(s);
@@ -142,6 +143,33 @@ function renderBudgets(b) {
     h("span", { class: "small c-done" }, b.spend_usd_total ? "" : "Zero-spend mode"));
 }
 
+function renderCredits(c) {
+  const est = c.episodes.some((r) => r.estimated);
+  $("credit-note").textContent = est ? "~ = clip made before logging started, counted at its planned price" : "";
+  $("credit-tiles").replaceChildren(
+    tile("Total used", c.total),
+    tile("This month", `${c.month} / ${c.monthly_allowance}`),
+    tile("Today", c.today),
+    tile("Per finished video", c.per_video ?? "-"));
+  const max = Math.max(1, ...c.episodes.map((r) => Math.max(r.used, r.planned)));
+  $("credit-table").replaceChildren(h("table", null,
+    h("thead", null, h("tr", null, h("th", null, "Video"), h("th", null, "Clips"), h("th", { class: "num" }, "Planned"),
+      h("th", { class: "num" }, "Used"), h("th", { class: "num" }, "Over plan"), h("th", null, h("span", { class: "sr" }, "Bar")))),
+    h("tbody", null, ...c.episodes.map((r) => {
+      const over = r.extra || 0, base = r.used - over;
+      return h("tr", { class: r.id === current ? "current" : "" },
+        h("td", null, h("button", { type: "button", onclick: () => { current = r.id; lastKey = ""; poll(); } },
+          h("b", null, r.id), r.title ? ` · ${r.title}` : "")),
+        h("td", null, `${r.clips_made}/${r.clips_total}`),
+        h("td", { class: "num" }, r.planned),
+        h("td", { class: "num" }, (r.estimated ? "~" : "") + r.used),
+        h("td", { class: "num " + (over ? "c-failed" : "muted") }, r.extra == null ? "-" : (over ? `+${over}` : "0")),
+        h("td", null, h("div", { class: "cbar", role: "img", "aria-label": `${r.used} of ${r.planned} planned` },
+          h("i", { style: `width:${(100 * base) / max}%` }),
+          over ? h("b", { style: `left:${(100 * base) / max}%;width:${(100 * over) / max}%` }) : null)));
+    }))));
+}
+
 function verdictText(v, has, label) {
   if (v === "pass") return h("b", { class: "c-done" }, "pass");
   if (v) return h("b", { class: "c-failed" }, "redo");
@@ -161,7 +189,7 @@ function renderShots(ep) {
       frame,
       h("span", { class: "meta" }, "Image ", verdictText(sh.image_verdict, !!sh.image, "waiting")),
       h("span", { class: "meta" }, "Clip ", sh.animated ? verdictText(sh.clip_verdict, !!sh.clip, sh.running ? "making" : "waiting") : "none"),
-      sh.tries || sh.credits ? h("span", { class: "meta" }, [sh.tries && `${sh.tries} ${sh.tries === 1 ? "retry" : "retries"}`, sh.credits && `${sh.credits} cr`].filter(Boolean).join(" · ")) : null);
+      sh.tries || sh.credits ? h("span", { class: "meta" }, [sh.tries && `${sh.tries} ${sh.tries === 1 ? "retry" : "retries"}`, sh.credits && `${sh.credits_estimated ? "~" : ""}${sh.credits} cr`].filter(Boolean).join(" · ")) : null);
     if (vid && sh.image) {
       btn.addEventListener("mouseenter", () => { vid.style.opacity = 1; vid.play().catch(() => {}); });
       btn.addEventListener("mouseleave", () => { vid.pause(); vid.style.opacity = 0; });
