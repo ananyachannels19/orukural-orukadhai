@@ -313,6 +313,11 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         "after 2 min (image) or 4 min (clip), counts as a failure: look for a finished result, then retry up to 2 "
         "times. Post a one-line note after each finished clip. If Flow shows \"unusual activity\", stop and tell "
         "the user; never try to get around it.",
+        "",
+        "**Clip frames come from the project.** For a clip's start (and any end) frame, pick the existing image "
+        "tile in the Flow project (search or scroll the picker by flow name). Upload or generate only if it is truly "
+        "missing, and then only once. **Delete failed tiles** (failed generations with no usable result); never "
+        "delete a successful image or clip without the user's say-so.",
         "", "Work in this order:", "",
         "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
