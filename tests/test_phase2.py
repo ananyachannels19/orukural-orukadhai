@@ -132,6 +132,7 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     ep = studio.path("episodes") / "K0301"
 
+    studio.raw["continuity"]["max_refs_per_image"] = 6
     sheet = visuals.flow_sheet(studio, ep, sc, "K0301")
     kinds = [j["kind"] for j in sheet["jobs"]]
     assert kinds.count("character_ref") == 2 and kinds.count("location_ref") == 4 and kinds.count("prop_ref") == 4
@@ -269,3 +270,9 @@ def test_flow_project_per_adhikaram(studio):
     assert visuals.flow_project(studio, 301)["url"].startswith("https://flow.google.com/project/")
     other = visuals.flow_project(studio, 151)  # adhikaram 16, no project yet
     assert other["adhikaram"] == 16 and other["url"] is None
+
+
+def test_reference_cap(studio):
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    refs = continuity.shot_refs(studio, studio.path("episodes") / "K0301", sc, sc.shots[5])
+    assert [lab for lab, _ in refs] == ["Kavin", "Thatha", "the place (thatha_thinnai)"]

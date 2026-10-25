@@ -119,7 +119,7 @@ flow:
 
 continuity:
   locations_dir: assets/locations   # one reference plate per recurring place, made once and committed
-  max_refs_per_image: 6             # characters first, then the place, then props
+  max_refs_per_image: 3             # flow-mcp attaches at most 3; characters first, then the place, then props (the rest are described in words)
   # Assembly refuses to render until every image and clip is marked "pass" in
   # episodes/<id>/continuity_review.json (see .claude/skills/continuity-review).
   require_review: true
