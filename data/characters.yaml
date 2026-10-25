@@ -94,7 +94,7 @@ characters:
       Thin, energetic, short messy black hair with a cowlick, big expressive eyes,
       small gap in his front teeth.
     wardrobe:
-      school: Light-blue half-sleeve school shirt, navy shorts, black school shoes; red backpack with a yellow star keychain.
+      school: Light-blue half-sleeve school shirt, navy shorts, black school shoes.   # the red backpack is a prop, listed per episode
       home: Orange T-shirt with a small rocket print, grey shorts, barefoot.
     voice_and_manner: >
       Talks fast in casual spoken Tamil, gets angry or excited quickly, learns by the
