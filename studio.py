@@ -106,11 +106,13 @@ def _episode(s, ref):
 def cmd_flow_sheet(s, args):
     from orukural import visuals
     k, ep_dir, sc = _episode(s, args.kural)
-    sheet = visuals.flow_sheet(s, ep_dir, sc, k["id"])
+    pool = s["flow"]["monthly_top_up_per_episode"] if args.use_monthly else 0
+    sheet = visuals.flow_sheet(s, ep_dir, sc, k["id"], pool=pool)
     kinds = [j["kind"] for j in sheet["jobs"]]
+    extra = f", {sheet['monthly_credits_used']} of them monthly" if sheet["monthly_credits_used"] else ""
     print(f"{ep_dir.relative_to(s.root)}/flow/README.md: {kinds.count('character_ref')} character refs, "
-          f"{kinds.count('image')} images, {kinds.count('clip')} clips ({sheet['clip_credits']} of "
-          f"{sheet['daily_credits']} daily credits)")
+          f"{kinds.count('image')} images, {kinds.count('clip')} clips: {sheet['clip_credits']} credits over "
+          f"{sheet['clip_days']} day(s){extra}")
 
 
 def cmd_voice_test(s, args):
@@ -212,6 +214,8 @@ def main(argv=None):
 
     fs = sub.add_parser("flow-sheet", help="list the images/clips to make in Google Flow for an episode")
     fs.add_argument("kural")
+    fs.add_argument("--use-monthly", action="store_true",
+                    help="top up day 1 with monthly plan credits so the episode's clips fit in one day")
     fs.set_defaults(fn=cmd_flow_sheet)
 
     vt = sub.add_parser("voice-test", help="say one line in several voices to pick one by ear")

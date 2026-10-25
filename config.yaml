@@ -103,8 +103,12 @@ video:
   price_per_second: 0.10
 
 flow:
-  # Free Flow accounts get 50 credits a day (third-party guide, Oct 2026; check your Flow screen).
+  # Google AI Plus: 50 credits every day (use them or lose them) plus 200 a month.
   daily_credits: 50
+  monthly_credits: 200
+  # `flow-sheet N --use-monthly` adds this many monthly credits to day 1 so one episode
+  # (10 clips, ~85 credits) is made in a single day. Without the flag only daily credits are used.
+  monthly_top_up_per_episode: 35
   video_model: "Omni Flash 720p"
   credits_per_clip: {4: 7, 8: 12, 10: 15}
   image_model: "Nano Banana 2 Lite"   # free in Flow

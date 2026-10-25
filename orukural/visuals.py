@@ -248,7 +248,8 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, image: Pat
     return out
 
 
-def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) -> dict:
+def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, pool: int = 0) -> dict:
+    """`pool`: monthly plan credits to add on top of day 1's daily credits (0 = daily credits only)."""
     """Write flow/jobs.json + flow/README.md: everything a Flow session must make, and where to save it."""
     rel = lambda p: str(Path(p).relative_to(s.root))  # noqa: E731
     cdir = s.root / s["images"]["characters_dir"]
@@ -270,7 +271,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
                 f" Keep each character's face, hair, body and clothes exactly as in the reference images "
                 f"({', '.join(used)})." if used else ""),
         })
-    credits, day, day_used = 0, 1, 0
+    credits, day, day_used, pool_used = 0, 1, 0, 0
     daily = s["flow"]["daily_credits"]
     table = {int(k): v for k, v in s["flow"]["credits_per_clip"].items()}
     for n in sorted(animated_shots(s, script)):
@@ -279,9 +280,12 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
             continue
         secs = min(table, key=lambda k: (k < clip_seconds(s, sh), abs(k - clip_seconds(s, sh))))
         credits += table[secs]
-        if day_used + table[secs] > daily:  # spread clips over days as Flow's free credits reset
+        cap = daily + (pool if day == 1 else 0)  # monthly credits only top up day 1
+        if day_used + table[secs] > cap:  # spread clips over days as Flow's daily credits reset
             day, day_used = day + 1, 0
         day_used += table[secs]
+        if day == 1:
+            pool_used = max(0, day_used - daily)
         jobs.append({
             "kind": "clip", "shot": n, "day": day, "priority": sh.motion_priority,
             "save_as": rel(ep_dir / "clips" / f"shot{n:02d}.mp4"),
@@ -291,6 +295,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
                        f"they look in the start frame. One continuous shot, no cuts, no text, no dialogue."),
         })
     sheet = {"episode_id": episode_id, "clip_credits": credits, "daily_credits": daily, "clip_days": day if credits else 0,
+             "monthly_credits_used": pool_used,
              "jobs": jobs}
     fdir = ep_dir / "flow"
     fdir.mkdir(parents=True, exist_ok=True)
@@ -299,8 +304,10 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         f"# Flow jobs for {episode_id}", "",
         "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo).",
         "Do images first: clips start from the saved shot image. Attach the listed reference images.",
-        f"Clips need {credits} credits over {sheet['clip_days']} day(s); the free plan has {daily} a day. Make only "
-        "the clips for today's day number; if credits run out early, stop and continue after the reset. Never buy credits.",
+        f"Clips need {credits} credits over {sheet['clip_days']} day(s): {daily} daily credits a day"
+        + (f", plus {pool_used} monthly plan credits on day 1" if pool_used else "") + ". Spend daily credits before "
+        "monthly ones. Make only the clips for today's day number; if credits run out early, stop and continue after "
+        "the reset. Never buy credits.",
         "Then run `python studio.py visuals " + episode_id.lstrip("K0") + "` to collect everything.", "",
     ]
     for j in jobs:

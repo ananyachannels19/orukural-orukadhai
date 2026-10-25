@@ -165,3 +165,12 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
     visuals.generate(studio, ep, sc, "K0301")
     t = assemble.assemble(studio, ep, sc, "K0301")
     assert [x["source"] for x in t["shots"]].count("clip") == 10
+
+
+def test_monthly_top_up_fits_an_episode_in_one_day(studio):
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    ep = studio.path("episodes") / "K0301"
+    plain = visuals.flow_sheet(studio, ep, sc, "K0301")
+    assert plain["clip_days"] == 2 and plain["monthly_credits_used"] == 0
+    topped = visuals.flow_sheet(studio, ep, sc, "K0301", pool=studio["flow"]["monthly_top_up_per_episode"])
+    assert topped["clip_days"] == 1 and topped["monthly_credits_used"] == topped["clip_credits"] - studio["flow"]["daily_credits"]
