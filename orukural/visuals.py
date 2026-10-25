@@ -308,6 +308,11 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         "project for an asset with that name (or the same prompt); if it exists, download it to `save_as` instead. "
         "Name each new generation with its `flow_name`. If Flow or the tool reports an error or timeout, look in the "
         "project first: Flow often finishes jobs that were reported as failed. Only then retry.",
+        "",
+        "**Never wait idle.** While a job runs, check the Flow page every 30-60 s. A failed tile, or no progress "
+        "after 2 min (image) or 4 min (clip), counts as a failure: look for a finished result, then retry up to 2 "
+        "times. Post a one-line note after each finished clip. If Flow shows \"unusual activity\", stop and tell "
+        "the user; never try to get around it.",
         "", "Work in this order:", "",
         "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
