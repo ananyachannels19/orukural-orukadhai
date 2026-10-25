@@ -9,6 +9,7 @@ from pathlib import Path
 import anthropic
 import yaml
 
+from . import continuity
 from .config import Settings
 from .kurals import STATUSES, KuralStore, verse_text
 from .ledger import Ledger
@@ -135,10 +136,14 @@ def dry_run_script(kural: dict) -> dict:
         hooks=[{"style": st, "on_screen_ta": "[DRY RUN]", "narration_ta": "[DRY RUN] கேள்வி?"}
                for st in ("question", "tense_moment", "surprising_line")],
         chosen_hook=0,
+        continuity={"locations": [{"id": "thatha_thinnai", "description_en": "", "light_en": "golden hour",
+                                   "blocking_en": "Thatha in his chair on the right, Kavin on the left"}],
+                    "props": [], "outfits": [{"character": "thatha", "outfit_en": "white veshti, cream shirt"},
+                                             {"character": "kavin", "outfit_en": "orange rocket T-shirt"}]},
         segments=[{"beat": b, "start_s": a, "end_s": e, "speaker": "narrator", "narration_ta": say[b],
                    "on_screen_ta": ""} for b, a, e in beats],
         shots=[{"n": i, "beat": b, "start_s": a, "end_s": e, "characters": ["thatha", "kavin"],
-                "location": "thatha's verandah", "action_en": "placeholder", "camera_en": "medium shot",
+                "location": "thatha_thinnai", "action_en": "placeholder", "camera_en": "medium shot",
                 "image_prompt_en": "placeholder", "motion_prompt_en": "placeholder"} for i, b, a, e in shots],
         lesson_ta="[DRY RUN]", tease_ta="[DRY RUN]", loop_note_en="dry run",
         youtube={"title": f"குறள் {n} | [DRY RUN]", "description_intro_ta": "[DRY RUN]",
@@ -152,6 +157,8 @@ def write_outputs(s: Settings, kural: dict, script: dict, meta: dict) -> tuple[l
     d.mkdir(parents=True, exist_ok=True)
     parsed = EpisodeScript.model_validate(script)
     errors, warns = check(parsed, kural, s.raw)
+    c_err, c_warn = continuity.check(s, parsed)
+    errors, warns = errors + c_err, warns + c_warn
     payload = {**meta, "kural_id": kural["id"], "errors": errors, "warnings": warns, "script": script}
     (d / "script.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", "utf-8")
     (d / "script.md").write_text(render_markdown(s, kural, parsed, errors, warns), "utf-8")
@@ -284,10 +291,18 @@ def render_markdown(s: Settings, kural: dict, sc: EpisodeScript, errors: list[st
         out.append(f"| {seg.start_s:g}–{seg.end_s:g} s | {seg.beat} | {seg.speaker} | "
                    f"{seg.narration_ta} | {(seg.on_screen_ta or '').replace(chr(10), '<br>')} |")
     out += ["", f"**Lesson:** {sc.lesson_ta}  ", f"**Tease:** {sc.tease_ta}  ", f"**Loop:** {sc.loop_note_en}",
-            "", "## Shot list", ""]
+            "", "## Continuity", ""]
+    for loc in sc.continuity.locations:
+        out.append(f"- **{loc.id}**: {loc.description_en} *Light:* {loc.light_en} *Blocking:* {loc.blocking_en}")
+    for p in sc.continuity.props:
+        out.append(f"- prop **{p.id}**" + (f" ({p.name_ta})" if p.name_ta else "") + f": {p.description_en}")
+    for o in sc.continuity.outfits:
+        out.append(f"- **{o.character}** wears {o.outfit_en}")
+    out += ["", "## Shot list", ""]
     for sh in sc.shots:
         out += [
-            f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · {sh.beat} · {', '.join(sh.characters)} · {sh.location}  ",
+            f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · {sh.beat} · {', '.join(sh.characters)} · {sh.location}"
+            + (f" · props: {', '.join(sh.props)}" if sh.props else "") + "  ",
             f"{sh.action_en} *Camera:* {sh.camera_en}  ",
             f"🖼 `{sh.image_prompt_en}`  ",
             f"🎞 `{sh.motion_prompt_en}`",

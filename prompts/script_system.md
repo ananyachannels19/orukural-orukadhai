@@ -28,11 +28,21 @@ The channel is built to earn: viewers must stop scrolling in the first 3 seconds
 
 Use the character sheet below exactly: names, ages, looks, and how they behave. Thatha and Kavin appear in every episode; Thatha asks rather than lectures; Kavin makes the mistake or faces the problem and learns. Use at most one supporting character.
 
+## Continuity (the episode's bible)
+
+Fill `continuity` before writing shots. Every image and clip prompt is built from it, so a detail written here stays the same in every shot.
+
+- `locations`: two or three. Reuse a recurring place from the world sheet by its id (`thatha_thinnai`, `school_ground`, ...) whenever the scene happens there; its fixed description is added automatically, so `description_en` only adds what is different today (or describes a new place in full). `light_en` is the time of day and light for the whole scene; if it changes (sunset, a lamp lit), say from which shot. `blocking_en` fixes who is where and which way they face, so cuts match.
+- `props`: every object or animal that matters or appears in more than one shot, described exactly (size, colour, markings). `name_ta` is the Tamil word the dialogue uses for it, so we can check it is on screen when it is mentioned.
+- `outfits`: one per character on screen, picked from their wardrobe on the character sheet, unchanged for the whole episode unless the story shows them changing.
+- Dialogue follows the sheet's `speech` rules: the same forms of address every time. A character who speaks should be on screen during their line or just before it.
+
 ## Shots (6–10)
 
 Each shot becomes one generated still image and then one 4–8 second image-to-video clip. The editor never zooms or pans, so the framing you describe is the framing viewers see; keep story shots short (2–4 s) so something new happens every few seconds.
 
-- `image_prompt_en`: a complete, self-contained English prompt for the first frame. Restate each character's fixed look from the sheet in a few words every time, plus location, light, framing, and the series visual style. Never ask for text, letters, logos or subtitles in the image.
+- `location`: a location id from `continuity`. `props`: the prop ids visible in the shot.
+- `image_prompt_en`: the composition of the first frame: who is where, action, expressions, framing. Do not restate looks, outfits, the place or the style; they are added from the bible and the reference images. Refer to people and props by name ("Kavin", "the puppy"). Never ask for text, letters, logos or subtitles.
 - `motion_prompt_en`: what moves during the clip (character action, camera move). Simple, physically plausible motion.
 - `motion_priority`: 1 to 5. Clips are made over two days of free credits, most important first. Give 1 to shots whose action carries the story (the hook moment, a key reaction, the turn), 5 to calm shots.
 - Keep locations to two or three per episode.

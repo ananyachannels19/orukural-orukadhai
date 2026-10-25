@@ -113,6 +113,13 @@ flow:
   credits_per_clip: {4: 7, 8: 12, 10: 15}
   image_model: "Nano Banana 2 Lite"   # free in Flow
 
+continuity:
+  locations_dir: assets/locations   # one reference plate per recurring place, made once and committed
+  max_refs_per_image: 6             # characters first, then the place, then props
+  # Assembly refuses to render until every image and clip is marked "pass" in
+  # episodes/<id>/continuity_review.json (see .claude/skills/continuity-review).
+  require_review: true
+
 voice:
   provider: google_tts        # google_tts | elevenlabs
   language_code: ta

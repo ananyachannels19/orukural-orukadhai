@@ -10,6 +10,10 @@
 **Logline:** Scolded by his PT sir in front of the class, Kavin says nothing, then comes home and takes it all out on the street puppy at Thatha's gate, until Thatha asks one quiet question.  
 **Why it's original:** A school scolding redirected onto a street puppy at Thatha's gate turns 'anger shown only where it can land' into a moment every child and parent recognises.
 
+## Checks
+
+- ⚠️ 4 locations; keep to two or three
+
 ## Hooks
 
 1. **உன் கோபம் யார் மேல பாயுது?** (question)  
@@ -37,56 +41,69 @@
 **Tease:** பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்!  
 **Loop:** The final shot repeats the opening composition (puppy running at the gate, low angle), so on replay the same puppy-run cuts straight into Kavin's shout. The tease asks about anger at elders, and the hook answers with anger at the weakest, which pulls a second viewing.
 
+## Continuity
+
+- **thatha_gate**:  *Light:* Golden hour, low warm sun from the left, long soft shadows across the sand. *Blocking:* Camera looks from the yard out to the gate; the street is behind the gate, the thinnai is behind the camera on the right.
+- **school_ground**: Morning assembly lines on the sand. *Light:* Harsh midday sun from above, short shadows. *Blocking:* The PT teacher stands on the left (only his arm and whistle are seen), the line of children runs left to right.
+- **town_street**:  *Light:* Late-afternoon sun from behind Kavin, warm. *Blocking:* Kavin walks towards the camera, the tea shop is far behind him.
+- **thatha_thinnai**: A folded Tamil newspaper and Thatha's walking stick rest by his chair. *Light:* Golden hour turning to sunset over the scene; the brass lamp in the niche is lit from shot 7 on. *Blocking:* Thatha sits in his cane chair on the right, facing left; Kavin stands or sits on the left facing him; the gap under the thinnai, where the puppy hides, is at the bottom left.
+- prop **puppy** (குட்டி): A small brown-and-white street puppy, white chest and paws, brown back, one floppy left ear, thin red string collar.
+- prop **red_backpack**: Kavin's red school backpack with a yellow star keychain on the zip.
+- prop **newspaper**: A folded Tamil newspaper, plain grey print with no readable words.
+- prop **biscuit**: One round golden Marie-style biscuit, no brand.
+- **thatha** wears White veshti, cream half-sleeve shirt, no shawl; round steel-rimmed glasses; wooden walking stick nearby.
+- **kavin** wears School uniform all episode: light-blue half-sleeve shirt, navy shorts, black school shoes.
+
 ## Shot list
 
-**Shot 1** · 0–3 s · hook · kavin · Thatha's front gate  
+**Shot 1** · 0–3 s · hook · kavin · thatha_gate · props: puppy, red_backpack  
 A small brown-and-white street puppy bounds toward Kavin wagging its tail; Kavin stamps his foot and shouts, and the puppy freezes mid-step. *Camera:* Wide, low angle from the puppy's height, Kavin framed in the gateway.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, soft golden-hour light, gentle film grain, shallow depth of field. Low angle from ground level at the iron gate of an old Tamil Nadu town house with a red-oxide verandah and a neem tree. A small brown-and-white street puppy with one floppy ear runs toward the camera, tail wagging. Behind it in the gateway stands Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack with a yellow keychain, mid-stamp with an angry face. No text, no letters, no logos.`  
+🖼 `Low angle from ground level in the yard, looking out at the gate. The puppy runs toward the camera, tail wagging. Behind it in the gateway Kavin, backpack on, is mid-stamp with an angry face, shouting.`  
 🎞 `The puppy bounds two steps forward, then stops dead and flattens its ears as Kavin stamps his foot and shouts; slight camera shake on the stamp.`
 
-**Shot 2** · 3–8 s · story · kavin · school ground  
+**Shot 2** · 3–8 s · story · kavin · school_ground · props: red_backpack  
 Kavin stands with head down in a line of classmates while an adult's pointing hand and whistle fill the foreground. *Camera:* Over-the-shoulder from the unseen PT teacher; only his hand and whistle cord visible, slow push-in on Kavin.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, harsh midday light, gentle film grain. A dusty Tamil Nadu school ground with a line of children in light-blue shirts. In the foreground, out of focus, an adult man's hand points sharply with a whistle on a cord; his face is not shown. In focus in the middle of the line, Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack, looks down at his shoes, jaw clenched, ears red. No text, no letters, no logos.`  
+🖼 `A line of children on the school ground. In the foreground, out of focus, an adult man's hand points sharply with a whistle on a cord; his face is not shown. In focus in the middle of the line, Kavin, backpack on, looks down at his shoes, jaw clenched, ears red.`  
 🎞 `The pointing hand jabs twice; classmates glance sideways at Kavin; slow push-in toward Kavin's lowered face.`
 
-**Shot 3** · 8–11 s · story · kavin · street to Thatha's house  
+**Shot 3** · 8–11 s · story · kavin · town_street · props: red_backpack  
 Kavin walks home fast, kicking a pebble hard, fists clenched on his backpack straps. *Camera:* Tracking shot at knee height, pebble skittering toward the lens.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, late-afternoon light, gentle film grain. A narrow Tamil Nadu town street with colourful houses and a tea shop in the distance. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, red backpack with a yellow keychain, walks toward the camera scowling, gripping his backpack straps, one foot kicking a pebble. No text, no letters, no logos.`  
+🖼 `Kavin walks toward the camera down the street, scowling, gripping both backpack straps, one foot kicking a pebble.`  
 🎞 `Kavin strides forward and kicks the pebble, which skitters past the camera; camera tracks backward with him.`
 
-**Shot 4** · 11–15 s · story · kavin · Thatha's front gate  
+**Shot 4** · 11–15 s · story · kavin · thatha_gate · props: puppy, red_backpack  
 The puppy runs to greet Kavin; he throws his bag down and shouts; the puppy yelps and scrambles under the thinnai. *Camera:* Medium shot, quick whip-pan following the puppy under the verandah.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain, shallow depth of field. The front yard of an old Tamil Nadu house with a red-oxide raised verandah (thinnai) and a neem tree. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, throws his red backpack to the ground, mouth open shouting. A small brown-and-white street puppy with one floppy ear cowers, about to dart under the verandah. No text, no letters, no logos.`  
+🖼 `Wide shot of the yard. Kavin throws his backpack to the ground, mouth open, shouting. The puppy cowers, about to dart toward the gap under the thinnai.`  
 🎞 `The backpack hits the ground with a puff of dust; the puppy scrambles under the verandah; camera whip-pans to follow it.`
 
-**Shot 5** · 15–19 s · story · thatha · Thatha's thinnai  
+**Shot 5** · 15–19 s · story · thatha · thatha_thinnai · props: newspaper  
 Thatha, sitting on the thinnai with a newspaper, slowly lowers it and looks at Kavin over his glasses. *Camera:* Medium close-up, static, Thatha centred.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain, shallow depth of field. Thatha, a slim slightly stooped 72-year-old Tamil grandfather with silver hair combed back, short white beard, round steel-rimmed glasses, thin sandal-paste line on his forehead, white veshti and cream half-sleeve shirt, sits on a red-oxide verandah with a wooden walking stick beside him, lowering a folded newspaper and looking calmly over his glasses. A brass lamp and neem leaves in the soft background. No text, no letters, no logos.`  
+🖼 `Medium shot. Thatha in his cane chair slowly lowers the folded newspaper and looks calmly over his glasses toward the left of frame.`  
 🎞 `Thatha slowly lowers the newspaper onto his lap and tilts his head, eyebrows raised kindly; neem leaves sway behind him.`
 
-**Shot 6** · 19–25 s · story · kavin, thatha · Thatha's thinnai  
+**Shot 6** · 19–25 s · story · kavin, thatha · thatha_thinnai · props: puppy  
 Kavin answers defensively, then follows Thatha's glance down to the puppy trembling under the thinnai. *Camera:* Two-shot, then tilt down to the puppy's frightened eyes in the dark gap under the verandah.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, golden-hour light, gentle film grain. Two-shot at an old Tamil Nadu house verandah: Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, light-blue school shirt, navy shorts, stands with arms crossed looking away; Thatha, a slim 72-year-old Tamil grandfather with silver hair, short white beard, round steel-rimmed glasses, white veshti, cream half-sleeve shirt, sits on the red-oxide verandah gazing down. In the lower frame, in the shadow under the verandah, a small brown-and-white puppy with one floppy ear peeks out with frightened eyes. No text, no letters, no logos.`  
+🖼 `Two-shot. Kavin stands on the left with arms crossed, looking away; Thatha in his chair on the right gazes down. Bottom left, in the shadow under the thinnai, the puppy peeks out with frightened eyes.`  
 🎞 `Kavin uncrosses his arms as his eyes drift down; camera slowly tilts down to the puppy's trembling face in the shadow.`
 
-**Shot 7** · 25–29 s · kural · thatha, kavin · Thatha's thinnai  
+**Shot 7** · 25–29 s · kural · thatha, kavin · thatha_thinnai  
 Thatha recites the kural slowly; Kavin sits down beside him, listening. *Camera:* Wide, warm, slow push-in; lamp glow on Thatha's face.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, deep golden sunset light, brass oil lamp glowing, gentle film grain. Thatha, a slim 72-year-old Tamil grandfather with silver hair combed back, short white beard, round steel-rimmed glasses, sandal-paste line on forehead, white veshti, cream half-sleeve shirt, brown shawl, sits on a red-oxide verandah speaking gently with one hand raised. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, sits beside him looking up. Neem tree silhouette behind. Clean empty space in the upper third of the frame. No text, no letters, no logos.`  
+🖼 `Thatha speaks gently with one hand raised; Kavin sits on the thinnai floor beside him on the left, looking up. The brass lamp in the niche is now lit. Clean empty space in the upper third of the frame.`  
 🎞 `Very slow push-in; Thatha's hand moves gently as he speaks; the lamp flame flickers.`
 
-**Shot 8** · 29–33 s · kural · kavin · Thatha's thinnai  
+**Shot 8** · 29–33 s · kural · kavin · thatha_thinnai  
 Close-up of Kavin as the words sink in; his eyes soften and glisten. *Camera:* Close-up, static, lamp light on one side of his face.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, sunset light with warm brass-lamp glow on one side, gentle film grain, shallow depth of field. Close-up of Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, big expressive eyes, small gap in his front teeth, light-blue school shirt, listening quietly, his angry expression melting into guilt, eyes slightly wet. Clean empty space in the upper third of the frame. No text, no letters, no logos.`  
+🖼 `Close-up of Kavin listening quietly, his angry expression melting into guilt, eyes slightly wet, warm lamp glow on one side of his face. Clean empty space in the upper third of the frame.`  
 🎞 `Kavin blinks slowly and swallows; his eyebrows relax; subtle lamp flicker on his cheek.`
 
-**Shot 9** · 33–40 s · lesson · kavin, thatha · Thatha's thinnai  
+**Shot 9** · 33–40 s · lesson · kavin, thatha · thatha_thinnai · props: puppy, biscuit  
 Kavin kneels by the verandah and holds out a biscuit; the puppy creeps out and licks his fingers; Thatha smiles behind them. *Camera:* Low medium shot at the puppy's height, Thatha soft in the background.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, last golden light of sunset, gentle film grain, shallow depth of field. Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, kneels at the edge of a red-oxide verandah holding out a biscuit. A small brown-and-white puppy with one floppy ear creeps out from the shadow under the verandah toward his hand. Behind, softly out of focus, Thatha, a 72-year-old Tamil grandfather with silver hair, white beard, round glasses, white veshti, smiles. Clean empty space in the upper third of the frame. No text, no letters, no logos.`  
+🖼 `Kavin kneels at the edge of the thinnai holding out the biscuit; the puppy creeps out from the shadow toward his hand. Behind, softly out of focus, Thatha smiles. Clean empty space in the upper third of the frame.`  
 🎞 `The puppy inches out, sniffs, then licks Kavin's fingers and wags its tail; Kavin breaks into a small gap-toothed smile.`
 
-**Shot 10** · 40–43 s · tease · kavin · Thatha's front gate  
+**Shot 10** · 40–43 s · tease · kavin · thatha_gate · props: puppy  
 The puppy bounds happily toward the gate with Kavin laughing behind it, mirroring the opening shot's framing. *Camera:* Wide, low angle from ground level at the gate, same framing as shot 1.  
-🖼 `Vertical 9:16 frame. Warm painterly 3D animation style, soft golden-hour light, gentle film grain, shallow depth of field. Low angle from ground level at the iron gate of an old Tamil Nadu town house with a red-oxide verandah and a neem tree, same composition as the opening shot. A small brown-and-white street puppy with one floppy ear runs toward the camera, tail wagging. Behind it in the gateway, Kavin, a thin 10-year-old Tamil boy with short messy black hair and a cowlick, light-blue school shirt, navy shorts, runs after it laughing. No text, no letters, no logos.`  
+🖼 `Same composition as shot 1: low angle from ground level in the yard, looking out at the gate. The puppy runs toward the camera, tail wagging; behind it Kavin, without his backpack, runs after it laughing.`  
 🎞 `The puppy bounds toward the camera and Kavin chases it laughing; the clip ends with the puppy mid-stride at the gate, matching the first frame.`
 
 ## YouTube

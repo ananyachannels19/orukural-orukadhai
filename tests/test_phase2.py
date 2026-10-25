@@ -9,7 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from orukural import assemble, config, visuals, voice
+from orukural import assemble, config, continuity, visuals, voice
 from orukural.kurals import KuralStore
 from orukural.schema import EpisodeScript
 
@@ -83,6 +83,7 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
 
     studio.raw["video"]["animate"] = "key"  # 4 paid clips, the rest held stills
     studio.raw["assembly"]["missing_clip"] = "still"
+    studio.raw["continuity"]["require_review"] = False
     store = KuralStore(studio.path("kurals"))
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     ep = studio.path("episodes") / "K0301"
@@ -90,14 +91,15 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     visuals.generate(studio, ep, sc, "K0301")
     t = assemble.assemble(studio, ep, sc, "K0301")
 
-    assert calls == {"image": 2 + 10, "video": 4, "tts": 9}
+    # references: 2 characters + 4 places + 4 props, then 10 shot images
+    assert calls == {"image": 2 + 4 + 4 + 10, "video": 4, "tts": 9}
     assert (ep / "render" / "K0301_draft.mp4").exists() and t["total_seconds"] >= 35
     # second run: everything comes from the cache, nothing is paid for again
     voice.generate(studio, ep, sc, "K0301")
     visuals.generate(studio, ep, sc, "K0301")
-    assert calls == {"image": 12, "video": 4, "tts": 9}
+    assert calls == {"image": 20, "video": 4, "tts": 9}
     spend = [json.loads(l) for l in studio.path("ledger").read_text().splitlines()]
-    assert {e["step"] for e in spend} == {"character_ref", "image", "clip", "voice"}
+    assert {e["step"] for e in spend} == {"character_ref", "location_ref", "prop_ref", "image", "clip", "voice"}
 
 
 def test_key_mode_picks_first_last_and_priorities(studio):
@@ -132,7 +134,12 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
 
     sheet = visuals.flow_sheet(studio, ep, sc, "K0301")
     kinds = [j["kind"] for j in sheet["jobs"]]
-    assert kinds.count("character_ref") == 2 and kinds.count("image") == 10 and kinds.count("clip") == 10
+    assert kinds.count("character_ref") == 2 and kinds.count("location_ref") == 4 and kinds.count("prop_ref") == 4
+    assert kinds.count("image") == 10 and kinds.count("clip") == 10
+    shot6 = next(j for j in sheet["jobs"] if j.get("shot") == 6 and j["kind"] == "image")
+    assert shot6["reference_images"] == ["assets/characters/kavin.png", "assets/characters/thatha.png",
+                                         "assets/locations/thatha_thinnai.png", "episodes/K0301/refs/props/puppy.png"]
+    assert "one floppy left ear" in shot6["prompt"] and "no shawl" in shot6["prompt"]
     daily = studio["flow"]["daily_credits"]
     per_day = {}
     for j in sheet["jobs"]:
@@ -163,6 +170,19 @@ def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
     for n in range(2, 11):  # next day's credits
         _mp4(ep / "clips" / f"shot{n:02d}.mp4")
     visuals.generate(studio, ep, sc, "K0301")
+    with pytest.raises(SystemExit, match="continuity review not passed"):
+        assemble.assemble(studio, ep, sc, "K0301")
+    made = continuity.contact_sheet(studio, ep, sc, ep / "flow" / "review")
+    assert {p.name for p in made} >= {"images.jpg", "clip_frames.jpg"}
+    review = continuity.load_review(ep)
+    review["images"] = {k: "pass" for k in review["images"]}
+    review["clips"] = {k: "pass" for k in review["clips"]}
+    review["clips"]["4"] = "puppy's ear flips sides"
+    (ep / continuity.REVIEW_FILE).write_text(json.dumps(review))
+    with pytest.raises(SystemExit, match="clip shot 4: puppy"):
+        assemble.assemble(studio, ep, sc, "K0301")
+    review["clips"]["4"] = "pass"
+    (ep / continuity.REVIEW_FILE).write_text(json.dumps(review))
     t = assemble.assemble(studio, ep, sc, "K0301")
     assert [x["source"] for x in t["shots"]].count("clip") == 10
 
@@ -174,3 +194,24 @@ def test_monthly_top_up_fits_an_episode_in_one_day(studio):
     assert plain["clip_days"] == 2 and plain["monthly_credits_used"] == 0
     topped = visuals.flow_sheet(studio, ep, sc, "K0301", pool=studio["flow"]["monthly_top_up_per_episode"])
     assert topped["clip_days"] == 1 and topped["monthly_credits_used"] == topped["clip_credits"] - studio["flow"]["daily_credits"]
+
+
+def test_continuity_checks_catch_breaks(studio):
+    raw = json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"]
+    sc = EpisodeScript.model_validate(raw)
+    errors, _ = continuity.check(studio, sc)
+    assert errors == []
+    raw["shots"][4]["location"] = "kitchen"                 # place not in the bible
+    raw["shots"][5]["props"] = ["puppy", "kite"]            # prop not in the bible
+    raw["shots"][2]["characters"] = ["kavin", "meena", "murugan_anna"]  # two supporting characters
+    raw["shots"][5]["props"] = ["kite"]
+    raw["continuity"]["props"].append({"id": "kite", "name_ta": "", "description_en": "a red kite"})
+    raw["shots"][3]["props"] = ["red_backpack"]             # puppy gone while the narration names it
+    raw["shots"][4]["characters"] = ["kavin"]               # Thatha speaks 15-19 s but is not on screen
+    sc = EpisodeScript.model_validate(raw)
+    errors, warns = continuity.check(studio, sc)
+    text = " | ".join(errors + warns)
+    assert "location 'kitchen'" in text
+    assert "more than one supporting character" in text and "no outfit in continuity for meena" in text
+    assert "dialogue mentions குட்டி (puppy) but no shot shows it" in text
+    assert "thatha speaks but is not on screen" in text

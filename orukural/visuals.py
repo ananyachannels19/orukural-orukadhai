@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-from . import media
+from . import continuity, media
 from .config import Settings
 from .ledger import Ledger
 from .schema import EpisodeScript, Shot
@@ -89,14 +89,7 @@ def _placeholder(out: Path, label: str, size: tuple[int, int] = (1080, 1920)) ->
 
 
 def character_prompt(s: Settings, cid: str) -> str:
-    sheet = _sheet(s)
-    c = sheet["characters"][cid]
-    return (
-        f"Character reference sheet for an animated series. {c['name']}, {c['age']} years old. {c['look'].strip()} "
-        f"Show the same character twice side by side: full body standing front view, and a head-and-shoulders "
-        f"close-up. Neutral expression with a hint of their personality: {c['voice_and_manner'].strip()} "
-        f"Plain light warm-grey background. Style: {sheet['world']['visual_style'].strip()}"
-    )
+    return continuity.character_ref_prompt(s, cid)
 
 
 def find_media(stem: Path, kinds: tuple[str, ...]) -> Path | None:
@@ -109,51 +102,48 @@ def find_media(stem: Path, kinds: tuple[str, ...]) -> Path | None:
 IMAGE_EXT = (".png", ".jpg", ".jpeg", ".webp")
 
 
-def character_refs(s: Settings, force: bool = False) -> dict[str, Path]:
-    """One reference image per main character, made once and committed."""
-    cdir = s.root / s["images"]["characters_dir"]
-    if s.dry_run:  # placeholders must never land in the committed assets folder
-        cdir = s.path("cache") / "dry_run_characters"
-    refs = {}
-    for cid in MAIN_CHARACTERS:
-        found = find_media(cdir / cid, IMAGE_EXT)
-        out = found or cdir / f"{cid}.png"
-        refs[cid] = out
-        if found and not force:
-            continue
-        prompt = character_prompt(s, cid)
+def _rel(s: Settings):
+    return lambda p: str(Path(p).relative_to(s.root)) if Path(p).is_relative_to(s.root) else str(p)
+
+
+def ensure_refs(s: Settings, ep_dir: Path, script: EpisodeScript, force: bool = False) -> None:
+    """Make missing character, location and prop references (Gemini or dry-run placeholders).
+    In Flow mode they are made from the job sheet instead."""
+    if s["images"]["provider"] == "flow" and not s.dry_run:
+        return
+    for job in continuity.ref_jobs(s, ep_dir, script, rel=lambda p: p):
+        out = Path(job["save_as"])
         if s.dry_run:
-            _placeholder(out, f"REF {cid}", (1024, 1024))
+            _placeholder(out, f"REF {job['id']}", (1024, 1024) if job["aspect_ratio"] == "1:1" else (1080, 1920))
             continue
-        if s["images"]["provider"] == "flow":
-            continue  # made in Flow from the job sheet
-        res = _ledger(s).run(episode_id="CHARACTERS", step="character_ref",
-                             inputs={"model": s["images"]["model"], "prompt": prompt},
+        res = _ledger(s).run(episode_id="CHARACTERS" if job["kind"] == "character_ref" else script_id(ep_dir),
+                             step=job["kind"], inputs={"model": s["images"]["model"], "prompt": job["prompt"]},
                              estimate_usd=s["budget"]["estimates"]["character_ref"],
-                             call=lambda: _gen_image(s, [{"type": "text", "text": prompt}], "1:1",
-                                                     s.path("cache") / "character_ref" / f"{cid}.png"),
+                             call=lambda: _gen_image(s, [{"type": "text", "text": job["prompt"]}], job["aspect_ratio"],
+                                                     s.path("cache") / job["kind"] / out.name),
                              force=force)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_bytes(Path(res.value["file"]).read_bytes())
-    return refs
 
 
-def shot_image(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, refs: dict[str, Path], force: bool = False) -> Path:
+def script_id(ep_dir: Path) -> str:
+    return ep_dir.parent.name if ep_dir.name == "dryrun" else ep_dir.name
+
+
+def shot_image(s: Settings, ep_dir: Path, episode_id: str, script: EpisodeScript, shot: Shot,
+               force: bool = False) -> Path:
     out = ep_dir / "images" / f"shot{shot.n:02d}.png"
     if s.dry_run:
         _placeholder(out, f"{episode_id} shot {shot.n} {shot.beat} — {shot.action_en[:80]}")
         return out
-    used = [c for c in shot.characters if c in refs][:4]  # model takes up to 4 character references
-    parts: list[dict] = [{"type": "text", "text": shot.image_prompt_en}]
-    if used:
-        names = ", ".join(f"reference image {i + 1} is {c}" for i, c in enumerate(used))
-        parts[0]["text"] += (f" Keep each character's face, hair, body and clothes exactly as in the attached "
-                             f"reference images ({names}). Do not copy the reference layout or background.")
-        parts += [{"type": "image", "data": _b64(refs[c]), "mime_type": _mime(refs[c])} for c in used]
-    ref_hashes = {c: refs[c].stat().st_size for c in used}
+    refs = [(lab, p) for lab, p in continuity.shot_refs(s, ep_dir, script, shot) if p.exists()]
+    prompt = continuity.image_prompt(s, script, shot, [lab for lab, _ in refs])
+    parts: list[dict] = [{"type": "text", "text": prompt}]
+    parts += [{"type": "image", "data": _b64(p), "mime_type": _mime(p)} for _, p in refs]
     res = _ledger(s).run(
         episode_id=episode_id, step="image",
-        inputs={"model": s["images"]["model"], "size": s["images"]["image_size"], "prompt": parts[0]["text"], "refs": ref_hashes},
+        inputs={"model": s["images"]["model"], "size": s["images"]["image_size"], "prompt": prompt,
+                "refs": {lab: p.stat().st_size for lab, p in refs}},
         estimate_usd=s["images"]["price_per_image"][s["images"]["image_size"]],
         call=lambda: _gen_image(s, parts, "9:16", s.path("cache") / "image" / f"{episode_id}_shot{shot.n:02d}.png"),
         force=force,
@@ -223,7 +213,8 @@ def _gen_clip(s: Settings, image: Path, prompt: str, out: Path) -> tuple[dict, f
         "interaction_id": getattr(interaction, "id", None)}
 
 
-def shot_clip(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, image: Path, force: bool = False) -> Path:
+def shot_clip(s: Settings, ep_dir: Path, episode_id: str, script: EpisodeScript, shot: Shot, image: Path,
+              force: bool = False) -> Path:
     out = ep_dir / "clips" / f"shot{shot.n:02d}.mp4"
     secs = clip_seconds(s, shot)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -232,9 +223,7 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, image: Pat
                    f"{media.fill_frame()},fps=24",
                    "-c:v", "libx264", "-pix_fmt", "yuv420p", str(out)])
         return out
-    prompt = (f"{shot.motion_prompt_en.strip()} Camera: {shot.camera_en.strip()} "
-              f"Keep the characters exactly as they look in the image. About {secs} seconds, one continuous shot, "
-              f"no cuts, no on-screen text, no dialogue or speech.")
+    prompt = continuity.clip_prompt(s, script, shot, secs)
     res = _ledger(s).run(
         episode_id=episode_id, step="clip",
         inputs={"model": s["video"]["model"], "res": s["video"]["resolution"], "prompt": prompt,
@@ -249,27 +238,19 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, image: Pat
 
 
 def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, pool: int = 0) -> dict:
-    """`pool`: monthly plan credits to add on top of day 1's daily credits (0 = daily credits only)."""
-    """Write flow/jobs.json + flow/README.md: everything a Flow session must make, and where to save it."""
+    """Write flow/jobs.json + flow/README.md: everything a Flow session must make, and where to save it.
+    `pool`: monthly plan credits to add on top of day 1's daily credits (0 = daily credits only)."""
     rel = lambda p: str(Path(p).relative_to(s.root))  # noqa: E731
-    cdir = s.root / s["images"]["characters_dir"]
-    refs = {cid: find_media(cdir / cid, IMAGE_EXT) for cid in MAIN_CHARACTERS}
-    jobs = []
-    for cid, found in refs.items():
-        if not found:
-            jobs.append({"kind": "character_ref", "save_as": rel(cdir / f"{cid}.png"), "aspect_ratio": "1:1",
-                         "model": s["flow"]["image_model"], "prompt": character_prompt(s, cid)})
+    jobs = continuity.ref_jobs(s, ep_dir, script, rel)
     for sh in script.shots:
         if find_media(ep_dir / "images" / f"shot{sh.n:02d}", IMAGE_EXT):
             continue
-        used = [c for c in sh.characters if c in refs][:4]
+        refs = continuity.shot_refs(s, ep_dir, script, sh)
         jobs.append({
             "kind": "image", "shot": sh.n, "save_as": rel(ep_dir / "images" / f"shot{sh.n:02d}.png"),
             "aspect_ratio": "9:16", "model": s["flow"]["image_model"],
-            "reference_images": [rel(cdir / f"{c}.png") for c in used],
-            "prompt": sh.image_prompt_en + (
-                f" Keep each character's face, hair, body and clothes exactly as in the reference images "
-                f"({', '.join(used)})." if used else ""),
+            "reference_images": [rel(p) for _, p in refs],
+            "prompt": continuity.image_prompt(s, script, sh, [lab for lab, _ in refs]),
         })
     credits, day, day_used, pool_used = 0, 1, 0, 0
     daily = s["flow"]["daily_credits"]
@@ -291,8 +272,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
             "save_as": rel(ep_dir / "clips" / f"shot{n:02d}.mp4"),
             "start_frame": rel(ep_dir / "images" / f"shot{n:02d}.png"),
             "model": s["flow"]["video_model"], "seconds": secs, "aspect_ratio": "9:16", "credits": table[secs],
-            "prompt": (f"{sh.motion_prompt_en.strip()} Camera: {sh.camera_en.strip()} Keep the characters exactly as "
-                       f"they look in the start frame. One continuous shot, no cuts, no text, no dialogue."),
+            "prompt": continuity.clip_prompt(s, script, sh, secs),
         })
     sheet = {"episode_id": episode_id, "clip_credits": credits, "daily_credits": daily, "clip_days": day if credits else 0,
              "monthly_credits_used": pool_used,
@@ -300,23 +280,33 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
     fdir = ep_dir / "flow"
     fdir.mkdir(parents=True, exist_ok=True)
     (fdir / "jobs.json").write_text(json.dumps(sheet, ensure_ascii=False, indent=1), "utf-8")
+    n = episode_id.lstrip("K0")
     lines = [
         f"# Flow jobs for {episode_id}", "",
-        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo).",
-        "Do images first: clips start from the saved shot image. Attach the listed reference images.",
-        f"Clips need {credits} credits over {sheet['clip_days']} day(s): {daily} daily credits a day"
-        + (f", plus {pool_used} monthly plan credits on day 1" if pool_used else "") + ". Spend daily credits before "
-        "monthly ones. Make only the clips for today's day number; if credits run out early, stop and continue after "
-        "the reset. Never buy credits.",
-        "Then run `python studio.py visuals " + episode_id.lstrip("K0") + "` to collect everything.", "",
+        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo). Work in this order:", "",
+        "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
+        "2. **Shot images**, attaching every listed reference image in the listed order.",
+        f"3. **Image review.** Run `python studio.py continuity-sheet {n}` and follow the continuity-review skill "
+        "(`.claude/skills/continuity-review/SKILL.md`): compare every image with the references, redo any that "
+        f"drift (images are free), and mark each one `pass` in `episodes/{episode_id}/continuity_review.json`. "
+        "Do not start clips until every image passes; clips cost credits.",
+        f"4. **Clips**, from the reviewed images. They need {credits} credits over {sheet['clip_days']} day(s): "
+        f"{daily} daily credits a day" + (f", plus {pool_used} monthly plan credits on day 1" if pool_used else "")
+        + ". Spend daily credits before monthly ones. Make only today's day number; if credits run out, stop and "
+        "continue after the reset. Never buy credits.",
+        f"5. **Clip review.** Run `continuity-sheet {n}` again, check the first, middle and last frames of each clip, "
+        "and mark clips `pass`. Redo a drifting clip only if credits allow; otherwise note it and tell the user.",
+        f"6. Run `python studio.py visuals {n}`, then `render {n}`.", "",
     ]
     for j in jobs:
-        head = {"character_ref": f"Character reference → `{j['save_as']}`",
+        head = {"character_ref": f"Character reference: {j.get('id')} → `{j['save_as']}`",
+                "location_ref": f"Place reference: {j.get('id')} → `{j['save_as']}`",
+                "prop_ref": f"Prop reference: {j.get('id')} → `{j['save_as']}`",
                 "image": f"Shot {j.get('shot')} image → `{j['save_as']}`",
                 "clip": f"Day {j.get('day')} · shot {j.get('shot')} clip ({j.get('seconds')} s, {j.get('credits')} credits) → `{j['save_as']}`"}[j["kind"]]
         lines += [f"## {head}", ""]
         if j.get("reference_images"):
-            lines.append("References: " + ", ".join(f"`{r}`" for r in j["reference_images"]))
+            lines.append("References, in this order: " + ", ".join(f"`{r}`" for r in j["reference_images"]))
         if j.get("start_frame"):
             lines.append(f"Start frame: `{j['start_frame']}`")
         lines += [f"Aspect {j['aspect_ratio']} · {j['model']}", "", "```", j["prompt"], "```", ""]
@@ -326,7 +316,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
 
 def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, force: bool = False,
              only: set[int] | None = None) -> dict:
-    refs = character_refs(s)
+    ensure_refs(s, ep_dir, script, force=force)
     animate = animated_shots(s, script)
     flow_images = s["images"]["provider"] == "flow" and not s.dry_run
     flow_video = s["video"]["provider"] == "flow" and not s.dry_run
@@ -340,14 +330,14 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
                 missing.append(sh.n)
                 continue
         else:
-            img = shot_image(s, ep_dir, episode_id, sh, refs, force=force)
+            img = shot_image(s, ep_dir, episode_id, script, sh, force=force)
         clip = None
         if sh.n in animate:
             if flow_video:
                 found = ep_dir / "clips" / f"shot{sh.n:02d}.mp4"
                 clip = found if found.exists() else None
             else:
-                clip = shot_clip(s, ep_dir, episode_id, sh, img, force=force)
+                clip = shot_clip(s, ep_dir, episode_id, script, sh, img, force=force)
         shots.append({"n": sh.n, "image": img.name, "clip": clip.name if clip else None})
     if missing:
         raise SystemExit(f"{episode_id}: no image yet for shots {missing}. Run `studio.py flow-sheet "

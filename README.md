@@ -65,14 +65,25 @@ Flow has no API we can call from Python, so the hand-off is file based: `studio.
 
 ```bash
 python studio.py voice-test            # one kural line in 8 Tamil voices → review/voice_test/, pick by ear
-python studio.py flow-sheet 301        # what to make in Flow and where to save it (character refs first time)
+python studio.py flow-sheet 301        # what to make in Flow and where to save it (refs, images, review, clips)
+python studio.py continuity-sheet 301  # contact sheets + review file for the continuity check
 python studio.py render 301            # voice → collect visuals → assemble → episodes/K0301/render/K0301_draft.mp4
 python studio.py render 301 --dry-run  # whole pipeline with placeholder cards and silence, in episodes/K0301/dryrun/
 ```
 
 - **Voice** (`orukural/voice.py`): each script segment is voiced on its own. Narrator, Thatha and Kavin can have separate voices (`speaker_voices`). `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only.
-- **Visuals** (`orukural/visuals.py`): Thatha and Kavin reference images live in `assets/characters/` and are attached to every shot image so the faces stay the same. `video.animate: all` (default) makes a clip for every shot; `key` would animate only the first, last and highest `motion_priority` shots, and `none` none.
+- **Visuals** (`orukural/visuals.py`): reference images for characters, places and props are attached to every shot image (see Consistency above). `video.animate: all` (default) makes a clip for every shot; `key` would animate only the first, last and highest `motion_priority` shots, and `none` none.
 - **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Shots are shown as made, with no pan, zoom or punch-in (`assembly.punch_in: 1.0`). Narration is mixed over a track from `assets/music/` (ducked under speech) and loudness-normalised to −14 LUFS. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
+
+## Consistency (characters, places, props, dialogue)
+
+An episode has 10 separately generated shots, so anything left to chance drifts: a shawl appears, the puppy's ear switches sides, the light goes back from sunset to afternoon. Consistency is built in at three layers (`orukural/continuity.py`):
+
+1. **The bible.** `data/characters.yaml` fixes the cast (face and body in `look`, clothes in `wardrobe`), eight recurring places, and how people address each other (`speech`). Each script adds a `continuity` block: this episode's places with their light and blocking (who stands where, facing which way), every prop described exactly, and one outfit per character. Image and clip prompts are **built from the bible**, not retyped per shot, so a detail can't drift between shots. The shot's own `image_prompt_en` only says the composition and action.
+2. **Reference images.** Every character (supporting ones too), every recurring place (`assets/locations/`, made once and reused by every episode) and every episode prop (`episodes/<id>/refs/props/`) gets one reference image, attached to every shot that shows it, in a fixed order.
+3. **Checks.**
+   - On the script (`script-check`): unknown places, props or characters; a character on screen with no outfit; more than one supporting character; a character who speaks but is never on screen during the line; a prop the dialogue names (`name_ta`) but no nearby shot shows.
+   - On the pictures: `studio.py continuity-sheet 301` makes contact sheets (references, all shot images, and first/middle/last frames of every clip) and `episodes/<id>/continuity_review.json`. The Mac session follows `.claude/skills/continuity-review/SKILL.md` to compare them, redoes failing images (free) before any clip is made, and marks each shot `pass`. `assemble` refuses to render until every image and clip passes (`continuity.require_review`).
 
 ## Script generation
 

@@ -15,7 +15,7 @@ import json
 from bisect import bisect_right
 from pathlib import Path
 
-from . import media
+from . import continuity, media
 from .config import Settings
 from .schema import EpisodeScript, Shot
 
@@ -120,6 +120,15 @@ def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) 
     if waiting and s["assembly"]["missing_clip"] == "wait":
         raise SystemExit(f"{episode_id}: waiting for clips for shots {waiting}. Make them in Flow when the daily "
                          f"credits reset (`studio.py flow-sheet {episode_id}`), then run visuals and assemble again.")
+
+    if s["continuity"]["require_review"] and not s.dry_run:
+        review = continuity.load_review(ep_dir)
+        gaps = [f"image {g}" for g in continuity.review_gaps(script, review, "images")]
+        gaps += [f"clip {g}" for g in continuity.review_gaps(script, review, "clips",
+                                                             [n for n in visuals.get("animated", []) if by_n[n]["clip"]])]
+        if gaps:
+            raise SystemExit(f"{episode_id}: continuity review not passed: " + "; ".join(gaps)
+                             + f". Run `studio.py continuity-sheet {episode_id}` and review.")
 
     segs, anchors = real_timeline(s, script, voice)
     total = segs[-1]["end"]

@@ -10,7 +10,8 @@ Phase 1 commands:
   python studio.py spend [K0301]         spend log
 
 Phase 2 commands:
-  python studio.py characters [--force]  generate Thatha/Kavin reference images (once; commit them)
+  python studio.py refs 301 [--force]    make missing character/place/prop references (Gemini or dry-run)
+  python studio.py continuity-sheet 301  contact sheets + review file for the continuity check
   python studio.py voice 301             narration, one file per segment
   python studio.py flow-sheet 301        what to make in Google Flow, and where to save it
   python studio.py voice-test            one kural line in 8 Tamil voices → review/voice_test/
@@ -110,7 +111,8 @@ def cmd_flow_sheet(s, args):
     sheet = visuals.flow_sheet(s, ep_dir, sc, k["id"], pool=pool)
     kinds = [j["kind"] for j in sheet["jobs"]]
     extra = f", {sheet['monthly_credits_used']} of them monthly" if sheet["monthly_credits_used"] else ""
-    print(f"{ep_dir.relative_to(s.root)}/flow/README.md: {kinds.count('character_ref')} character refs, "
+    refs = sum(kinds.count(x) for x in ("character_ref", "location_ref", "prop_ref"))
+    print(f"{ep_dir.relative_to(s.root)}/flow/README.md: {refs} references, "
           f"{kinds.count('image')} images, {kinds.count('clip')} clips: {sheet['clip_credits']} credits over "
           f"{sheet['clip_days']} day(s){extra}")
 
@@ -126,10 +128,25 @@ def cmd_voice_test(s, args):
         print(o.relative_to(s.root))
 
 
-def cmd_characters(s, args):
-    from orukural import visuals
-    for cid, path in visuals.character_refs(s, force=args.force).items():
-        print(f"{cid}: {path.relative_to(s.root)}")
+def cmd_refs(s, args):
+    from orukural import continuity, visuals
+    k, ep_dir, sc = _episode(s, args.kural)
+    if s["images"]["provider"] == "flow" and not s.dry_run:
+        raise SystemExit(f"images.provider is flow: run `studio.py flow-sheet {args.kural}` and make them in Flow")
+    visuals.ensure_refs(s, ep_dir, sc, force=args.force)
+    for shot in sc.shots:
+        print(f"shot {shot.n}: " + ", ".join(f"{lab} ({p.name})" for lab, p in continuity.shot_refs(s, ep_dir, sc, shot)))
+
+
+def cmd_continuity_sheet(s, args):
+    from orukural import continuity
+    k, ep_dir, sc = _episode(s, args.kural)
+    for p in continuity.contact_sheet(s, ep_dir, sc, ep_dir / "flow" / "review"):
+        print(p.relative_to(s.root))
+    review = continuity.load_review(ep_dir)
+    for kind in ("images", "clips"):
+        gaps = continuity.review_gaps(sc, review, kind)
+        print(f"{kind}: " + ("all pass" if not gaps else "; ".join(gaps)))
 
 
 def cmd_voice(s, args):
@@ -223,9 +240,14 @@ def main(argv=None):
     vt.add_argument("--voices", help="comma-separated voice names")
     vt.set_defaults(fn=cmd_voice_test)
 
-    ch = sub.add_parser("characters", help="generate the character reference images")
-    ch.add_argument("--force", action="store_true")
-    ch.set_defaults(fn=cmd_characters)
+    rf = sub.add_parser("refs", help="make missing character, place and prop references (Gemini or dry-run)")
+    rf.add_argument("kural")
+    rf.add_argument("--force", action="store_true")
+    rf.set_defaults(fn=cmd_refs)
+
+    cs = sub.add_parser("continuity-sheet", help="contact sheets and review file for the continuity check")
+    cs.add_argument("kural")
+    cs.set_defaults(fn=cmd_continuity_sheet)
 
     for name, fn in (("voice", cmd_voice), ("visuals", cmd_visuals), ("assemble", cmd_assemble), ("render", cmd_render)):
         c = sub.add_parser(name)

@@ -14,6 +14,60 @@ world:
     No text inside generated images (we add Tamil text ourselves).
   palette: [terracotta, turmeric yellow, neem green, temple-lamp gold, indigo night]
 
+# Recurring places. Each gets one reference image (assets/locations/<id>.png), made
+# once and attached to every shot set there, so the place looks the same in every episode.
+locations:
+  thatha_gate:
+    name: Thatha's front gate and yard
+    description: >
+      Low whitewashed compound wall with a black iron gate that squeaks, a sandy front
+      yard with a big neem tree on the left, a kolam drawn at the gate, and the house
+      behind: red-oxide thinnai, two wooden pillars, a teak front door with brass studs.
+  thatha_thinnai:
+    name: Thatha's thinnai (verandah)
+    description: >
+      Raised red-oxide verandah along the front of the house, two square wooden pillars,
+      Thatha's cane easy chair on the right, a brass kuthuvilakku in a wall niche, a
+      small shelf of old books, the neem tree's shade falling across the floor.
+  thatha_hall:
+    name: Thatha's house, main hall
+    description: >
+      Red-oxide floor, lime-washed walls, a wooden swing (oonjal) on chains in the middle,
+      framed black-and-white family photos, a steel almirah, a window with green wooden shutters.
+  school_ground:
+    name: Kavin's school ground
+    description: >
+      Dusty sand ground with a flag post, a two-storey cream school building with a
+      blue door and a long corridor, a big rain tree on one side, children in light-blue
+      shirts and navy shorts or green pinafores.
+  town_street:
+    name: The street to Thatha's house
+    description: >
+      Narrow town street with colourful single-storey houses, kolams at doorsteps,
+      tangled overhead wires, a cycle leaning on a wall, Murugan Anna's tea shop at the corner.
+  tea_shop:
+    name: Murugan Anna's tea shop
+    description: >
+      Small corner shop with a tin roof, a big steel tea boiler, glass jars of biscuits,
+      a wooden bench outside, a hand-painted sign with no readable words.
+  bus_stand:
+    name: Town bus stand
+    description: >
+      Small open bus stand with a concrete shelter, a green-and-yellow town bus, fruit
+      carts, posters with no readable words.
+  temple_tank:
+    name: Temple tank
+    description: >
+      Old stone steps going down to green water, a small gopuram behind, pigeons,
+      a stone mandapam with pillars at one corner.
+
+# How the characters talk to each other. Keep these the same in every episode.
+speech:
+  - Kavin calls his grandfather "தாத்தா" and his mother "அம்மா".
+  - Thatha calls Kavin "கவின்" or, warmly, "கண்ணா".
+  - Kavin calls Murugan Anna "அண்ணா", and Meena by her name.
+  - Thatha speaks slow, gentle spoken Tamil; Kavin speaks fast, casual spoken Tamil.
+
 characters:
   thatha:
     name_ta: "தாத்தா"
@@ -22,9 +76,11 @@ characters:
     age: 72
     look: >
       Slim, slightly stooped, silver hair combed back, short white beard, round
-      steel-rimmed glasses, thin sandal-paste line on the forehead. Always in a white
-      veshti and a cream half-sleeve shirt, a brown shawl in the evenings. Carries a
-      worn wooden walking stick. Kind crinkled eyes.
+      steel-rimmed glasses, thin sandal-paste line on the forehead, kind crinkled eyes.
+      Carries a worn wooden walking stick.
+    wardrobe:   # an episode picks one and keeps it in every shot
+      everyday: White veshti and a cream half-sleeve shirt.
+      evening: White veshti, cream half-sleeve shirt and a brown shawl over the shoulders.
     voice_and_manner: >
       Calm, never preachy. Asks a question instead of giving an answer. Uses gentle
       humour. Says the kural slowly, then explains it in everyday Tamil.
@@ -36,8 +92,10 @@ characters:
     age: 10
     look: >
       Thin, energetic, short messy black hair with a cowlick, big expressive eyes,
-      small gap in his front teeth. School days: light-blue shirt, navy shorts, a red
-      backpack with a yellow keychain. Home: an orange T-shirt with a small rocket print.
+      small gap in his front teeth.
+    wardrobe:
+      school: Light-blue half-sleeve school shirt, navy shorts, black school shoes; red backpack with a yellow star keychain.
+      home: Orange T-shirt with a small rocket print, grey shorts, barefoot.
     voice_and_manner: >
       Talks fast in casual spoken Tamil, gets angry or excited quickly, learns by the
       end of every episode, and sometimes catches Thatha out with a clever question.
@@ -54,6 +112,8 @@ characters:
 
 rules:
   - Thatha and Kavin appear in every episode. Use at most one supporting character.
+  - Within an episode nothing changes unless the story changes it on screen - outfits,
+    props, light, where people stand. If something changes, show it happening.
   - Kavin makes the mistake or faces the problem; Thatha never lectures, he asks.
   - Stories are original everyday situations, set today, never retellings of famous folk tales.
   - No real people, brands, politics, religion-vs-religion conflict, or violence beyond a raised voice.

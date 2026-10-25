@@ -26,16 +26,43 @@ class Segment(BaseModel):
     on_screen_ta: str = Field(description="Extra on-screen Tamil text besides subtitles, or empty string")
 
 
+class Location(BaseModel):
+    id: str = Field(description="snake_case id; reuse a series location id from the world sheet when the scene is there")
+    description_en: str = Field(description="Fixed look of the place: layout, materials, landmarks, colours")
+    light_en: str = Field(description="Time of day and light for this episode, the same in every shot here")
+    blocking_en: str = Field(description="Who is where and facing which way, so cuts between shots match")
+
+
+class Prop(BaseModel):
+    id: str = Field(description="snake_case id, e.g. puppy, red_backpack")
+    name_ta: str = Field(default="", description="The Tamil word the dialogue uses for it, or empty")
+    description_en: str = Field(description="Exact look: size, colour, markings, condition; never changes mid-episode")
+
+
+class Outfit(BaseModel):
+    character: str = Field(description="Character id")
+    outfit_en: str = Field(description="What they wear for the whole episode, from the character sheet")
+
+
+class Continuity(BaseModel):
+    """The episode's fixed bible: every image and clip prompt is built from it."""
+    locations: list[Location]
+    props: list[Prop] = Field(description="Objects and animals that matter to the story or recur across shots")
+    outfits: list[Outfit] = Field(description="One entry for every character on screen")
+
+
 class Shot(BaseModel):
     n: int
     beat: Beat
     start_s: float
     end_s: float
     characters: list[str] = Field(description="Character ids from the character sheet, e.g. thatha, kavin")
-    location: str
+    location: str = Field(description="A location id from continuity.locations")
+    props: list[str] = Field(default_factory=list, description="Prop ids from continuity.props visible in this shot")
     action_en: str = Field(description="What happens in the shot, in English")
     camera_en: str = Field(description="Framing and camera move, in English")
-    image_prompt_en: str = Field(description="Prompt for the still image (first frame), no text in image")
+    image_prompt_en: str = Field(description="Composition, action, expressions and framing of the first frame. "
+                                 "Character looks, outfits, location and props are added from the bible")
     motion_prompt_en: str = Field(description="Prompt for the 3–8 s image-to-video clip")
     motion_priority: int = Field(
         default=5, description="1 (clip made first, carries the story) to 5 (calm shot, made last)")
@@ -61,6 +88,7 @@ class EpisodeScript(BaseModel):
     originality_note_en: str = Field(description="What in this story is new and specific to our series")
     meaning_ta: str = Field(description="Our own plain-Tamil meaning of the kural, 1–2 sentences")
     meaning_en: str = Field(description="Our own plain-English meaning, 1–2 sentences")
+    continuity: Continuity
     hooks: list[Hook]
     chosen_hook: int = Field(description="Index (0-based) of the hook used in the segments")
     segments: list[Segment]

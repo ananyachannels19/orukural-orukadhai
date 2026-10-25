@@ -1,5 +1,40 @@
 {
  "$defs": {
+  "Continuity": {
+   "description": "The episode's fixed bible: every image and clip prompt is built from it.",
+   "properties": {
+    "locations": {
+     "items": {
+      "$ref": "#/$defs/Location"
+     },
+     "title": "Locations",
+     "type": "array"
+    },
+    "props": {
+     "description": "Objects and animals that matter to the story or recur across shots",
+     "items": {
+      "$ref": "#/$defs/Prop"
+     },
+     "title": "Props",
+     "type": "array"
+    },
+    "outfits": {
+     "description": "One entry for every character on screen",
+     "items": {
+      "$ref": "#/$defs/Outfit"
+     },
+     "title": "Outfits",
+     "type": "array"
+    }
+   },
+   "required": [
+    "locations",
+    "props",
+    "outfits"
+   ],
+   "title": "Continuity",
+   "type": "object"
+  },
   "Hook": {
    "properties": {
     "style": {
@@ -50,6 +85,84 @@
     "hashtags"
    ],
    "title": "InstagramMeta",
+   "type": "object"
+  },
+  "Location": {
+   "properties": {
+    "id": {
+     "description": "snake_case id; reuse a series location id from the world sheet when the scene is there",
+     "title": "Id",
+     "type": "string"
+    },
+    "description_en": {
+     "description": "Fixed look of the place: layout, materials, landmarks, colours",
+     "title": "Description En",
+     "type": "string"
+    },
+    "light_en": {
+     "description": "Time of day and light for this episode, the same in every shot here",
+     "title": "Light En",
+     "type": "string"
+    },
+    "blocking_en": {
+     "description": "Who is where and facing which way, so cuts between shots match",
+     "title": "Blocking En",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "description_en",
+    "light_en",
+    "blocking_en"
+   ],
+   "title": "Location",
+   "type": "object"
+  },
+  "Outfit": {
+   "properties": {
+    "character": {
+     "description": "Character id",
+     "title": "Character",
+     "type": "string"
+    },
+    "outfit_en": {
+     "description": "What they wear for the whole episode, from the character sheet",
+     "title": "Outfit En",
+     "type": "string"
+    }
+   },
+   "required": [
+    "character",
+    "outfit_en"
+   ],
+   "title": "Outfit",
+   "type": "object"
+  },
+  "Prop": {
+   "properties": {
+    "id": {
+     "description": "snake_case id, e.g. puppy, red_backpack",
+     "title": "Id",
+     "type": "string"
+    },
+    "name_ta": {
+     "default": "",
+     "description": "The Tamil word the dialogue uses for it, or empty",
+     "title": "Name Ta",
+     "type": "string"
+    },
+    "description_en": {
+     "description": "Exact look: size, colour, markings, condition; never changes mid-episode",
+     "title": "Description En",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "description_en"
+   ],
+   "title": "Prop",
    "type": "object"
   },
   "Segment": {
@@ -139,8 +252,17 @@
      "type": "array"
     },
     "location": {
+     "description": "A location id from continuity.locations",
      "title": "Location",
      "type": "string"
+    },
+    "props": {
+     "description": "Prop ids from continuity.props visible in this shot",
+     "items": {
+      "type": "string"
+     },
+     "title": "Props",
+     "type": "array"
     },
     "action_en": {
      "description": "What happens in the shot, in English",
@@ -153,7 +275,7 @@
      "type": "string"
     },
     "image_prompt_en": {
-     "description": "Prompt for the still image (first frame), no text in image",
+     "description": "Composition, action, expressions and framing of the first frame. Character looks, outfits, location and props are added from the bible",
      "title": "Image Prompt En",
      "type": "string"
     },
@@ -250,6 +372,9 @@
    "title": "Meaning En",
    "type": "string"
   },
+  "continuity": {
+   "$ref": "#/$defs/Continuity"
+  },
   "hooks": {
    "items": {
     "$ref": "#/$defs/Hook"
@@ -306,6 +431,7 @@
   "originality_note_en",
   "meaning_ta",
   "meaning_en",
+  "continuity",
   "hooks",
   "chosen_hook",
   "segments",
