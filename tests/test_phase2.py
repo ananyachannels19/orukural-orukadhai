@@ -41,6 +41,8 @@ def studio(tmp_path, monkeypatch):
         (shutil.copytree if src.is_dir() else shutil.copy)(src, tmp_path / item)
     s = config.load(tmp_path / "config.yaml", dry_run=False)
     s.raw["budget"]["per_episode_cap"] = 50
+    s.raw["images"]["provider"] = s.raw["video"]["provider"] = "gemini"
+    s.raw["voice"]["provider"] = "elevenlabs"
     monkeypatch.setenv("GEMINI_API_KEY", "fake")
     monkeypatch.setenv("ELEVENLABS_API_KEY", "fake")
     return s
@@ -86,19 +88,19 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     visuals.generate(studio, ep, sc, "K0301")
     t = assemble.assemble(studio, ep, sc, "K0301")
 
-    assert calls == {"image": 2 + 10, "video": 5, "tts": 9}
+    assert calls == {"image": 2 + 10, "video": 4, "tts": 9}
     assert (ep / "render" / "K0301_draft.mp4").exists() and t["total_seconds"] >= 35
     # second run: everything comes from the cache, nothing is paid for again
     voice.generate(studio, ep, sc, "K0301")
     visuals.generate(studio, ep, sc, "K0301")
-    assert calls == {"image": 12, "video": 5, "tts": 9}
+    assert calls == {"image": 12, "video": 4, "tts": 9}
     spend = [json.loads(l) for l in studio.path("ledger").read_text().splitlines()]
     assert {e["step"] for e in spend} == {"character_ref", "image", "clip", "voice"}
 
 
 def test_key_mode_picks_first_last_and_priorities(studio):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
-    assert visuals.animated_shots(studio, sc) == {1, 10, 4, 6, 9}
+    assert visuals.animated_shots(studio, sc) == {1, 10, 4, 6}
     studio.raw["video"]["animate"] = "none"
     assert visuals.animated_shots(studio, sc) == set()
 
@@ -107,3 +109,45 @@ def test_remap_keeps_shots_with_their_segments():
     anchors = [(0, 0), (3, 3.5), (8, 9.0)]
     assert assemble.remap(3, anchors) == 3.5
     assert abs(assemble.remap(5.5, anchors) - 6.25) < 1e-9
+
+
+def test_free_mode_google_tts_and_flow(studio, tmp_path, monkeypatch):
+    studio.raw["images"]["provider"] = studio.raw["video"]["provider"] = "flow"
+    studio.raw["voice"]["provider"] = "google_tts"
+    monkeypatch.setenv("GOOGLE_TTS_API_KEY", "fake")
+    mp3 = _mp3(tmp_path / "a.mp3")
+    sent = []
+
+    def fake_post(url, params, json, timeout):
+        sent.append(json["voice"])
+        return SimpleNamespace(status_code=200, json=lambda: {"audioContent": base64.b64encode(mp3).decode()}, text="")
+
+    monkeypatch.setattr(voice.requests, "post", fake_post)
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    ep = studio.path("episodes") / "K0301"
+
+    sheet = visuals.flow_sheet(studio, ep, sc, "K0301")
+    kinds = [j["kind"] for j in sheet["jobs"]]
+    assert kinds.count("character_ref") == 2 and kinds.count("image") == 10 and kinds.count("clip") == 4
+    assert sheet["clip_credits"] <= studio["flow"]["daily_credits"]
+
+    with pytest.raises(SystemExit):  # nothing made in Flow yet
+        visuals.generate(studio, ep, sc, "K0301")
+    (ep / "images").mkdir(parents=True)
+    for n in range(1, 11):
+        _png(ep / "images" / f"shot{n:02d}.jpg")
+    (ep / "clips").mkdir()
+    _mp4(ep / "clips" / "shot01.mp4")  # only one clip made: the rest fall back to pan/zoom
+    (studio.root / "assets" / "characters").mkdir(parents=True, exist_ok=True)
+    for cid in ("thatha", "kavin"):
+        _png(studio.root / "assets" / "characters" / f"{cid}.png")
+
+    m = visuals.generate(studio, ep, sc, "K0301")
+    assert m["animated_made"] == [1]
+    voice.generate(studio, ep, sc, "K0301")
+    # seg 1 is Kavin, seg 2 the narrator, seg 4 Thatha
+    assert [sent[i]["name"] for i in (0, 1, 3)] == [
+        "ta-IN-Chirp3-HD-Puck", "ta-IN-Chirp3-HD-Charon", "ta-IN-Chirp3-HD-Iapetus"]
+    assert all(v["languageCode"] == "ta-IN" for v in sent)
+    t = assemble.assemble(studio, ep, sc, "K0301")
+    assert [x["source"] for x in t["shots"]].count("clip") == 1

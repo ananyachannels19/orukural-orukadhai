@@ -168,6 +168,16 @@ def generate(s: Settings, store: KuralStore, ref: int | str, force: bool = False
     d.mkdir(parents=True, exist_ok=True)
     (d / "script_prompt.md").write_text(f"# System\n\n{system}\n\n# User\n\n{user}\n", "utf-8")
 
+    if s["script"]["provider"] == "session" and not s.dry_run:
+        # Claude writes the script in the weekly session (no API spend), then runs script-check.
+        schema = s.root / "prompts" / "episode_script.schema.json"
+        schema.write_text(json.dumps(EpisodeScript.model_json_schema(), ensure_ascii=False, indent=1), "utf-8")
+        return {"kural": kural, "dir": d, "errors": [], "warnings": [], "dry_run": False, "cost": 0.0,
+                "session": True, "next": (
+                    f"Write the episode as JSON matching prompts/episode_script.schema.json to "
+                    f"{(d / 'script.json').relative_to(s.root)}, following {(d / 'script_prompt.md').relative_to(s.root)}; "
+                    f"then run `python studio.py script-check {kural['number']}`.")}
+
     if s.dry_run:
         meta = {"dry_run": True, "model": None, "cost_usd": 0.0, "cached": False}
         errors, warns = write_outputs(s, kural, dry_run_script(kural), meta)
@@ -201,6 +211,8 @@ def revalidate(s: Settings, store: KuralStore, ref: int | str) -> dict:
     kural = store.get(ref)
     d = episode_dir(s, kural)
     payload = json.loads((d / "script.json").read_text("utf-8"))
+    if "script" not in payload:  # bare script written in a Claude session
+        payload = {"dry_run": False, "model": "claude session", "cost_usd": 0.0, "cached": False, "script": payload}
     meta = {k: v for k, v in payload.items() if k not in {"script", "errors", "warnings", "kural_id"}}
     errors, warns = write_outputs(s, kural, payload["script"], meta)
     if not errors and not payload.get("dry_run"):

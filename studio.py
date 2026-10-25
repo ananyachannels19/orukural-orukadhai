@@ -12,7 +12,9 @@ Phase 1 commands:
 Phase 2 commands:
   python studio.py characters [--force]  generate Thatha/Kavin reference images (once; commit them)
   python studio.py voice 301             narration, one file per segment
-  python studio.py visuals 301 [--shots 2,5]   stills for every shot, clips for the animated ones
+  python studio.py flow-sheet 301        what to make in Google Flow, and where to save it
+  python studio.py voice-test            one kural line in 8 Tamil voices → review/voice_test/
+  python studio.py visuals 301 [--shots 2,5]   collect (Flow) or make (Gemini) stills and clips
   python studio.py assemble 301          cut and mix → episodes/K0301/render/K0301_draft.mp4
   python studio.py render 301            voice + visuals + assemble in one go
 
@@ -56,6 +58,9 @@ def cmd_plan(s, args):
 
 def _report(res):
     k = res["kural"]
+    if res.get("session"):
+        print(f"#{k['number']}: prompt written. {res['next']}")
+        return 0
     tag = " [dry run]" if res.get("dry_run") else ""
     cost = "" if res.get("dry_run") or "cost" not in res else (" · cached, $0" if res.get("cached") else f" · ${res['cost']:.3f}")
     print(f"#{k['number']} → {res['dir'].relative_to(res['dir'].parents[1])}/script.md{tag}{cost}")
@@ -93,7 +98,30 @@ def _episode(s, ref):
     payload = json.loads(f.read_text("utf-8"))
     if payload.get("errors"):
         raise SystemExit(f"{k['id']} script has errors; fix them and run script-check first")
-    return k, ep_dir, EpisodeScript.model_validate(payload["script"])
+    # Dry runs work in their own subfolder so placeholders never mix with real assets.
+    work = ep_dir / "dryrun" if s.dry_run else ep_dir
+    return k, work, EpisodeScript.model_validate(payload["script"])
+
+
+def cmd_flow_sheet(s, args):
+    from orukural import visuals
+    k, ep_dir, sc = _episode(s, args.kural)
+    sheet = visuals.flow_sheet(s, ep_dir, sc, k["id"])
+    kinds = [j["kind"] for j in sheet["jobs"]]
+    print(f"{ep_dir.relative_to(s.root)}/flow/README.md: {kinds.count('character_ref')} character refs, "
+          f"{kinds.count('image')} images, {kinds.count('clip')} clips ({sheet['clip_credits']} of "
+          f"{sheet['daily_credits']} daily credits)")
+
+
+def cmd_voice_test(s, args):
+    from orukural import voice
+    name, cfg = voice.provider_cfg(s)
+    voices = args.voices.split(",") if args.voices else [
+        f"ta-IN-Chirp3-HD-{v}" for v in ("Charon", "Iapetus", "Puck", "Orus", "Kore", "Aoede", "Leda", "Sulafat")
+    ] if name == "google_tts" else [cfg["voice_id"]]
+    outs = voice.voice_test(s, args.text, voices, s.root / "review" / "voice_test")
+    for o in outs:
+        print(o.relative_to(s.root))
 
 
 def cmd_characters(s, args):
@@ -181,6 +209,15 @@ def main(argv=None):
     ck = sub.add_parser("script-check")
     ck.add_argument("kural")
     ck.set_defaults(fn=cmd_script_check)
+
+    fs = sub.add_parser("flow-sheet", help="list the images/clips to make in Google Flow for an episode")
+    fs.add_argument("kural")
+    fs.set_defaults(fn=cmd_flow_sheet)
+
+    vt = sub.add_parser("voice-test", help="say one line in several voices to pick one by ear")
+    vt.add_argument("--text", default="செல்லிடத்துக் காப்பான் சினங்காப்பான் அல்லிடத்துக் காக்கின்என் காவாக்கா லென்?")
+    vt.add_argument("--voices", help="comma-separated voice names")
+    vt.set_defaults(fn=cmd_voice_test)
 
     ch = sub.add_parser("characters", help="generate the character reference images")
     ch.add_argument("--force", action="store_true")

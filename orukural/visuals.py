@@ -1,8 +1,13 @@
-"""Phase 2: character references, per-shot stills and image-to-video clips (Gemini API).
+"""Phase 2: character references, per-shot stills and image-to-video clips.
 
-Models (checked 25 Oct 2026): images `gemini-nano-banana-2.1`, video `gemini-omni-1.1-flash`,
-both through the Interactions API in the google-genai SDK. Generated clip audio is always
-discarded at assembly; our narration and music replace it.
+Providers (config `images.provider` / `video.provider`):
+  flow    Google Flow, driven by flow-mcp on your Mac. `studio.py flow-sheet N` writes a job
+          list; the Flow session saves files to the listed paths; `studio.py visuals N`
+          collects them. Free images; clips use Flow's daily free credits. A shot without a
+          clip simply gets a pan/zoom over its still, so missing credits never block a week.
+  gemini  Gemini API (paid): images `gemini-nano-banana-2.1`, video `gemini-omni-1.1-flash`
+          through the Interactions API (checked 25 Oct 2026).
+Generated clip audio is always discarded at assembly; our narration and music replace it.
 """
 
 from __future__ import annotations
@@ -83,27 +88,45 @@ def _placeholder(out: Path, label: str, size: tuple[int, int] = (1080, 1920)) ->
     img.save(out)
 
 
-def character_refs(s: Settings, force: bool = False) -> dict[str, Path]:
-    """Generate one reference image per main character, once. Commit the results."""
+def character_prompt(s: Settings, cid: str) -> str:
     sheet = _sheet(s)
+    c = sheet["characters"][cid]
+    return (
+        f"Character reference sheet for an animated series. {c['name']}, {c['age']} years old. {c['look'].strip()} "
+        f"Show the same character twice side by side: full body standing front view, and a head-and-shoulders "
+        f"close-up. Neutral expression with a hint of their personality: {c['voice_and_manner'].strip()} "
+        f"Plain light warm-grey background. Style: {sheet['world']['visual_style'].strip()}"
+    )
+
+
+def find_media(stem: Path, kinds: tuple[str, ...]) -> Path | None:
+    for ext in kinds:
+        if stem.with_suffix(ext).exists():
+            return stem.with_suffix(ext)
+    return None
+
+
+IMAGE_EXT = (".png", ".jpg", ".jpeg", ".webp")
+
+
+def character_refs(s: Settings, force: bool = False) -> dict[str, Path]:
+    """One reference image per main character, made once and committed."""
     cdir = s.root / s["images"]["characters_dir"]
-    style = sheet["world"]["visual_style"].strip()
+    if s.dry_run:  # placeholders must never land in the committed assets folder
+        cdir = s.path("cache") / "dry_run_characters"
     refs = {}
     for cid in MAIN_CHARACTERS:
-        c = sheet["characters"][cid]
-        out = cdir / f"{cid}.png"
+        found = find_media(cdir / cid, IMAGE_EXT)
+        out = found or cdir / f"{cid}.png"
         refs[cid] = out
-        if out.exists() and not force:
+        if found and not force:
             continue
-        prompt = (
-            f"Character reference sheet for an animated series. {c['name']}, {c['age']} years old. {c['look'].strip()} "
-            f"Show the same character twice side by side: full body standing front view, and a head-and-shoulders "
-            f"close-up. Neutral expression with a hint of their personality: {c['voice_and_manner'].strip()} "
-            f"Plain light warm-grey background. Style: {style}"
-        )
+        prompt = character_prompt(s, cid)
         if s.dry_run:
             _placeholder(out, f"REF {cid}", (1024, 1024))
             continue
+        if s["images"]["provider"] == "flow":
+            continue  # made in Flow from the job sheet
         res = _ledger(s).run(episode_id="CHARACTERS", step="character_ref",
                              inputs={"model": s["images"]["model"], "prompt": prompt},
                              estimate_usd=s["budget"]["estimates"]["character_ref"],
@@ -225,17 +248,100 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, shot: Shot, image: Pat
     return out
 
 
+def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) -> dict:
+    """Write flow/jobs.json + flow/README.md: everything a Flow session must make, and where to save it."""
+    rel = lambda p: str(Path(p).relative_to(s.root))  # noqa: E731
+    cdir = s.root / s["images"]["characters_dir"]
+    refs = {cid: find_media(cdir / cid, IMAGE_EXT) for cid in MAIN_CHARACTERS}
+    jobs = []
+    for cid, found in refs.items():
+        if not found:
+            jobs.append({"kind": "character_ref", "save_as": rel(cdir / f"{cid}.png"), "aspect_ratio": "1:1",
+                         "model": s["flow"]["image_model"], "prompt": character_prompt(s, cid)})
+    for sh in script.shots:
+        if find_media(ep_dir / "images" / f"shot{sh.n:02d}", IMAGE_EXT):
+            continue
+        used = [c for c in sh.characters if c in refs][:4]
+        jobs.append({
+            "kind": "image", "shot": sh.n, "save_as": rel(ep_dir / "images" / f"shot{sh.n:02d}.png"),
+            "aspect_ratio": "9:16", "model": s["flow"]["image_model"],
+            "reference_images": [rel(cdir / f"{c}.png") for c in used],
+            "prompt": sh.image_prompt_en + (
+                f" Keep each character's face, hair, body and clothes exactly as in the reference images "
+                f"({', '.join(used)})." if used else ""),
+        })
+    credits = 0
+    table = {int(k): v for k, v in s["flow"]["credits_per_clip"].items()}
+    for n in sorted(animated_shots(s, script)):
+        sh = next(x for x in script.shots if x.n == n)
+        if (ep_dir / "clips" / f"shot{n:02d}.mp4").exists():
+            continue
+        secs = min(table, key=lambda k: (k < clip_seconds(s, sh), abs(k - clip_seconds(s, sh))))
+        credits += table[secs]
+        jobs.append({
+            "kind": "clip", "shot": n, "priority": sh.motion_priority,
+            "save_as": rel(ep_dir / "clips" / f"shot{n:02d}.mp4"),
+            "start_frame": rel(ep_dir / "images" / f"shot{n:02d}.png"),
+            "model": s["flow"]["video_model"], "seconds": secs, "aspect_ratio": "9:16", "credits": table[secs],
+            "prompt": (f"{sh.motion_prompt_en.strip()} Camera: {sh.camera_en.strip()} Keep the characters exactly as "
+                       f"they look in the start frame. One continuous shot, no cuts, no text, no dialogue."),
+        })
+    sheet = {"episode_id": episode_id, "clip_credits": credits, "daily_credits": s["flow"]["daily_credits"],
+             "jobs": jobs}
+    fdir = ep_dir / "flow"
+    fdir.mkdir(parents=True, exist_ok=True)
+    (fdir / "jobs.json").write_text(json.dumps(sheet, ensure_ascii=False, indent=1), "utf-8")
+    lines = [
+        f"# Flow jobs for {episode_id}", "",
+        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo).",
+        "Do images first: clips start from the saved shot image. Attach the listed reference images.",
+        f"Clips need {credits} credits; the free plan has {s['flow']['daily_credits']} a day. If credits run out, "
+        "stop: shots without a clip get a pan/zoom, and the rest can be made tomorrow.",
+        "Then run `python studio.py visuals " + episode_id.lstrip("K0") + "` to collect everything.", "",
+    ]
+    for j in jobs:
+        head = {"character_ref": f"Character reference → `{j['save_as']}`",
+                "image": f"Shot {j.get('shot')} image → `{j['save_as']}`",
+                "clip": f"Shot {j.get('shot')} clip ({j.get('seconds')} s, {j.get('credits')} credits) → `{j['save_as']}`"}[j["kind"]]
+        lines += [f"## {head}", ""]
+        if j.get("reference_images"):
+            lines.append("References: " + ", ".join(f"`{r}`" for r in j["reference_images"]))
+        if j.get("start_frame"):
+            lines.append(f"Start frame: `{j['start_frame']}`")
+        lines += [f"Aspect {j['aspect_ratio']} · {j['model']}", "", "```", j["prompt"], "```", ""]
+    (fdir / "README.md").write_text("\n".join(lines), "utf-8")
+    return sheet
+
+
 def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, force: bool = False,
              only: set[int] | None = None) -> dict:
     refs = character_refs(s)
     animate = animated_shots(s, script)
-    shots = []
+    flow_images = s["images"]["provider"] == "flow" and not s.dry_run
+    flow_video = s["video"]["provider"] == "flow" and not s.dry_run
+    shots, missing = [], []
     for sh in script.shots:
         if only and sh.n not in only:
             continue
-        img = shot_image(s, ep_dir, episode_id, sh, refs, force=force)
-        clip = shot_clip(s, ep_dir, episode_id, sh, img, force=force) if sh.n in animate else None
+        if flow_images:
+            img = find_media(ep_dir / "images" / f"shot{sh.n:02d}", IMAGE_EXT)
+            if not img:
+                missing.append(sh.n)
+                continue
+        else:
+            img = shot_image(s, ep_dir, episode_id, sh, refs, force=force)
+        clip = None
+        if sh.n in animate:
+            if flow_video:
+                found = ep_dir / "clips" / f"shot{sh.n:02d}.mp4"
+                clip = found if found.exists() else None
+            else:
+                clip = shot_clip(s, ep_dir, episode_id, sh, img, force=force)
         shots.append({"n": sh.n, "image": img.name, "clip": clip.name if clip else None})
-    manifest = {"dry_run": s.dry_run, "animated": sorted(animate), "shots": shots}
+    if missing:
+        raise SystemExit(f"{episode_id}: no image yet for shots {missing}. Run `studio.py flow-sheet "
+                         f"{episode_id}` and make them in Flow first.")
+    manifest = {"dry_run": s.dry_run, "animated": sorted(animate),
+                "animated_made": [x["n"] for x in shots if x["clip"]], "shots": shots}
     (ep_dir / "visuals.json").write_text(json.dumps(manifest, indent=1), "utf-8")
     return manifest

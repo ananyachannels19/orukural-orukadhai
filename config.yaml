@@ -55,7 +55,10 @@ lessons_file: data/lessons_learned.md
 pronunciation_file: data/pronunciation_fixes.yaml
 
 script:
-  provider: anthropic
+  # session: Claude writes the script in the weekly Claude session (no API cost);
+  #   `studio.py script N` writes the prompt, Claude writes script.json, `script-check` validates.
+  # anthropic: the API call below (~$0.10 a script).
+  provider: session
   model: claude-sonnet-5-5
   effort: high               # low | medium | high | xhigh | max
   max_tokens: 16000
@@ -66,45 +69,70 @@ script:
   hashtags: [3, 5]
   fixed_hashtags: ["#திருக்குறள்", "#thirukkural", "#ஒருகுறள்ஒருகதை"]
 
-# Model IDs and prices checked against ai.google.dev and elevenlabs.io on 25 Oct 2026.
-# Veo 3.1 preview models were shut down on 22 Oct 2026; Gemini Omni Flash replaces them.
+# ---------------------------------------------------------------------------
+# Zero-spend mode (default until the channel earns):
+#   scripts  → written by Claude in the weekly session, no API call   (script.provider: session)
+#   images   → Google Flow via flow-mcp on your Mac, free             (images.provider: flow)
+#   clips    → Google Flow, 50 free credits a day                     (video.provider: flow)
+#   voice    → Google Cloud Text-to-Speech free tier                   (voice.provider: google_tts)
+# Paid API providers stay available: switch a provider back when it's worth paying.
+# Model IDs and prices checked on 25 Oct 2026. Veo 3.1 preview API models were shut
+# down on 22 Oct 2026; Gemini Omni Flash replaces them.
+# ---------------------------------------------------------------------------
+
 images:
-  provider: gemini
+  provider: flow              # flow | gemini
+  characters_dir: assets/characters   # Thatha/Kavin reference images, made once and committed
+  # gemini (paid API)
   model: gemini-nano-banana-2.1
   image_size: 2K              # 1K | 2K | 4K (uppercase K)
   price_per_image: {1K: 0.0336, 2K: 0.0504, 4K: 0.113}
-  characters_dir: assets/characters   # generated once by `studio.py characters`, then committed
 
 video:
-  provider: gemini
-  model: gemini-omni-1.1-flash
-  resolution: 720p            # 360p | 720p | 1080p (upscaled) | 4k (upscaled); we scale to 1080x1920 ourselves
-  price_per_second: 0.10      # 720p standard rate; re-check before switching resolution
-  clip_seconds: [3, 10]       # what the model can produce per clip
+  provider: flow              # flow | gemini
   # Which shots get real AI motion. The rest get a slow pan/zoom over the still.
   #   all  — every shot
   #   key  — the first shot, the last shot, then the highest-priority shots up to max_animated_shots
   #   none — stills only
   animate: key
-  max_animated_shots: 5
+  max_animated_shots: 4
+  clip_seconds: [4, 8]
+  # gemini (paid API)
+  model: gemini-omni-1.1-flash
+  resolution: 720p            # we scale to 1080x1920 ourselves
+  price_per_second: 0.10
+
+flow:
+  # Free Flow accounts get 50 credits a day (third-party guide, Oct 2026; check your Flow screen).
+  daily_credits: 50
+  video_model: "Omni Flash 720p"
+  credits_per_clip: {4: 7, 8: 12, 10: 15}
+  image_model: "Nano Banana 2 Lite"   # free in Flow
 
 voice:
-  provider: elevenlabs
-  model: eleven_v4            # Tamil-capable; eleven_multilingual_v2 is the fallback
+  provider: google_tts        # google_tts | elevenlabs
   language_code: ta
-  output_format: mp3_44100_128
-  price_per_1k_chars: 0.08
-  # One fixed narrator voice for the series. Listen to the previews in your ElevenLabs
-  # voice library and change it before the first real episode. Library voices must be
-  # added to "My Voices" before the API can use them.
-  voice_id: a49ffQsGpRBw28CL67GF        # Yazhini – calm, expressive Tamil storyteller
-  # Optional: separate voices for dialogue. Leave empty to use voice_id for everyone.
-  speaker_voices:
-    thatha: 5RvT42yho9PKXu2vTVf5        # Mohanlal – natural, calm narrator
-    kavin: null                         # no child voice yet; design one in ElevenLabs Voice Design
-  stability: 0.5
-  similarity_boost: 0.8
   gap_seconds: 0.15           # silence between spoken segments
+  google_tts:
+    # Free tier: 1M Chirp 3 HD characters a month; we use ~10k. Needs billing enabled
+    # on the Google Cloud project, but stays at $0 inside the free tier.
+    voice: ta-IN-Chirp3-HD-Charon        # narrator; try others with `studio.py voice-test`
+    speaker_voices:
+      thatha: ta-IN-Chirp3-HD-Iapetus
+      kavin: ta-IN-Chirp3-HD-Puck
+    speaking_rate: 0.95
+    price_per_1k_chars: 0.0
+  elevenlabs:
+    # Paid plan needed for commercial use (the free plan forbids it and needs attribution).
+    model: eleven_v4
+    output_format: mp3_44100_128
+    price_per_1k_chars: 0.08
+    voice_id: a49ffQsGpRBw28CL67GF      # Yazhini – calm, expressive Tamil storyteller
+    speaker_voices:
+      thatha: 5RvT42yho9PKXu2vTVf5      # Mohanlal – natural, calm narrator
+      kavin: null
+    stability: 0.5
+    similarity_boost: 0.8
 
 music:
   dir: assets/music

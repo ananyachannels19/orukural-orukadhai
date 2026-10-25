@@ -1,0 +1,321 @@
+{
+ "$defs": {
+  "Hook": {
+   "properties": {
+    "style": {
+     "enum": [
+      "question",
+      "tense_moment",
+      "surprising_line"
+     ],
+     "title": "Style",
+     "type": "string"
+    },
+    "on_screen_ta": {
+     "description": "Big on-screen Tamil text for 0–3 s, at most 6 words",
+     "title": "On Screen Ta",
+     "type": "string"
+    },
+    "narration_ta": {
+     "description": "What the narrator says in 0–3 s",
+     "title": "Narration Ta",
+     "type": "string"
+    }
+   },
+   "required": [
+    "style",
+    "on_screen_ta",
+    "narration_ta"
+   ],
+   "title": "Hook",
+   "type": "object"
+  },
+  "InstagramMeta": {
+   "properties": {
+    "caption_ta": {
+     "description": "Caption ending with one easy question to answer in comments",
+     "title": "Caption Ta",
+     "type": "string"
+    },
+    "hashtags": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Hashtags",
+     "type": "array"
+    }
+   },
+   "required": [
+    "caption_ta",
+    "hashtags"
+   ],
+   "title": "InstagramMeta",
+   "type": "object"
+  },
+  "Segment": {
+   "properties": {
+    "beat": {
+     "enum": [
+      "hook",
+      "story",
+      "kural",
+      "lesson",
+      "tease"
+     ],
+     "title": "Beat",
+     "type": "string"
+    },
+    "start_s": {
+     "title": "Start S",
+     "type": "number"
+    },
+    "end_s": {
+     "title": "End S",
+     "type": "number"
+    },
+    "speaker": {
+     "enum": [
+      "narrator",
+      "thatha",
+      "kavin",
+      "other"
+     ],
+     "title": "Speaker",
+     "type": "string"
+    },
+    "narration_ta": {
+     "description": "Spoken Tamil for this segment, exactly as it should be voiced",
+     "title": "Narration Ta",
+     "type": "string"
+    },
+    "on_screen_ta": {
+     "description": "Extra on-screen Tamil text besides subtitles, or empty string",
+     "title": "On Screen Ta",
+     "type": "string"
+    }
+   },
+   "required": [
+    "beat",
+    "start_s",
+    "end_s",
+    "speaker",
+    "narration_ta",
+    "on_screen_ta"
+   ],
+   "title": "Segment",
+   "type": "object"
+  },
+  "Shot": {
+   "properties": {
+    "n": {
+     "title": "N",
+     "type": "integer"
+    },
+    "beat": {
+     "enum": [
+      "hook",
+      "story",
+      "kural",
+      "lesson",
+      "tease"
+     ],
+     "title": "Beat",
+     "type": "string"
+    },
+    "start_s": {
+     "title": "Start S",
+     "type": "number"
+    },
+    "end_s": {
+     "title": "End S",
+     "type": "number"
+    },
+    "characters": {
+     "description": "Character ids from the character sheet, e.g. thatha, kavin",
+     "items": {
+      "type": "string"
+     },
+     "title": "Characters",
+     "type": "array"
+    },
+    "location": {
+     "title": "Location",
+     "type": "string"
+    },
+    "action_en": {
+     "description": "What happens in the shot, in English",
+     "title": "Action En",
+     "type": "string"
+    },
+    "camera_en": {
+     "description": "Framing and camera move, in English",
+     "title": "Camera En",
+     "type": "string"
+    },
+    "image_prompt_en": {
+     "description": "Prompt for the still image (first frame), no text in image",
+     "title": "Image Prompt En",
+     "type": "string"
+    },
+    "motion_prompt_en": {
+     "description": "Prompt for the 3–8 s image-to-video clip",
+     "title": "Motion Prompt En",
+     "type": "string"
+    },
+    "motion_priority": {
+     "default": 5,
+     "description": "1 (most needs real motion) to 5 (a slow pan over the still is enough)",
+     "title": "Motion Priority",
+     "type": "integer"
+    }
+   },
+   "required": [
+    "n",
+    "beat",
+    "start_s",
+    "end_s",
+    "characters",
+    "location",
+    "action_en",
+    "camera_en",
+    "image_prompt_en",
+    "motion_prompt_en"
+   ],
+   "title": "Shot",
+   "type": "object"
+  },
+  "YouTubeMeta": {
+   "properties": {
+    "title": {
+     "description": "Max 100 characters; starts with 'குறள் <number> |'",
+     "title": "Title",
+     "type": "string"
+    },
+    "description_intro_ta": {
+     "description": "2–3 line Tamil hook for the description; the template adds the rest",
+     "title": "Description Intro Ta",
+     "type": "string"
+    },
+    "tags": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Tags",
+     "type": "array"
+    },
+    "pinned_comment_ta": {
+     "title": "Pinned Comment Ta",
+     "type": "string"
+    }
+   },
+   "required": [
+    "title",
+    "description_intro_ta",
+    "tags",
+    "pinned_comment_ta"
+   ],
+   "title": "YouTubeMeta",
+   "type": "object"
+  }
+ },
+ "properties": {
+  "kural_number": {
+   "title": "Kural Number",
+   "type": "integer"
+  },
+  "story_title_ta": {
+   "title": "Story Title Ta",
+   "type": "string"
+  },
+  "story_title_en": {
+   "title": "Story Title En",
+   "type": "string"
+  },
+  "logline_en": {
+   "title": "Logline En",
+   "type": "string"
+  },
+  "originality_note_en": {
+   "description": "What in this story is new and specific to our series",
+   "title": "Originality Note En",
+   "type": "string"
+  },
+  "meaning_ta": {
+   "description": "Our own plain-Tamil meaning of the kural, 1–2 sentences",
+   "title": "Meaning Ta",
+   "type": "string"
+  },
+  "meaning_en": {
+   "description": "Our own plain-English meaning, 1–2 sentences",
+   "title": "Meaning En",
+   "type": "string"
+  },
+  "hooks": {
+   "items": {
+    "$ref": "#/$defs/Hook"
+   },
+   "title": "Hooks",
+   "type": "array"
+  },
+  "chosen_hook": {
+   "description": "Index (0-based) of the hook used in the segments",
+   "title": "Chosen Hook",
+   "type": "integer"
+  },
+  "segments": {
+   "items": {
+    "$ref": "#/$defs/Segment"
+   },
+   "title": "Segments",
+   "type": "array"
+  },
+  "shots": {
+   "items": {
+    "$ref": "#/$defs/Shot"
+   },
+   "title": "Shots",
+   "type": "array"
+  },
+  "lesson_ta": {
+   "description": "One shareable lesson line, at most 12 words",
+   "title": "Lesson Ta",
+   "type": "string"
+  },
+  "tease_ta": {
+   "description": "One line teasing the next kural without naming its answer",
+   "title": "Tease Ta",
+   "type": "string"
+  },
+  "loop_note_en": {
+   "description": "How the last frame and line flow back into the first",
+   "title": "Loop Note En",
+   "type": "string"
+  },
+  "youtube": {
+   "$ref": "#/$defs/YouTubeMeta"
+  },
+  "instagram": {
+   "$ref": "#/$defs/InstagramMeta"
+  }
+ },
+ "required": [
+  "kural_number",
+  "story_title_ta",
+  "story_title_en",
+  "logline_en",
+  "originality_note_en",
+  "meaning_ta",
+  "meaning_en",
+  "hooks",
+  "chosen_hook",
+  "segments",
+  "shots",
+  "lesson_ta",
+  "tease_ta",
+  "loop_note_en",
+  "youtube",
+  "instagram"
+ ],
+ "title": "EpisodeScript",
+ "type": "object"
+}

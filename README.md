@@ -7,7 +7,7 @@ Production pipeline for **ஒரு குறள் • ஒரு கதை** (O
 | Phase | What | State |
 |---|---|---|
 | 1 | Repo, config, `data/kurals.json`, script generator | ✅ done, sample in `samples/K0301/` |
-| 2 | Voice, images, clips, assembly → sample MP4 | ✅ built and tested in dry-run; real sample needs API keys |
+| 2 | Voice, images, clips, assembly → sample MP4 | ✅ built, tested in dry-run; real sample next, on your Mac |
 | 3 | Subtitles, branding, long-form compilation builder | |
 | 4 | YouTube + Instagram publishing (private/test) | |
 | 5 | Weekly scheduler, review gate, analytics | |
@@ -45,19 +45,32 @@ Each episode folder holds `script.json` (the machine-readable script every later
 - **`data/pronunciation_fixes.yaml`**: respellings for the voice model (phase 2).
 - **`orukural/ledger.py`**: every paid call goes through it. It returns a cached result if the same inputs already succeeded, refuses a call that would push an episode over `budget.per_episode_cap`, and logs real spend to `logs/spend.jsonl`.
 
+## Zero-spend mode (default)
+
+Until the channel earns, nothing in the weekly run costs money:
+
+| Step | Free route | Paid route (switch in `config.yaml`) |
+|---|---|---|
+| Script | Claude writes it in the weekly Claude session (`script.provider: session`) | Anthropic API, ~$0.10 |
+| Images | Google Flow via flow-mcp on your Mac (`images.provider: flow`) | Gemini `gemini-nano-banana-2.1`, ~$0.05 each |
+| Clips | Google Flow, 50 free credits a day; 4 clips ≈ 33 credits (`video.provider: flow`) | Gemini `gemini-omni-1.1-flash`, ~$0.10/s |
+| Voice | Google Cloud TTS free tier, Chirp 3 HD Tamil voices (`voice.provider: google_tts`) | ElevenLabs `eleven_v4` (paid plan for commercial use) |
+| Assembly | FFmpeg, local | – |
+
+Flow has no API we can call from Python, so the hand-off is file based: `studio.py flow-sheet 301` writes `episodes/K0301/flow/README.md` with every image and clip to make, the prompt, the reference images to attach, and the exact path to save it to. A Claude Code session on your Mac with flow-mcp works through that list. `studio.py visuals 301` then collects the files. Any shot without a clip gets a pan/zoom over its still, so running out of Flow credits never blocks an episode.
+
 ## Commands (phase 2)
 
 ```bash
-python studio.py characters            # once: Thatha + Kavin reference images → assets/characters/ (commit them)
-python studio.py render 301            # voice → visuals → assemble → episodes/K0301/render/K0301_draft.mp4
-python studio.py visuals 301 --shots 4 --force   # remake one shot you don't like (paid again)
-python studio.py render 301 --dry-run  # whole pipeline with placeholder cards and silence, $0
+python studio.py voice-test            # one kural line in 8 Tamil voices → review/voice_test/, pick by ear
+python studio.py flow-sheet 301        # what to make in Flow and where to save it (character refs first time)
+python studio.py render 301            # voice → collect visuals → assemble → episodes/K0301/render/K0301_draft.mp4
+python studio.py render 301 --dry-run  # whole pipeline with placeholder cards and silence, in episodes/K0301/dryrun/
 ```
 
-- **Voice** (`orukural/voice.py`): ElevenLabs `eleven_v4` with `language_code: ta`. Each script segment is voiced on its own, with the neighbouring lines as context, and the API's character timings are saved for phase 3 subtitles. `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only. Dialogue lines can use separate voices (`voice.speaker_voices`); anything unset uses the narrator.
-- **Images** (`orukural/visuals.py`): Gemini `gemini-nano-banana-2.1` through the Interactions API, 9:16 at 2K. Every shot image gets the character reference images attached, so Thatha and Kavin look the same in every episode.
-- **Clips**: Gemini `gemini-omni-1.1-flash` image-to-video, 720p, clip length asked to match the shot. `video.animate` picks which shots get real motion (`key`: first, last and the highest `motion_priority` shots up to `max_animated_shots`; `all`; `none`). Other shots get a slow pan/zoom over the still. Clip audio is always thrown away.
-- **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Story shots over 3.5 s are cut wide → punch-in. Narration is mixed over a track from `assets/music/` (picked per episode, ducked under speech) and loudness-normalised to −14 LUFS for YouTube/Instagram. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
+- **Voice** (`orukural/voice.py`): each script segment is voiced on its own. Narrator, Thatha and Kavin can have separate voices (`speaker_voices`). `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only.
+- **Visuals** (`orukural/visuals.py`): Thatha and Kavin reference images live in `assets/characters/` and are attached to every shot image so the faces stay the same. `video.animate: key` animates the first shot, the last shot and the highest `motion_priority` shots up to `max_animated_shots`.
+- **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Story shots over 3.5 s are cut wide → punch-in. Narration is mixed over a track from `assets/music/` (ducked under speech) and loudness-normalised to −14 LUFS. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
 
 ## Script generation
 

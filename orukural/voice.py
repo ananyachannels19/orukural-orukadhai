@@ -1,8 +1,11 @@
-"""Phase 2: Tamil narration with ElevenLabs, one file per script segment.
+"""Phase 2: Tamil narration, one audio file per script segment.
 
-Each segment is voiced separately with the text before and after it as context, so the
-read stays natural while we keep exact timings per beat. The API's character timings
-are saved next to each file for word-level subtitles (phase 3).
+Providers (config `voice.provider`):
+  google_tts  Google Cloud Text-to-Speech, Chirp 3 HD Tamil voices. Free tier covers us.
+  elevenlabs  ElevenLabs eleven_v4. Paid plan needed for commercial use.
+
+Each segment is voiced on its own so we keep exact per-beat timing. Word timings for
+subtitles come from ElevenLabs when used, otherwise from Whisper in phase 3.
 """
 
 from __future__ import annotations
@@ -21,7 +24,8 @@ from .config import Settings
 from .ledger import Ledger
 from .schema import EpisodeScript, tamil_letters
 
-API = "https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps"
+ELEVEN_API = "https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/with-timestamps"
+GOOGLE_API = "https://texttospeech.googleapis.com/v1/text:synthesize"
 
 
 def load_fixes(s: Settings) -> dict[str, str]:
@@ -36,16 +40,52 @@ def spoken_text(text: str, fixes: dict[str, str]) -> str:
     return re.sub(r"[➜→•]", "", text).strip()
 
 
+def provider_cfg(s: Settings) -> tuple[str, dict]:
+    name = s["voice"]["provider"]
+    return name, s["voice"][name]
+
+
 def voice_for(s: Settings, speaker: str) -> str:
-    cfg = s["voice"]
-    vid = (cfg.get("speaker_voices") or {}).get(speaker) or cfg["voice_id"]
+    name, cfg = provider_cfg(s)
+    default = cfg["voice"] if name == "google_tts" else cfg["voice_id"]
+    vid = (cfg.get("speaker_voices") or {}).get(speaker) or default
     if not vid:
-        raise SystemExit("voice.voice_id is empty in config.yaml")
+        raise SystemExit(f"no voice set for {speaker!r} in config.yaml voice.{name}")
     return vid
 
 
-def _tts(s: Settings, voice_id: str, text: str, prev: str, nxt: str, out: Path) -> tuple[dict, float, dict]:
-    cfg = s["voice"]
+def _google_key() -> str:
+    key = os.environ.get("GOOGLE_TTS_API_KEY") or os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise SystemExit("GOOGLE_TTS_API_KEY is not set (or GEMINI_API_KEY with the Text-to-Speech API enabled). "
+                         "Add it to .env, or run with --dry-run.")
+    return key
+
+
+def _google(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float, dict]:
+    cfg = s["voice"]["google_tts"]
+    r = requests.post(
+        GOOGLE_API,
+        params={"key": _google_key()},
+        json={
+            "input": {"text": text},
+            "voice": {"languageCode": voice.split("-Chirp")[0] if "-" in voice else "ta-IN", "name": voice},
+            "audioConfig": {"audioEncoding": "MP3", "speakingRate": cfg["speaking_rate"]},
+        },
+        timeout=120,
+    )
+    if r.status_code != 200:
+        raise RuntimeError(f"Google TTS {r.status_code}: {r.text[:500]}")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_bytes(base64.b64decode(r.json()["audioContent"]))
+    return {"file": str(out), "alignment": None}, len(text) / 1000 * cfg["price_per_1k_chars"], {
+        "provider": "google_tts", "model": voice, "chars": len(text)}
+
+
+def _eleven(s: Settings, voice_id: str, text: str, prev: str, nxt: str, out: Path) -> tuple[dict, float, dict]:
+    cfg = s["voice"]["elevenlabs"]
+    if not os.environ.get("ELEVENLABS_API_KEY"):
+        raise SystemExit("ELEVENLABS_API_KEY is not set. Add it to .env, or run with --dry-run.")
     body = {
         "text": text,
         "model_id": cfg["model"],
@@ -54,10 +94,10 @@ def _tts(s: Settings, voice_id: str, text: str, prev: str, nxt: str, out: Path) 
         "voice_settings": {"stability": cfg["stability"], "similarity_boost": cfg["similarity_boost"]},
         "seed": 1330,
     }
-    if cfg.get("language_code") and not cfg["model"].startswith("eleven_multilingual"):
-        body["language_code"] = cfg["language_code"]
+    if not cfg["model"].startswith("eleven_multilingual"):
+        body["language_code"] = s["voice"]["language_code"]
     r = requests.post(
-        API.format(voice_id=voice_id),
+        ELEVEN_API.format(voice_id=voice_id),
         params={"output_format": cfg["output_format"]},
         headers={"xi-api-key": os.environ["ELEVENLABS_API_KEY"], "content-type": "application/json"},
         json=body,
@@ -68,10 +108,27 @@ def _tts(s: Settings, voice_id: str, text: str, prev: str, nxt: str, out: Path) 
     data = r.json()
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_bytes(base64.b64decode(data["audio_base64"]))
-    cost = len(text) / 1000 * cfg["price_per_1k_chars"]
-    value = {"file": str(out), "alignment": data.get("alignment"), "normalized_alignment": data.get("normalized_alignment")}
-    return value, cost, {"provider": "elevenlabs", "model": cfg["model"], "chars": len(text),
-                         "request_id": r.headers.get("request-id")}
+    return {"file": str(out), "alignment": data.get("alignment")}, len(text) / 1000 * cfg["price_per_1k_chars"], {
+        "provider": "elevenlabs", "model": cfg["model"], "chars": len(text), "request_id": r.headers.get("request-id")}
+
+
+def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text: str, prev: str, nxt: str,
+               cache_name: str, force: bool = False):
+    name, cfg = provider_cfg(s)
+    vid = voice_for(s, speaker)
+    cache_file = s.path("cache") / "voice_audio" / cache_name
+    if name == "google_tts":
+        inputs = {"provider": name, "voice": vid, "rate": cfg["speaking_rate"], "text": text}
+        call = lambda: _google(s, vid, text, cache_file)  # noqa: E731
+    else:
+        inputs = {"provider": name, "voice": vid, "model": cfg["model"], "text": text, "prev": prev, "next": nxt,
+                  "settings": [cfg["stability"], cfg["similarity_boost"]]}
+        call = lambda: _eleven(s, vid, text, prev, nxt, cache_file)  # noqa: E731
+    res = ledger.run(episode_id=episode_id, step="voice", inputs=inputs,
+                     estimate_usd=len(text) / 1000 * cfg["price_per_1k_chars"], call=call, force=force)
+    if not Path(res.value["file"]).exists():  # cache entry lost its audio file: make it again
+        res = ledger.run(episode_id=episode_id, step="voice", inputs=inputs, estimate_usd=0.0, call=call, force=True)
+    return res
 
 
 def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, force: bool = False) -> dict:
@@ -82,8 +139,6 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
     fixes = load_fixes(s)
     segs = script.segments
     ledger = Ledger(s.path("ledger"), s.path("cache"), s["budget"]["per_episode_cap"])
-    if not s.dry_run and not os.environ.get("ELEVENLABS_API_KEY"):
-        raise SystemExit("ELEVENLABS_API_KEY is not set. Add it to .env, or run with --dry-run.")
 
     items, spent = [], 0.0
     for i, seg in enumerate(segs):
@@ -96,21 +151,8 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
             media.silence(out, max(0.6, tamil_letters(text) / s["episode"]["narration_letters_per_second"]))
             alignment, cached = None, False
         else:
-            vid = voice_for(s, seg.speaker)
-            cache_file = s.path("cache") / "voice_audio"
-            res = ledger.run(
-                episode_id=episode_id, step="voice",
-                inputs={"voice": vid, "model": s["voice"]["model"], "text": text, "prev": prev, "next": nxt,
-                        "settings": [s["voice"]["stability"], s["voice"]["similarity_boost"]]},
-                estimate_usd=len(text) / 1000 * s["voice"]["price_per_1k_chars"],
-                call=lambda: _tts(s, vid, text, prev, nxt, cache_file / f"{episode_id}_{out.name}"),
-                force=force,
-            )
-            src = Path(res.value["file"])
-            if not src.exists():  # cache entry without its audio: pay again rather than fail
-                res = ledger.run(episode_id=episode_id, step="voice", inputs={"retry": str(src)}, estimate_usd=0.01,
-                                 call=lambda: _tts(s, vid, text, prev, nxt, src), force=True)
-            out.write_bytes(src.read_bytes())
+            res = synthesize(s, ledger, episode_id, seg.speaker, text, prev, nxt, f"{episode_id}_{out.name}", force)
+            out.write_bytes(Path(res.value["file"]).read_bytes())
             alignment, cached = res.value.get("alignment"), res.cached
             spent += res.cost_usd
         dur = media.duration(out)
@@ -120,6 +162,25 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
         items.append({"n": i + 1, "beat": seg.beat, "speaker": seg.speaker, "file": out.name,
                       "seconds": round(dur, 3), "planned": [seg.start_s, seg.end_s], "cached": cached})
 
-    manifest = {"dry_run": s.dry_run, "model": s["voice"]["model"], "segments": items, "cost_usd": round(spent, 4)}
+    manifest = {"dry_run": s.dry_run, "provider": s["voice"]["provider"], "segments": items, "cost_usd": round(spent, 4)}
     (vdir / "voice.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), "utf-8")
     return manifest
+
+
+def voice_test(s: Settings, text: str, voices: list[str], out_dir: Path) -> list[Path]:
+    """Say one line in several voices so you can pick by ear (free on Google TTS)."""
+    name, _ = provider_cfg(s)
+    ledger = Ledger(s.path("ledger"), s.path("cache"), s["budget"]["per_episode_cap"])
+    outs = []
+    for v in voices:
+        out = out_dir / f"{v}.mp3"
+        if name == "google_tts":
+            res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"voice": v, "text": text},
+                             estimate_usd=0.0, call=lambda: _google(s, v, text, s.path("cache") / "voice_test" / out.name))
+        else:
+            res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"voice": v, "text": text},
+                             estimate_usd=0.01, call=lambda: _eleven(s, v, text, "", "", s.path("cache") / "voice_test" / out.name))
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_bytes(Path(res.value["file"]).read_bytes())
+        outs.append(out)
+    return outs
