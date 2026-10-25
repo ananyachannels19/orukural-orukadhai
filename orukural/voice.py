@@ -90,7 +90,11 @@ def _gemini_client(timeout_s: float = 90):
         raise SystemExit("GEMINI_API_KEY is not set. Make a free key at aistudio.google.com/apikey, add it to .env, "
                          "or run with --dry-run.")
     # A hard timeout: on the free tier a throttled request can otherwise hang with no error.
-    return genai.Client(api_key=os.environ["GEMINI_API_KEY"], http_options={"timeout": int(timeout_s * 1000)})
+    # The SDK also retries 429/5xx itself, silently sleeping (it looked like a hang); it turns attempts=0
+    # into 1, so limit its retries to a status code Google never sends and let _gemini do the retrying.
+    return genai.Client(api_key=os.environ["GEMINI_API_KEY"],
+                        http_options={"timeout": int(timeout_s * 1000),
+                                      "retry_options": {"attempts": 1, "http_status_codes": [599]}})
 
 
 _last_call = [0.0]
