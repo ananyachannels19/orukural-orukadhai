@@ -46,6 +46,7 @@ Each shot becomes one generated still image and then one 4–8 second image-to-v
 - `motion_prompt_en`: what moves during the clip (character action, camera move). Simple, physically plausible motion.
 - `motion_priority`: 1 to 5. Clips are made over two days of free credits, most important first. Give 1 to shots whose action carries the story (the hook moment, a key reaction, the turn), 5 to calm shots.
 - Keep locations to two or three per episode.
+- Video models block anything that looks like an adult threatening or hurting a child. Never show an adult shouting at, pointing at, grabbing or towering over Kavin or another child; show the child's reaction alone (head down, red ears) and let the narration carry what the adult did. Keep animals safe and unharmed on screen too.
 
 ## Metadata
 
