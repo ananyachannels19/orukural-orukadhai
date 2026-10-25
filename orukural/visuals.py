@@ -282,6 +282,9 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
             "model": s["flow"]["video_model"], "seconds": secs, "aspect_ratio": "9:16", "credits": table[secs],
             "prompt": continuity.clip_prompt(s, script, sh, secs),
         })
+    for j in jobs:  # stable names, so a job can be found in the Flow project instead of being made twice
+        j["flow_name"] = (f"{episode_id}_shot{j['shot']:02d}_{j['kind']}" if "shot" in j
+                          else f"ref_{j['kind'].replace('_ref', '')}_{j['id']}")
     sheet = {"episode_id": episode_id, "clip_credits": credits, "daily_credits": daily, "clip_days": day if credits else 0,
              "monthly_credits_used": pool_used,
              "jobs": jobs}
@@ -300,6 +303,11 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
     lines = [
         f"# Flow jobs for {episode_id}", "",
         "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo). " + project_line,
+        "",
+        "**Never generate the same thing twice.** Every job has a `flow_name`. Before generating, search the Flow "
+        "project for an asset with that name (or the same prompt); if it exists, download it to `save_as` instead. "
+        "Name each new generation with its `flow_name`. If Flow or the tool reports an error or timeout, look in the "
+        "project first: Flow often finishes jobs that were reported as failed. Only then retry.",
         "", "Work in this order:", "",
         "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
@@ -321,7 +329,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
                 "prop_ref": f"Prop reference: {j.get('id')} → `{j['save_as']}`",
                 "image": f"Shot {j.get('shot')} image → `{j['save_as']}`",
                 "clip": f"Day {j.get('day')} · shot {j.get('shot')} clip ({j.get('seconds')} s, {j.get('credits')} credits) → `{j['save_as']}`"}[j["kind"]]
-        lines += [f"## {head}", ""]
+        lines += [f"## {head}", "", f"Flow name: `{j['flow_name']}`"]
         if j.get("reference_images"):
             lines.append("References, in this order: " + ", ".join(f"`{r}`" for r in j["reference_images"]))
         if j.get("start_frame"):

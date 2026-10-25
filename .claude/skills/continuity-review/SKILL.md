@@ -34,3 +34,7 @@ Every shot in an episode must look like the same world: the same faces, clothes,
 ```
 
 7. If something on the character sheet or in a recurring place reference itself looks wrong, don't fix it per shot: tell the user, because changing a reference affects every future episode.
+
+## Redoing without duplicates
+
+Before redoing an image or clip, search the Flow project for its `flow_name` (from `episodes/<id>/flow/jobs.json`) and for tiles titled with its prompt. If a download failed or the tool reported an error, Flow often finished the job anyway: download that result instead of generating again. Name every new generation with its `flow_name`, plus `_v2` or `_v3` for deliberate redos.
