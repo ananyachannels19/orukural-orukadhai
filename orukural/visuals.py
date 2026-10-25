@@ -283,7 +283,9 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
     n = episode_id.lstrip("K0")
     lines = [
         f"# Flow jobs for {episode_id}", "",
-        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo). Work in this order:", "",
+        "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo)."
+        + (f" Use this Flow project: {s['flow']['project_url']}" if s["flow"].get("project_url") else "")
+        + " Work in this order:", "",
         "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
         f"3. **Image review.** Run `python studio.py continuity-sheet {n}` and follow the continuity-review skill "

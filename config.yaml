@@ -104,6 +104,8 @@ video:
 
 flow:
   # Google AI Plus: 50 credits every day (use them or lose them) plus 200 a month.
+  # Every image and clip is made inside this Flow project.
+  project_url: https://flow.google.com/project/b7755f8b-6f52-4abf-8563-86ab7a09d09d
   daily_credits: 50
   monthly_credits: 200
   # `flow-sheet N --use-monthly` adds this many monthly credits to day 1 so one episode
