@@ -91,7 +91,7 @@ def _row_times(rows: list[str], seconds: float, audio: Path | None) -> list[floa
             hi = min([(j, fixed[j][0]) for j in fixed if j > k], default=(len(rows) - 1, total))
             w0 = sum(weights[:lo[0] + 1])
             x = lo[1] + (hi[1] - lo[1]) * (sum(weights[:k + 1]) - w0) / (sum(weights[:hi[0] + 1]) - w0)
-            near = [m for m in free if abs(m[0] - x) <= 0.25 and lo[1] < m[0] < hi[1]]
+            near = [m for m in free if abs(m[0] - x) <= 0.45 and lo[1] < m[0] < hi[1]]
             t = max(near[0][1], near[0][2] - 0.1) if near else at(x)
         times.append(max(t, times[-1] + 0.3))
     return times + [max(stop, times[-1] + 0.3)]

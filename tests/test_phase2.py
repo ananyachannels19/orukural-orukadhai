@@ -370,3 +370,14 @@ def test_caption_short_row_before_a_pause_gets_its_word(tmp_path):
             "அல்லிடத்துக் காக்கின்என்", "காவாக்கா லென்?"]
     times = captions._row_times(rows, 5.6, wav)
     assert times[1] < 1.1 and 1.8 <= times[2] <= 1.95, times
+
+
+def test_caption_row_without_punctuation_still_takes_a_close_pause(tmp_path):
+    from orukural import captions
+    # K0301 line 2: "...வாலாட்டி ஓடி வந்த குட்டி மேல | அந்தக் கோபம்..." pauses ~0.3 s of speech past the split
+    talk = "between(t,0,2.6)+between(t,3.0,5.0)"
+    wav = tmp_path / "v.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
+                    f"sine=f=300:d=5.0,volume='if({talk},1,0)':eval=frame", str(wav)], check=True)
+    times = captions._row_times(["ஆஆஆஆஆஆஆஆஆ", "ஆஆஆஆஆஆஆஆஆ"], 5.0, wav)
+    assert 2.85 <= times[1] <= 3.0, times
