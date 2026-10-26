@@ -13,6 +13,7 @@ import subprocess
 from functools import lru_cache
 from pathlib import Path
 
+from . import media
 from .config import ROOT, Settings
 from .schema import EpisodeScript
 
@@ -44,9 +45,30 @@ def _text(t: str) -> str:
 WIDTH = 1080 - 2 * 90
 
 
+def _row_times(rows: list[str], seconds: float, audio: Path | None) -> list[float]:
+    """Start of each row and end of the last, in seconds into the line's voice file. Rows split the spoken
+    stretch in proportion to their length; where the voice pauses near a split, the next row waits for
+    the voice to resume, so a long breath inside a line doesn't push later rows out of step."""
+    gaps = media.pauses(audio) if audio and audio.exists() else []
+    onset = next((b for a, b in gaps if a <= 0.05), 0.0)
+    stop = next((a for a, b in gaps if b >= seconds - 0.05 and a > onset), seconds)
+    inner = [(a, b) for a, b in gaps if onset < a and b < stop]
+    weights = [len(r) for r in rows]
+    times, acc = [onset], 0
+    for w in weights[:-1]:
+        acc += w
+        guess = onset + (stop - onset) * acc / sum(weights)
+        near = [(a, b) for a, b in inner if abs((a + b) / 2 - guess) <= 0.8 and a > times[-1]]
+        if near:
+            a, b = min(near, key=lambda g: abs((g[0] + g[1]) / 2 - guess))
+            guess = max(a, b - 0.1)  # up just before the voice comes back
+        times.append(max(guess, times[-1] + 0.3))
+    return times + [max(stop, times[-1] + 0.3)]
+
+
 def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> list[tuple[str, float, float]]:
     """(row, start, end) for every subtitle row. segs: the real timeline from assemble.real_timeline
-    (start/end/voice_seconds per line)."""
+    (start/end/voice_seconds per line, and the voice file's path when it is known)."""
     from PIL import Image, ImageDraw
     font, probe, out = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1))), []
     for i, (seg, t) in enumerate(zip(script.segments, segs)):
@@ -54,13 +76,11 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
             continue
         end = total if i == len(segs) - 1 else t["end"]
         rows = _wrap(probe, seg.narration_ta.strip(), font, WIDTH)
-        weights = [len(r) for r in rows]
-        a, span = t["start"], t["voice_seconds"]
+        times = _row_times(rows, t["voice_seconds"], Path(t["path"]) if t.get("path") else None)
         for k, row in enumerate(rows):
-            b = a + span * weights[k] / sum(weights)
+            a, b = t["start"] + times[k], t["start"] + times[k + 1]
             # the last row stays up for a short tail after the words, never into the next line
             out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b))
-            a = b
     return out
 
 

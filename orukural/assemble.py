@@ -178,6 +178,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
 
     final = rdir / f"{episode_id}_draft.mp4"
     inputs = ["-i", str(video_only)]
+    segs = [{**g, "path": str(ep_dir / "voice" / g["file"])} for g in segs]  # subtitles follow the voice's pauses
     if captions.ffmpeg_has_ass():
         ass = captions.write_ass(s, script, segs, total, rdir / "captions.ass")
         graph = f"[0:v]{captions.filter_arg(s, ass)}[t]"

@@ -39,6 +39,23 @@ def has_audio(path: Path) -> bool:
     return bool(out.strip())
 
 
+def pauses(path: Path, min_seconds: float = 0.15, noise_db: int = -35) -> list[tuple[float, float]]:
+    """(start, end) of every quiet stretch in an audio file, from ffmpeg's silencedetect."""
+    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af",
+                          f"silencedetect=noise={noise_db}dB:d={min_seconds}", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    out, start = [], None
+    for line in err.splitlines():
+        if "silence_start:" in line:
+            start = float(line.split("silence_start:")[1].split()[0])
+        elif "silence_end:" in line and start is not None:
+            out.append((max(0.0, start), float(line.split("silence_end:")[1].split()[0])))
+            start = None
+    if start is not None:
+        out.append((start, duration(path)))
+    return out
+
+
 def silence(path: Path, seconds: float) -> None:
     run(["-f", "lavfi", "-i", "anullsrc=r=44100:cl=mono", "-t", f"{seconds:.3f}", "-c:a", "libmp3lame", "-q:a", "4", str(path)])
 

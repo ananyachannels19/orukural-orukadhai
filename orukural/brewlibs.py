@@ -10,11 +10,14 @@ from pathlib import Path
 BREW_LIB = "/opt/homebrew/lib"
 
 
+def needed() -> bool:
+    return (sys.platform == "darwin" and Path(BREW_LIB, "libfribidi.0.dylib").exists()
+            and BREW_LIB not in os.environ.get("DYLD_FALLBACK_LIBRARY_PATH", "").split(":"))
+
+
 def ensure(argv: list[str]) -> None:
-    if sys.platform != "darwin" or not Path(BREW_LIB, "libfribidi.0.dylib").exists():
+    if not needed():
         return
     paths = os.environ.get("DYLD_FALLBACK_LIBRARY_PATH", "").split(":")
-    if BREW_LIB in paths:
-        return
     os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = ":".join([BREW_LIB] + [p for p in paths if p])
     os.execv(sys.executable, [sys.executable] + argv)

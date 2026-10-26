@@ -325,3 +325,15 @@ def test_clip_prompts_say_who_talks(studio):
     assert "Kavin keeps their mouth closed" in continuity.clip_prompt(studio, sc, by_n[9], 8)
     _, warns = continuity.check(studio, sc)
     assert any("shot 8" in w and "wrong person" in w for w in warns)
+
+
+def test_caption_rows_wait_for_a_pause_in_the_voice(tmp_path):
+    from orukural import captions
+    # 0.3 s quiet, 1.0 s voice, 0.8 s pause, 2.5 s voice: a short first row, a long second one
+    wav = tmp_path / "v.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
+                    "sine=f=300:d=4.6,volume='if(between(t,0.3,1.3)+between(t,2.1,4.6),1,0)':eval=frame",
+                    str(wav)], check=True)
+    times = captions._row_times(["ஆஆஆஆ", "ஆஆஆஆஆஆஆஆஆஆஆஆ"], 4.6, wav)
+    assert abs(times[0] - 0.3) < 0.1     # first row waits for the first word
+    assert 1.9 < times[1] < 2.15         # second row comes up as the voice resumes, not at the length split
