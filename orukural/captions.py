@@ -44,7 +44,9 @@ def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float
                                                 "sub_margin", "top_margin")})]
     for i, (seg, t) in enumerate(zip(script.segments, segs)):
         end = total if i == len(segs) - 1 else t["end"]
-        if c.get("subtitles", True) and seg.narration_ta.strip():
+        # One text on screen at a time: a line with big on-screen text (hook, kural, lesson, tease) shows that
+        # instead of its subtitle, never both.
+        if c.get("subtitles", True) and seg.narration_ta.strip() and not seg.on_screen_ta.strip():
             # the subtitle stays up for the spoken words plus a short tail, never into the next line
             sub_end = min(end, t["start"] + t["voice_seconds"] + 0.3)
             lines.append(f"Dialogue: 0,{_ts(t['start'])},{_ts(sub_end)},Sub,,0,0,0,,{_text(seg.narration_ta)}")

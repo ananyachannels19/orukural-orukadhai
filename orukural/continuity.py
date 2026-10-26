@@ -170,11 +170,35 @@ def image_prompt(s: Settings, script: EpisodeScript, shot: Shot, ref_labels: lis
     return "\n".join(parts)
 
 
+def speech_direction(s: Settings, script: EpisodeScript, shot: Shot) -> str:
+    """Who talks during this shot, and when, so mouths match the voice track laid over it later.
+
+    A clip is made with no sound, so without this a model moves whichever mouth it likes: a listener in
+    close-up "says" someone else's line, or the speaker sits silent while their voice plays."""
+    names = cast(sheet(s))
+    label = lambda c: names.get(c, {}).get("name", c).split(" (")[0] if c in names else c.replace("_", " ")
+    lines = []
+    for seg in script.segments:
+        a, b = max(seg.start_s, shot.start_s), min(seg.end_s, shot.end_s)
+        if b - a < 0.5:
+            continue
+        a, b = a - shot.start_s, b - shot.start_s
+        if seg.speaker in shot.characters:
+            others = [label(c) for c in shot.characters if c != seg.speaker]
+            verb = "keeps their mouth closed and listens" if len(others) == 1 else "keep their mouths closed and listen"
+            rest = f" {' and '.join(others)} {verb}." if others else ""
+            lines.append(f"From {a:.0f} s to {b:.0f} s {label(seg.speaker)} is talking: lips and jaw move clearly "
+                         f"as if speaking, with small natural gestures.{rest}")
+        else:
+            lines.append(f"From {a:.0f} s to {b:.0f} s nobody on screen talks: every mouth stays closed.")
+    return " ".join(lines) or "Nobody on screen talks: every mouth stays closed."
+
+
 def clip_prompt(s: Settings, script: EpisodeScript, shot: Shot, secs: int) -> str:
     return (f"{shot.motion_prompt_en.strip()} Camera: {shot.camera_en.strip()} About {secs} seconds, one continuous "
-            f"shot, no cuts. Keep every character's face, hair, clothes and size, the place, the light and every "
-            f"object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen "
-            f"text, no dialogue or speech.")
+            f"shot, no cuts. {speech_direction(s, script, shot)} Keep every character's face, hair, clothes and "
+            f"size, the place, the light and every object exactly as in the start frame; nothing appears, "
+            f"disappears or changes colour. No on-screen text. No sound needed.")
 
 
 # ---- script checks -----------------------------------------------------------------
@@ -226,6 +250,13 @@ def check(s: Settings, script: EpisodeScript) -> tuple[list[str], list[str]]:
         if seg.speaker in MAIN_CHARACTERS and seg.beat != "hook":
             if not any(seg.speaker in x.characters for x in near):
                 warns.append(f"{seg.start_s:g}–{seg.end_s:g}s: {seg.speaker} speaks but is not on screen")
+        if seg.speaker in MAIN_CHARACTERS:
+            for x in script.shots:
+                overlap = min(seg.end_s, x.end_s) - max(seg.start_s, x.start_s)
+                if overlap >= 1.5 and x.characters and seg.speaker not in x.characters \
+                        and all(c in MAIN_CHARACTERS for c in x.characters):
+                    warns.append(f"shot {x.n}: {seg.speaker} is heard for {overlap:.1f} s over a shot of "
+                                 f"{', '.join(x.characters)} only; it will look like the wrong person is talking")
         for p in bible.props:
             if p.name_ta and p.name_ta in seg.narration_ta and not any(p.id in x.props for x in near):
                 warns.append(f"{seg.start_s:g}–{seg.end_s:g}s: dialogue mentions {p.name_ta} ({p.id}) but no shot shows it")

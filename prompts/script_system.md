@@ -69,3 +69,9 @@ Each story must be specific: a named place from the world sheet, a concrete obje
 ```yaml
 {characters}
 ```
+
+## Who speaks on screen
+Clips are made without sound, so the picture must show who is talking.
+- During a character's line, the shot shows that character, facing the camera or the person they talk to. Their mouth moves; everyone else listens with mouths closed.
+- Never cut to a close-up of one character while another character is talking: it looks as if the wrong person is speaking. Close-ups of a silent listener go only under narration or a pause.
+- A line said off screen (the speaker not in the shot) is fine only when the shot shows what the line is about, such as the puppy when Thatha asks about it.

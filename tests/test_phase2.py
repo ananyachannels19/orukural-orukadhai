@@ -299,5 +299,16 @@ def test_captions_cover_every_line_and_the_kural(studio, tmp_path):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     segs = [{"start": seg.start_s, "end": seg.end_s, "voice_seconds": seg.end_s - seg.start_s - 0.5} for seg in sc.segments]
     ass = captions.write_ass(studio, sc, segs, sc.segments[-1].end_s, tmp_path / "c.ass").read_text("utf-8")
-    assert ass.count(",Sub,") == len(sc.segments)
+    assert ass.count(",Sub,") == sum(1 for g in sc.segments if not g.on_screen_ta.strip())  # never two texts at once
     assert ",Kural," in ass and "\\N" in ass and ",Big," in ass
+
+
+def test_clip_prompts_say_who_talks(studio):
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    by_n = {sh.n: sh for sh in sc.shots}
+    assert "Thatha is talking" in continuity.clip_prompt(studio, sc, by_n[5], 4)
+    # Thatha recites over a close-up of Kavin: Kavin's mouth must stay shut
+    assert "nobody on screen talks" in continuity.clip_prompt(studio, sc, by_n[8], 4)
+    assert "Kavin keeps their mouth closed" in continuity.clip_prompt(studio, sc, by_n[9], 8)
+    _, warns = continuity.check(studio, sc)
+    assert any("shot 8" in w and "wrong person" in w for w in warns)
