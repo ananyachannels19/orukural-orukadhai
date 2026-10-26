@@ -122,7 +122,9 @@ def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float,
             msg = str(e)
             retryable = any(k in msg for k in ("429", "RESOURCE_EXHAUSTED", "503", "UNAVAILABLE")) \
                 or "timeout" in type(e).__name__.lower() or "timed out" in msg.lower()
-            if not retryable or attempt == tries - 1:
+            # A per-day free-tier limit only resets at midnight Pacific (about 12:30 IST): retrying is wasted.
+            per_day = "per day" in msg.lower() or "PerDay" in msg
+            if not retryable or per_day or attempt == tries - 1:
                 raise RuntimeError(f"Gemini TTS failed for {out.name} after {attempt + 1} tries: {msg[:300]}") from e
             print(f"  voice: {type(e).__name__}, waiting {60 * (attempt + 1)} s (free-tier limit?)", flush=True)
             time.sleep(60 * (attempt + 1))

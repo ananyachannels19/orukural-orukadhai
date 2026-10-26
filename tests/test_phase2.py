@@ -266,6 +266,22 @@ def test_gemini_tts_retries_a_hung_request(studio, tmp_path, monkeypatch):
     assert len(calls) == 2 and out.exists()
 
 
+def test_gemini_tts_stops_at_once_on_daily_limit(studio, tmp_path, monkeypatch):
+    studio.raw["voice"]["provider"] = "gemini_tts"
+    calls = []
+
+    class Interactions:
+        def create(self, **kw):
+            calls.append(1)
+            raise Exception("429 RESOURCE_EXHAUSTED. limit: 10 requests per day on Free Tier")
+
+    monkeypatch.setattr(voice, "_gemini_client", lambda *a: SimpleNamespace(interactions=Interactions()))
+    monkeypatch.setattr(voice.time, "sleep", lambda s: None)
+    with pytest.raises(RuntimeError, match="per day"):
+        voice._gemini(studio, "Charon", "வணக்கம்", tmp_path / "x.mp3")
+    assert len(calls) == 1
+
+
 def test_flow_project_per_adhikaram(studio):
     assert visuals.flow_project(studio, 301)["url"].startswith("https://flow.google.com/project/")
     other = visuals.flow_project(studio, 151)  # adhikaram 16, no project yet
