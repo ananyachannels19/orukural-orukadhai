@@ -98,6 +98,11 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     voice.generate(studio, ep, sc, "K0301")
     visuals.generate(studio, ep, sc, "K0301")
     assert calls == {"image": 20, "video": 4, "tts": 9}
+    # an ffmpeg without libass (Homebrew's) still gets the same subtitles, as overlaid images
+    from orukural import captions
+    monkeypatch.setattr(captions, "ffmpeg_has_ass", lambda: False)
+    assemble.assemble(studio, ep, sc, "K0301")
+    assert len(list((ep / "render" / "subs").glob("sub*.png"))) == len(sc.segments)
     spend = [json.loads(l) for l in studio.path("ledger").read_text().splitlines()]
     assert {e["step"] for e in spend} == {"character_ref", "location_ref", "prop_ref", "image", "clip", "voice"}
 

@@ -177,15 +177,23 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     _mix_audio(s, ep_dir, segs, total, music, audio)
 
     final = rdir / f"{episode_id}_draft.mp4"
-    ass = captions.write_ass(s, script, segs, total, rdir / "captions.ass")
-    graph = f"[0:v]{captions.filter_arg(s, ass)}[t]"
     inputs = ["-i", str(video_only)]
+    if captions.ffmpeg_has_ass():
+        ass = captions.write_ass(s, script, segs, total, rdir / "captions.ass")
+        graph = f"[0:v]{captions.filter_arg(s, ass)}[t]"
+    else:  # e.g. Homebrew's ffmpeg has no libass: overlay pre-drawn subtitle images instead
+        graph, last = "", "0:v"
+        for k, (png, a, b, y) in enumerate(captions.render_pngs(s, script, segs, total, rdir / "subs")):
+            inputs += ["-i", str(png)]
+            graph += f"[{last}][{k + 1}:v]overlay=0:{y}:enable='between(t,{a:.2f},{b:.2f})'[s{k}];"
+            last = f"s{k}"
+        graph += f"[{last}]null[t]"
     cover = s["assembly"].get("watermark_cover") or {}
     badge = s.root / cover["image"] if cover.get("image") else None
     if badge and badge.exists():
         # Flow puts a sparkle watermark bottom-right on every image and clip: cover it with the channel badge.
         inputs += ["-i", str(badge)]
-        graph += f";[t][1:v]overlay={cover['x']}:{cover['y']}[v]"
+        graph += f";[t][{len(inputs) // 2 - 1}:v]overlay={cover['x']}:{cover['y']}[v]"
     else:
         graph += ";[t]null[v]"
     media.run([*inputs, "-i", str(audio), "-filter_complex", graph, "-map", "[v]", "-map", f"{len(inputs) // 2}:a",
