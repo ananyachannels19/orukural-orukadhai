@@ -334,7 +334,7 @@ def test_caption_rows_wait_for_a_pause_in_the_voice(tmp_path):
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
                     "sine=f=300:d=4.6,volume='if(between(t,0.3,1.3)+between(t,2.1,4.6),1,0)':eval=frame",
                     str(wav)], check=True)
-    times = captions._row_times(["ஆஆஆஆ", "ஆஆஆஆஆஆஆஆஆஆஆஆ"], 4.6, wav)
+    times = captions._row_times(["ஆஆஆஆ,", "ஆஆஆஆஆஆஆஆஆஆஆஆ"], 4.6, wav)
     assert abs(times[0] - 0.3) < 0.1     # first row waits for the first word
     assert 1.9 < times[1] < 2.15         # second row comes up as the voice resumes, not at the length split
 
@@ -361,3 +361,12 @@ def test_caption_short_row_before_a_pause_gets_its_word(tmp_path):
     rows = ["வள்ளுவர் என்ன சொல்றார்", "தெரியுமா?", "செல்லிடத்துக் காப்பான்", "சினங்காப்பான்,"]
     times = captions._row_times(rows, 5.6, wav)
     assert times[1] < 1.8 and 2.6 <= times[2] <= 2.8, times   # தெரியுமா? is up while it is said
+    # K0301 line 7 as heard: the question takes longer than its letters suggest, and the pause comes
+    # nearer the split before தெரியுமா? than after it; the ? still claims it
+    talk = "between(t,0,1.31)+between(t,1.95,5.6)"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
+                    f"sine=f=300:d=5.6,volume='if({talk},1,0)':eval=frame", str(wav)], check=True)
+    rows = ["வள்ளுவர் என்ன சொல்றார்", "தெரியுமா?", "செல்லிடத்துக் காப்பான்", "சினங்காப்பான்,",
+            "அல்லிடத்துக் காக்கின்என்", "காவாக்கா லென்?"]
+    times = captions._row_times(rows, 5.6, wav)
+    assert times[1] < 1.1 and 1.8 <= times[2] <= 1.95, times

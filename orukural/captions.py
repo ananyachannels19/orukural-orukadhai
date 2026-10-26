@@ -67,16 +67,32 @@ def _row_times(rows: list[str], seconds: float, audio: Path | None) -> list[floa
                 return a - (h - x)
         return stop - (total - x)
 
-    weights, times, acc = [len(r) for r in rows], [onset], 0
-    for w in weights[:-1]:
-        acc += w
-        x = total * acc / sum(weights)
-        near = [(abs(h - x), a, b) for h, a, b in marks if abs(h - x) <= 0.35 and b > times[-1]]
+    # Voices pause at punctuation, so a row that ends on , ! ? or . takes the pause nearest its split;
+    # the rows in between share out the speech between those pauses by length, and take a pause only
+    # if one is left right at their split. Pause positions are counted in speech heard, not file time.
+    weights = [len(r) for r in rows]
+    cum = [sum(weights[:k + 1]) / sum(weights) * total for k in range(len(rows) - 1)]
+    fixed: dict[int, tuple[float, float]] = {}  # split -> (speech heard, file time)
+    free, last = list(marks), -1.0
+    for k, row in enumerate(rows[:-1]):
+        if not row.endswith((",", "!", "?", ".")):
+            continue
+        near = [m for m in free if m[0] > last and abs(m[0] - cum[k]) <= 0.6]
         if near:
-            _, a, b = min(near)
-            t = max(a, b - 0.1)
+            h, a, b = min(near, key=lambda m: abs(m[0] - cum[k]))
+            fixed[k], last = (h, max(a, b - 0.1)), h
+            free.remove((h, a, b))
+    times = [onset]
+    for k in range(len(rows) - 1):
+        if k in fixed:
+            t = fixed[k][1]
         else:
-            t = at(x)
+            lo = max([(j, fixed[j][0]) for j in fixed if j < k], default=(-1, 0.0))
+            hi = min([(j, fixed[j][0]) for j in fixed if j > k], default=(len(rows) - 1, total))
+            w0 = sum(weights[:lo[0] + 1])
+            x = lo[1] + (hi[1] - lo[1]) * (sum(weights[:k + 1]) - w0) / (sum(weights[:hi[0] + 1]) - w0)
+            near = [m for m in free if abs(m[0] - x) <= 0.25 and lo[1] < m[0] < hi[1]]
+            t = max(near[0][1], near[0][2] - 0.1) if near else at(x)
         times.append(max(t, times[-1] + 0.3))
     return times + [max(stop, times[-1] + 0.3)]
 
