@@ -46,23 +46,38 @@ WIDTH = 1080 - 2 * 90
 
 
 def _row_times(rows: list[str], seconds: float, audio: Path | None) -> list[float]:
-    """Start of each row and end of the last, in seconds into the line's voice file. Rows split the spoken
-    stretch in proportion to their length; where the voice pauses near a split, the next row waits for
-    the voice to resume, so a long breath inside a line doesn't push later rows out of step."""
+    """Start of each row and end of the last, in seconds into the line's voice file. Rows share out the
+    time the voice is actually speaking (pauses left out) in proportion to their length; a split that
+    lands right at a pause moves to the end of it, so the next row comes up as the voice resumes."""
     gaps = media.pauses(audio) if audio and audio.exists() else []
     onset = next((b for a, b in gaps if a <= 0.05), 0.0)
     stop = next((a for a, b in gaps if b >= seconds - 0.05 and a > onset), seconds)
     inner = [(a, b) for a, b in gaps if onset < a and b < stop]
-    weights = [len(r) for r in rows]
-    times, acc = [onset], 0
+    # each pause as (speech heard before it, start, end)
+    marks, heard, prev = [], 0.0, onset
+    for a, b in inner:
+        heard += a - prev
+        marks.append((heard, a, b))
+        prev = b
+    total = heard + stop - prev
+
+    def at(x: float) -> float:  # speech time -> file time
+        for h, a, b in marks:
+            if x <= h:
+                return a - (h - x)
+        return stop - (total - x)
+
+    weights, times, acc = [len(r) for r in rows], [onset], 0
     for w in weights[:-1]:
         acc += w
-        guess = onset + (stop - onset) * acc / sum(weights)
-        near = [(a, b) for a, b in inner if abs((a + b) / 2 - guess) <= 0.8 and a > times[-1]]
+        x = total * acc / sum(weights)
+        near = [(abs(h - x), a, b) for h, a, b in marks if abs(h - x) <= 0.35 and b > times[-1]]
         if near:
-            a, b = min(near, key=lambda g: abs((g[0] + g[1]) / 2 - guess))
-            guess = max(a, b - 0.1)  # up just before the voice comes back
-        times.append(max(guess, times[-1] + 0.3))
+            _, a, b = min(near)
+            t = max(a, b - 0.1)
+        else:
+            t = at(x)
+        times.append(max(t, times[-1] + 0.3))
     return times + [max(stop, times[-1] + 0.3)]
 
 

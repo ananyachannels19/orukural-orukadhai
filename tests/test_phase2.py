@@ -337,3 +337,27 @@ def test_caption_rows_wait_for_a_pause_in_the_voice(tmp_path):
     times = captions._row_times(["ஆஆஆஆ", "ஆஆஆஆஆஆஆஆஆஆஆஆ"], 4.6, wav)
     assert abs(times[0] - 0.3) < 0.1     # first row waits for the first word
     assert 1.9 < times[1] < 2.15         # second row comes up as the voice resumes, not at the length split
+
+
+def test_caption_rows_ignore_a_pause_inside_a_row(tmp_path):
+    from orukural import captions
+    # "என்ன, ஸ்கூல்ல யாராவது | திட்டினாங்களா? | அவங்க கிட்ட ஏன் கத்தல?" with a breath after என்ன,
+    talk = "between(t,0,0.4)+between(t,0.75,1.9)+between(t,2.1,2.9)+between(t,3.2,4.6)"
+    wav = tmp_path / "v.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
+                    f"sine=f=300:d=4.6,volume='if({talk},1,0)':eval=frame", str(wav)], check=True)
+    rows = ["என்ன, ஸ்கூல்ல யாராவது", "திட்டினாங்களா?", "அவங்க கிட்ட ஏன் கத்தல?"]
+    times = captions._row_times(rows, 4.6, wav)
+    assert 1.9 <= times[1] <= 2.15 and 2.9 <= times[2] <= 3.25, times
+
+
+def test_caption_short_row_before_a_pause_gets_its_word(tmp_path):
+    from orukural import captions
+    # "வள்ளுவர் என்ன சொல்றார் | தெரியுமா? | (pause) | செல்லிடத்துக் காப்பான் | சினங்காப்பான்,"
+    talk = "between(t,0,2.1)+between(t,2.75,5.6)"
+    wav = tmp_path / "v.wav"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
+                    f"sine=f=300:d=5.6,volume='if({talk},1,0)':eval=frame", str(wav)], check=True)
+    rows = ["வள்ளுவர் என்ன சொல்றார்", "தெரியுமா?", "செல்லிடத்துக் காப்பான்", "சினங்காப்பான்,"]
+    times = captions._row_times(rows, 5.6, wav)
+    assert times[1] < 1.8 and 2.6 <= times[2] <= 2.8, times   # தெரியுமா? is up while it is said
