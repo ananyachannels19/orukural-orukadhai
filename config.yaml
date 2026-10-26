@@ -180,6 +180,11 @@ assembly:
   #   still — hold the still image without any movement
   missing_clip: wait
   crf: 18
+  # Flow's sparkle watermark sits about here on every 1080x1920 frame; the badge covers it.
+  watermark_cover:
+    image: assets/brand/badge.png
+    x: 810
+    y: 1572
 
 budget:
   currency: USD
