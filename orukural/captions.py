@@ -1,12 +1,14 @@
 """On-screen Tamil text, burned in at render: one subtitle per spoken line, every line in the same
-font, size, colour and position (hook, story, dialogue, kural and tease alike), and only one on screen
-at a time. The words are what is heard, so reading and listening never disagree. Most Shorts are
+font, size, colour and position (hook, story, dialogue, kural and tease alike). A long line is shown one
+row at a time, each row timed across the voice in proportion to its length, so the text never grows
+upwards into the picture and only one row is ever on screen. The words are what is heard, so reading and listening never disagree. Most Shorts are
 watched muted, so this is not optional.
 
 The text sits in the middle band: the bottom ~25% and the right edge are under YouTube's and
 Instagram's buttons and caption."""
 from __future__ import annotations
 
+import re
 import subprocess
 from functools import lru_cache
 from pathlib import Path
@@ -39,17 +41,34 @@ def _text(t: str) -> str:
     return t.replace("\\", "").replace("{", "(").replace("}", ")").replace("\n", "\\N").strip()
 
 
-def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path) -> Path:
-    """segs: the real timeline from assemble.real_timeline (start/end/voice_seconds per line)."""
-    c = s["captions"]
-    lines = [HEADER.format(font=c["font"], size=c["size"], margin=c["margin"])]
+WIDTH = 1080 - 2 * 90
+
+
+def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> list[tuple[str, float, float]]:
+    """(row, start, end) for every subtitle row. segs: the real timeline from assemble.real_timeline
+    (start/end/voice_seconds per line)."""
+    from PIL import Image, ImageDraw
+    font, probe, out = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1))), []
     for i, (seg, t) in enumerate(zip(script.segments, segs)):
         if not seg.narration_ta.strip():
             continue
         end = total if i == len(segs) - 1 else t["end"]
-        # up for the spoken words plus a short tail, never into the next line
-        sub_end = min(end, t["start"] + t["voice_seconds"] + 0.3)
-        lines.append(f"Dialogue: 0,{_ts(t['start'])},{_ts(sub_end)},Sub,,0,0,0,,{_text(seg.narration_ta)}")
+        rows = _wrap(probe, seg.narration_ta.strip(), font, WIDTH)
+        weights = [len(r) for r in rows]
+        a, span = t["start"], t["voice_seconds"]
+        for k, row in enumerate(rows):
+            b = a + span * weights[k] / sum(weights)
+            # the last row stays up for a short tail after the words, never into the next line
+            out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b))
+            a = b
+    return out
+
+
+def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path) -> Path:
+    c = s["captions"]
+    lines = [HEADER.format(font=c["font"], size=c["size"], margin=c["margin"])]
+    for row, a, b in cues(s, script, segs, total):
+        lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},Sub,,0,0,0,,{_text(row)}")
     out.write_text("\n".join(lines) + "\n", "utf-8")
     return out
 
@@ -66,9 +85,11 @@ def ffmpeg_has_ass() -> bool:
     return any(line.split()[1:2] == ["ass"] for line in out.splitlines() if line.strip())
 
 
-def _font(s: Settings):
+def _font(s: Settings, strict: bool = True):
+    """strict: drawing needs raqm to shape Tamil; measuring rows for libass can make do without it."""
     from PIL import ImageFont, features
-    if not features.check("raqm"):
+    raqm = features.check("raqm")
+    if strict and not raqm:
         raise SystemExit("Pillow can't shape Tamil here (no libraqm), and this ffmpeg has no libass: install one "
                          "of them (`pip install --upgrade pillow` usually brings raqm) to burn in subtitles.")
     c = s["captions"]
@@ -76,40 +97,47 @@ def _font(s: Settings):
     path = next((d / c["fonts_dir"] / name for d in (s.root, ROOT) if (d / c["fonts_dir"] / name).exists()),
                 s.root / c["fonts_dir"] / name)
     # libass sizes by line height, Pillow by em: 0.81 makes the two renders the same size
-    return ImageFont.truetype(str(path), round(c["size"] * 0.81), layout_engine=ImageFont.Layout.RAQM)
+    return ImageFont.truetype(str(path), round(c["size"] * 0.81),
+                              layout_engine=ImageFont.Layout.RAQM if raqm else ImageFont.Layout.BASIC)
 
 
 def _wrap(draw, text: str, font, width: int) -> list[str]:
-    lines, cur = [], ""
-    for word in text.split():
-        trial = f"{cur} {word}".strip()
-        if cur and draw.textlength(trial, font=font) > width:
-            lines.append(cur)
-            cur = word
-        else:
+    """Rows that fit the width, breaking at the end of a phrase (after ! ? , or a full stop) where it
+    can, so each row reads on its own, and between words only inside a phrase too long for one row."""
+    fits = lambda r: draw.textlength(r, font=font) <= width
+    rows, cur = [], ""
+    # a stop ends a phrase only after a word, not inside an abbreviation like பி.டி.
+    for phrase in re.split(r"(?<=[!?,])\s+|(?<=[^.\s]{3}\.)\s+", text):
+        trial = f"{cur} {phrase}".strip()
+        if fits(trial):
             cur = trial
-    return lines + ([cur] if cur else [])
+            continue
+        # a short start like "என்ன," runs on into the next phrase rather than flashing up alone
+        if cur.endswith(("!", "?", ".")) or draw.textlength(cur, font=font) >= width / 2:
+            rows.append(cur)
+            cur = ""
+        for word in phrase.split():
+            trial = f"{cur} {word}".strip()
+            if cur and not fits(trial):
+                rows.append(cur)
+                cur = word
+            else:
+                cur = trial
+    return rows + ([cur] if cur else [])
 
 
 def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out_dir: Path) -> list[tuple]:
-    """For an ffmpeg without libass: each subtitle drawn once to a transparent 1080-wide PNG, in the same
-    font, size, outline and position as the ASS style. Returns (png, start, end, y) per line."""
+    """For an ffmpeg without libass: each row drawn once to a transparent 1080-wide PNG, in the same
+    font, size, outline and position as the ASS style. Returns (png, start, end, y) per row."""
     from PIL import Image, ImageDraw
     c, font = s["captions"], _font(s)
     out_dir.mkdir(parents=True, exist_ok=True)
-    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    line_h, stroke, rows = int(c["size"] * 1.1), 5, []
-    for i, (seg, t) in enumerate(zip(script.segments, segs)):
-        if not seg.narration_ta.strip():
-            continue
-        end = total if i == len(segs) - 1 else t["end"]
-        lines = _wrap(probe, seg.narration_ta.strip(), font, 1080 - 2 * 90)
-        im = Image.new("RGBA", (1080, line_h * len(lines) + 2 * stroke), (0, 0, 0, 0))
-        d = ImageDraw.Draw(im)
-        for k, line in enumerate(lines):
-            d.text((540, stroke + k * line_h), line, font=font, anchor="ma", fill=(255, 255, 255, 255),
-                   stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
-        png = out_dir / f"sub{i + 1:02d}.png"
+    line_h, stroke, out = int(c["size"] * 1.1), 5, []
+    for n, (row, a, b) in enumerate(cues(s, script, segs, total), 1):
+        im = Image.new("RGBA", (1080, line_h + 2 * stroke), (0, 0, 0, 0))
+        ImageDraw.Draw(im).text((540, stroke), row, font=font, anchor="ma", fill=(255, 255, 255, 255),
+                                stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+        png = out_dir / f"sub{n:02d}.png"
         im.save(png)
-        rows.append((png, t["start"], min(end, t["start"] + t["voice_seconds"] + 0.3), 1920 - c["margin"] - im.height))
-    return rows
+        out.append((png, a, b, 1920 - c["margin"] - im.height))
+    return out

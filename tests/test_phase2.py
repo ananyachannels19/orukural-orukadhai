@@ -102,7 +102,8 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     from orukural import captions
     monkeypatch.setattr(captions, "ffmpeg_has_ass", lambda: False)
     assemble.assemble(studio, ep, sc, "K0301")
-    assert len(list((ep / "render" / "subs").glob("sub*.png"))) == len(sc.segments)
+    pngs = list((ep / "render" / "subs").glob("sub*.png"))
+    assert len(pngs) > len(sc.segments)  # long lines come one row at a time
     spend = [json.loads(l) for l in studio.path("ledger").read_text().splitlines()]
     assert {e["step"] for e in spend} == {"character_ref", "location_ref", "prop_ref", "image", "clip", "voice"}
 
@@ -299,13 +300,19 @@ def test_reference_cap(studio):
     assert [lab for lab, _ in refs] == ["Kavin", "Thatha", "the place (thatha_thinnai)"]
 
 
-def test_captions_one_style_one_line_at_a_time(studio, tmp_path):
+def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
     from orukural import captions
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.5} for g in sc.segments]
     ass = captions.write_ass(studio, sc, segs, sc.segments[-1].end_s, tmp_path / "c.ass").read_text("utf-8")
     events = [l for l in ass.splitlines() if l.startswith("Dialogue:")]
-    assert len(events) == len(sc.segments) and all(",Sub," in l for l in events)
+    assert len(events) > len(sc.segments) and all(",Sub," in l and "\\N" not in l for l in events)
+    # rows follow one another and never overlap
+    cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
+    assert all(a < b <= nxt for (_, a, b), (_, nxt, _) in zip(cues, cues[1:]))
+    from PIL import Image, ImageDraw
+    d, font = ImageDraw.Draw(Image.new("RGBA", (1, 1))), captions._font(studio)
+    assert all(d.textlength(row, font=font) <= captions.WIDTH for row, _, _ in cues)
     assert sum(l.startswith("Style:") for l in ass.splitlines()) == 1
 
 

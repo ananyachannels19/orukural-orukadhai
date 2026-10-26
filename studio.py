@@ -34,7 +34,7 @@ import collections
 import subprocess
 import sys
 
-from orukural import config, live
+from orukural import brewlibs, config, live
 from orukural.kurals import STATUSES, KuralStore, verse_text
 from orukural.ledger import Ledger
 
@@ -306,4 +306,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
+    brewlibs.ensure(sys.argv)
     sys.exit(main())
