@@ -187,15 +187,11 @@ assembly:
     y: 1572
 
 captions:
-  subtitles: true            # a subtitle for every spoken line
+  # One subtitle per spoken line, all in the same style and place, one at a time.
   fonts_dir: assets/fonts
-  font: Noto Sans Tamil
-  bold_font: Noto Sans Tamil ExtraBold
-  sub_size: 58
-  big_size: 84               # hook, lesson, tease
-  kural_size: 58
-  sub_margin: 600            # px above the bottom edge: clear of the Shorts/Reels buttons and caption
-  top_margin: 300
+  font: Noto Sans Tamil ExtraBold
+  size: 60
+  margin: 560               # px above the bottom edge: clear of the Shorts/Reels buttons and caption
 
 budget:
   currency: USD

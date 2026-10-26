@@ -294,13 +294,14 @@ def test_reference_cap(studio):
     assert [lab for lab, _ in refs] == ["Kavin", "Thatha", "the place (thatha_thinnai)"]
 
 
-def test_captions_cover_every_line_and_the_kural(studio, tmp_path):
+def test_captions_one_style_one_line_at_a_time(studio, tmp_path):
     from orukural import captions
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
-    segs = [{"start": seg.start_s, "end": seg.end_s, "voice_seconds": seg.end_s - seg.start_s - 0.5} for seg in sc.segments]
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.5} for g in sc.segments]
     ass = captions.write_ass(studio, sc, segs, sc.segments[-1].end_s, tmp_path / "c.ass").read_text("utf-8")
-    assert ass.count(",Sub,") == sum(1 for g in sc.segments if not g.on_screen_ta.strip())  # never two texts at once
-    assert ",Kural," in ass and "\\N" in ass and ",Big," in ass
+    events = [l for l in ass.splitlines() if l.startswith("Dialogue:")]
+    assert len(events) == len(sc.segments) and all(",Sub," in l for l in events)
+    assert sum(l.startswith("Style:") for l in ass.splitlines()) == 1
 
 
 def test_clip_prompts_say_who_talks(studio):
