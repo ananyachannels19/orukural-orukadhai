@@ -172,6 +172,8 @@ music:
 
 assembly:
   fps: 30
+  # Flow clips come with their own sound (footsteps, the puppy, the street): keep it under the voice.
+  natural_sound: {enabled: true, volume_db: -6, mute_talking_shots: true}
   # No zooms or pans: a punch-in is a cut to a tighter crop of the same clip. 1.0 = off.
   punch_in: 1.0
   split_story_shots_over: 3.5 # seconds; only used when punch_in > 1.0
@@ -182,9 +184,9 @@ assembly:
   crf: 18
   # Flow's sparkle watermark sits about here on every 1080x1920 frame; the badge covers it.
   watermark_cover:
-    image: assets/brand/badge.png
-    x: 810
-    y: 1572
+    image: assets/brand/logo_badge.png   # the channel logo, small, over Flow's sparkle
+    x: 825
+    y: 1669
 
 captions:
   # One subtitle per spoken line, all in the same style and place, one at a time.

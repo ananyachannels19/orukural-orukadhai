@@ -194,11 +194,18 @@ def speech_direction(s: Settings, script: EpisodeScript, shot: Shot) -> str:
     return " ".join(lines) or "Nobody on screen talks: every mouth stays closed."
 
 
+def someone_talks(s: Settings, script: EpisodeScript, shot: Shot) -> bool:
+    """A speaker is on screen for at least half a second of their line: Flow then tends to invent a voice."""
+    return any(seg.speaker in shot.characters and min(seg.end_s, shot.end_s) - max(seg.start_s, shot.start_s) >= 0.5
+               for seg in script.segments)
+
+
 def clip_prompt(s: Settings, script: EpisodeScript, shot: Shot, secs: int) -> str:
     return (f"{shot.motion_prompt_en.strip()} Camera: {shot.camera_en.strip()} About {secs} seconds, one continuous "
             f"shot, no cuts. {speech_direction(s, script, shot)} Keep every character's face, hair, clothes and "
             f"size, the place, the light and every object exactly as in the start frame; nothing appears, "
-            f"disappears or changes colour. No on-screen text. No sound needed.")
+            f"disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene "
+            f"(footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.")
 
 
 # ---- script checks -----------------------------------------------------------------

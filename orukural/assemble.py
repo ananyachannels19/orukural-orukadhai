@@ -79,7 +79,19 @@ def pick_music(s: Settings, episode_id: str) -> Path | None:
     return tracks[idx]
 
 
-def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music: Path | None, out: Path) -> None:
+def _fx_piece(clip: Path | None, offset: float, seconds: float, out: Path) -> None:
+    """The clip's own sound for one cut (footsteps, the puppy, the street), or silence: always exactly as long
+    as the picture so the concatenated track stays in sync."""
+    if clip and media.has_audio(clip):
+        media.run(["-ss", f"{max(0.0, offset):.3f}", "-i", str(clip), "-vn", "-af",
+                   f"aresample=44100,aformat=channel_layouts=stereo,apad,atrim=0:{seconds:.3f}",
+                   "-c:a", "pcm_s16le", str(out)])
+    else:
+        media.run(["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{seconds:.3f}", "-c:a", "pcm_s16le", str(out)])
+
+
+def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music: Path | None, out: Path,
+               fx: Path | None = None) -> None:
     vdir = ep_dir / "voice"
     args, labels, filters = [], [], []
     for i, seg in enumerate(segs):
@@ -87,9 +99,19 @@ def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music:
         ms = int(seg["start"] * 1000)
         filters.append(f"[{i}:a]aresample=44100,aformat=channel_layouts=stereo,adelay={ms}|{ms}[v{i}]")
         labels.append(f"[v{i}]")
-    filters.append(f"{''.join(labels)}amix=inputs={len(labels)}:normalize=0,apad=whole_dur={total:.3f}[narr]")
+    filters.append(f"{''.join(labels)}amix=inputs={len(labels)}:normalize=0,apad=whole_dur={total:.3f}[narr0]")
+    if fx:
+        # the scene's own sound under the voice, dipped while someone speaks
+        nat = s["assembly"].get("natural_sound") or {}
+        args += ["-i", str(fx)]
+        filters.append(f"[narr0]asplit=2[narr1][fxkey]")
+        filters.append(f"[{len(segs)}:a]volume={nat.get('volume_db', -6)}dB,apad=whole_dur={total:.3f}[fx0]")
+        filters.append("[fx0][fxkey]sidechaincompress=threshold=0.02:ratio=4:attack=15:release=350[fx1]")
+        filters.append("[narr1][fx1]amix=inputs=2:normalize=0[narr]")
+    else:
+        filters.append("[narr0]anull[narr]")
     if music:
-        m = len(segs)
+        m = len(segs) + (1 if fx else 0)
         args += ["-stream_loop", "-1", "-i", str(music)]
         vol = s["music"]["volume_db"]
         filters.append(f"[{m}:a]aresample=44100,aformat=channel_layouts=stereo,volume={vol}dB,"
@@ -152,18 +174,25 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     pdir = rdir / "pieces"
     pdir.mkdir(parents=True, exist_ok=True)
 
-    shot_rows, pieces = [], []
+    nat = s["assembly"].get("natural_sound") or {}
+    shot_rows, pieces, fx_pieces = [], [], []
     for k, sh in enumerate(script.shots):
         start = remap(sh.start_s, anchors)
         end = total if k == len(script.shots) - 1 else remap(sh.end_s, anchors)
         v = by_n[sh.n]
         for j, (off, length, punch) in enumerate(_pieces_for(s, sh, start, end)):
             out = pdir / f"shot{sh.n:02d}_{j}.mp4"
-            if v["clip"]:
-                _clip_piece(s, ep_dir / "clips" / v["clip"], off, length, punch, out)
+            clip = ep_dir / "clips" / v["clip"] if v["clip"] else None
+            if clip:
+                _clip_piece(s, clip, off, length, punch, out)
             else:
                 _still_piece(s, ep_dir / "images" / v["image"], length, punch=punch, out=out)
             pieces.append(out)
+            if nat.get("enabled", True):
+                # Flow invents a voice when a character on screen talks: keep only the narration there
+                quiet = nat.get("mute_talking_shots", True) and continuity.someone_talks(s, script, sh)
+                fx_pieces.append(pdir / f"shot{sh.n:02d}_{j}.wav")
+                _fx_piece(None if quiet else clip, off, length, fx_pieces[-1])
         shot_rows.append({"n": sh.n, "beat": sh.beat, "start": round(start, 3), "end": round(end, 3),
                           "source": "clip" if v["clip"] else "still", "cuts": j + 1})
 
@@ -172,9 +201,15 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     video_only = rdir / "video_only.mp4"
     media.run(["-f", "concat", "-safe", "0", "-i", str(concat), "-c", "copy", str(video_only)])
 
+    fx = None
+    if fx_pieces:
+        fx = rdir / "natural_sound.wav"
+        (pdir / "fx.txt").write_text("".join(f"file '{p.name}'\n" for p in fx_pieces), "utf-8")
+        media.run(["-f", "concat", "-safe", "0", "-i", str(pdir / "fx.txt"), "-c", "copy", str(fx)])
+
     music = pick_music(s, episode_id)
     audio = rdir / "audio.m4a"
-    _mix_audio(s, ep_dir, segs, total, music, audio)
+    _mix_audio(s, ep_dir, segs, total, music, audio, fx)
 
     final = rdir / f"{episode_id}_draft.mp4"
     inputs = ["-i", str(video_only)]

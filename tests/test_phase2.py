@@ -94,6 +94,7 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     # references: 2 characters + 4 places + 4 props, then 10 shot images
     assert calls == {"image": 2 + 4 + 4 + 10, "video": 4, "tts": 9}
     assert (ep / "render" / "K0301_draft.mp4").exists() and t["total_seconds"] >= 35
+    assert (ep / "render" / "natural_sound.wav").exists()  # the clips' own sound goes under the voice
     # second run: everything comes from the cache, nothing is paid for again
     voice.generate(studio, ep, sc, "K0301")
     visuals.generate(studio, ep, sc, "K0301")
