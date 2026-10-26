@@ -292,3 +292,12 @@ def test_reference_cap(studio):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     refs = continuity.shot_refs(studio, studio.path("episodes") / "K0301", sc, sc.shots[5])
     assert [lab for lab, _ in refs] == ["Kavin", "Thatha", "the place (thatha_thinnai)"]
+
+
+def test_captions_cover_every_line_and_the_kural(studio, tmp_path):
+    from orukural import captions
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    segs = [{"start": seg.start_s, "end": seg.end_s, "voice_seconds": seg.end_s - seg.start_s - 0.5} for seg in sc.segments]
+    ass = captions.write_ass(studio, sc, segs, sc.segments[-1].end_s, tmp_path / "c.ass").read_text("utf-8")
+    assert ass.count(",Sub,") == len(sc.segments)
+    assert ",Kural," in ass and "\\N" in ass and ",Big," in ass

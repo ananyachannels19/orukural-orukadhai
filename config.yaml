@@ -186,6 +186,17 @@ assembly:
     x: 810
     y: 1572
 
+captions:
+  subtitles: true            # a subtitle for every spoken line
+  fonts_dir: assets/fonts
+  font: Noto Sans Tamil
+  bold_font: Noto Sans Tamil ExtraBold
+  sub_size: 58
+  big_size: 84               # hook, lesson, tease
+  kural_size: 58
+  sub_margin: 600            # px above the bottom edge: clear of the Shorts/Reels buttons and caption
+  top_margin: 300
+
 budget:
   currency: USD
   per_episode_cap: 3.00       # hard stop before any paid call that would exceed it
