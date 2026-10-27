@@ -9,9 +9,15 @@ word, stretched to the length of Flow's speech, and laid at the moment Flow's sp
 picture is offset so that moment lands where the line sits in the timeline. Flow's own voice is never
 heard (the talking shots' clip sound is muted).
 
+The fit is phrase by phrase: our line is split at its own pauses, Flow's speech at its pauses, and
+each of our phrases is stretched onto its own stretch of Flow's speech, so the mouth closes when our
+voice pauses (a whole-line stretch only gets the first and last word right).
+
 Speech is found from the clip's sound by energy in the voice band. When that guess is wrong (a loud
 bark, music), `episodes/<id>/lipsync.json` can pin it: {"6": [[0.6, 2.9], [3.4, 5.5]]} gives the
-speech spans of shot 6 in clip seconds, one per spoken line in order.
+speech spans of shot 6 in clip seconds, one per spoken line in order; a line given as a list of
+phrases, {"5": [[[1.47, 1.94], [3.53, 5.06]]]}, pins its phrases too. Pinned seconds are those of
+the clip as Flow made it, before any cut from edit.py.
 
 Flow's own voice can be kept instead where it says the right words in a voice that suits the
 character: {"flow_voice": [5, 9]} in the same file. Its lines then play straight from the clip's
@@ -75,16 +81,72 @@ def _voice_bounds(path: Path) -> tuple[float, float]:
     return onset, stop
 
 
+def _parts(gaps: list[tuple[float, float]], a: float, b: float, min_len: float = 0.1) -> list[tuple[float, float]]:
+    """The sounding stretches between a and b, given the quiet stretches of the whole file."""
+    out, t = [], a
+    for g0, g1 in sorted(gaps) + [(b, b)]:
+        g0, g1 = max(a, min(b, g0)), max(a, min(b, g1))
+        if g0 - t >= min_len:
+            out.append((t, g0))
+        t = max(t, g1)
+    return out
+
+
+def merge_parts(parts: list[tuple[float, float]], count: int) -> list[tuple[float, float]]:
+    """Join the closest neighbours until `count` parts are left."""
+    parts = list(parts)
+    while len(parts) > max(1, count):
+        k = min(range(len(parts) - 1), key=lambda j: parts[j + 1][0] - parts[j][1])
+        parts[k:k + 2] = [(parts[k][0], parts[k + 1][1])]
+    return parts
+
+
+def _phrases(path: Path, v0: float, v1: float) -> list[tuple[float, float]]:
+    """Our voice split at its own pauses (a comma or a full stop in the line)."""
+    return _parts(media.pauses(path, min_seconds=0.12, noise_db=-40), v0, v1) or [(v0, v1)]
+
+
+def _flow_parts(clip: Path, a: float, b: float) -> list[tuple[float, float]]:
+    """Flow's speech between a and b split at its pauses (voice band only, as in speech_spans)."""
+    quiet = media.pauses(clip, min_seconds=0.12, noise_db=-32, af="highpass=f=180,lowpass=f=3800")
+    return _parts(quiet, a, b) or [(a, b)]
+
+
+def _place_phrases(src: Path, phrases: list[tuple[float, float]], targets: list[tuple[float, float]], out: Path
+                   ) -> list[float]:
+    """Stretch each phrase of our voice onto its own stretch of Flow's speech, so our pauses fall where Flow's
+    mouth closes. Writes one file starting at targets[0][0]; returns the tempo used per phrase."""
+    args, chain, labels, tempos, t_free = [], [], [], [], 0.0
+    for k, ((p0, p1), (q0, q1)) in enumerate(zip(phrases, targets)):
+        tempo = min(STRETCH[1], max(STRETCH[0], (p1 - p0) / (q1 - q0)))
+        at = max(q0 - targets[0][0], t_free)  # a phrase that could not be squeezed enough pushes the next one on
+        t_free = at + (p1 - p0) / tempo + 0.04
+        args += ["-ss", f"{p0:.3f}", "-t", f"{p1 - p0:.3f}", "-i", str(src)]
+        ms = int(round(at * 1000))
+        chain.append(f"[{k}:a]aresample=44100,aformat=channel_layouts=stereo,atempo={tempo:.4f},adelay={ms}|{ms}[p{k}]")
+        labels.append(f"[p{k}]")
+        tempos.append(tempo)
+    chain.append(f"{''.join(labels)}amix=inputs={len(labels)}:normalize=0[out]")
+    media.run([*args, "-filter_complex", ";".join(chain), "-map", "[out]", "-ar", "44100", str(out)])
+    return tempos
+
+
+def _span(v) -> list[tuple[float, float]]:
+    """A pinned line: [a, b] (its whole speech) or [[a, b], [c, d], ...] (its phrases)."""
+    return [tuple(v)] if isinstance(v[0], (int, float)) else [tuple(x) for x in v]
+
+
 def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shots: list[tuple[Shot, float, float]],
-        clips: dict[int, Path]) -> tuple[list[dict], dict[int, float], list[str]]:
+        clips: dict[int, Path], to_clip: dict | None = None) -> tuple[list[dict], dict[int, float], list[str]]:
     """Move each on-screen line onto Flow's speech. shots: (shot, real start, real end).
+    to_clip: per shot, a function from the original clip's seconds to the (edited) clip's, for pinned spans.
     Returns the updated segments, a picture offset (clip seconds) per shot, and notes for the log."""
     pinned, flow_voice = {}, set()
     pin_file = ep_dir / "lipsync.json"
     if pin_file.exists():
         raw = json.loads(pin_file.read_text("utf-8"))
         flow_voice = {int(n) for n in raw.pop("flow_voice", [])}
-        pinned = {int(k): [tuple(x) for x in v] for k, v in raw.items()}
+        pinned = {int(k): [_span(x) for x in v] for k, v in raw.items()}
     out_dir = ep_dir / "render" / "fit"
     segs = [dict(g) for g in segs]
     offsets, notes = {}, []
@@ -93,7 +155,9 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         clip = clips.get(shot.n)
         if not lines or not clip:
             continue
-        spans = pinned.get(shot.n) or speech_spans(clip, len(lines))
+        move = (to_clip or {}).get(shot.n) or (lambda t: t)
+        given = [[(move(x), move(y)) for x, y in line] for line in pinned.get(shot.n, [])]
+        spans = [(line[0][0], line[-1][1]) for line in given] or speech_spans(clip, len(lines))
         if len(spans) != len(lines):
             notes.append(f"shot {shot.n}: no clear speech in the clip; voice left where it was")
             continue
@@ -102,7 +166,7 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         # show the clip from the point where its speech lands on our line's slot
         offset = max(0.0, spans[0][0] - (first["start"] - start))
         offsets[shot.n] = offset
-        for i, (a, b) in zip(lines, spans):
+        for j, (i, (a, b)) in enumerate(zip(lines, spans)):
             g = segs[i]
             fitted = out_dir / f"seg{i + 1:02d}.wav"
             if shot.n in flow_voice:  # Flow's own voice, cut straight from the clip
@@ -116,18 +180,26 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
                 continue
             src = ep_dir / "voice" / g["file"]
             v0, v1 = _voice_bounds(src)
-            speed = (v1 - v0) / (b - a)
-            tempo = min(STRETCH[1], max(STRETCH[0], speed))
-            if tempo != speed:
-                notes.append(f"shot {shot.n}: line {i + 1} needed {speed:.2f}x to fit Flow's speech; capped at {tempo:.2f}x")
-            media.run(["-ss", f"{v0:.3f}", "-t", f"{v1 - v0:.3f}", "-i", str(src), "-af",
-                       f"atempo={tempo:.4f}", "-ar", "44100", str(fitted)])
-            g["start"] = round(start + a - offset, 3)
+            # phrase by phrase: as many of our phrases as Flow has stretches of speech (the closest ones joined)
+            ours = _phrases(src, v0, v1)
+            flows = given[j] if given and len(given[j]) > 1 else _flow_parts(clip, a, b)
+            k = min(len(ours), len(flows))
+            ours, flows = merge_parts(ours, k), merge_parts(flows, k)
+            for (p0, p1), (q0, q1) in zip(ours, flows):
+                speed = (p1 - p0) / (q1 - q0)
+                if not STRETCH[0] <= speed <= STRETCH[1]:
+                    notes.append(f"shot {shot.n}: line {i + 1} phrase at {q0:.2f} s needed {speed:.2f}x to fit "
+                                 f"Flow's speech; capped")
+            tempos = _place_phrases(src, ours, flows, fitted)
+            g["start"] = round(start + flows[0][0] - offset, 3)
             g["voice_seconds"] = round(media.duration(fitted), 3)
             g["file"] = str(fitted)
             g["path"] = str(fitted)
-            g["lipsync"] = {"shot": shot.n, "flow_speech": [round(a, 2), round(b, 2)], "tempo": round(tempo, 3)}
-            notes.append(f"shot {shot.n}: line {i + 1} on Flow's speech {a:.2f}-{b:.2f} s, voice at {tempo:.2f}x")
+            g["lipsync"] = {"shot": shot.n, "flow_speech": [[round(q0, 2), round(q1, 2)] for q0, q1 in flows],
+                            "tempo": [round(t, 3) for t in tempos]}
+            notes.append(f"shot {shot.n}: line {i + 1} on Flow's speech "
+                         + ", ".join(f"{q0:.2f}-{q1:.2f}" for q0, q1 in flows) + " s, voice at "
+                         + ", ".join(f"{t:.2f}x" for t in tempos))
     for prev, nxt in zip(segs, segs[1:]):
         if prev["start"] + prev["voice_seconds"] > nxt["start"] + 0.05:
             notes.append(f"line {nxt['n']} starts before line {prev['n']} ends ({nxt['start']:.2f} s): check that cut")

@@ -15,8 +15,9 @@ import json
 from bisect import bisect_right
 from pathlib import Path
 
-from . import captions, continuity, lipsync, live, media
+from . import captions, continuity, edit, lipsync, live, media
 from .config import Settings
+from .kurals import KuralStore
 from .schema import EpisodeScript, Shot
 
 MUSIC_EXT = {".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg"}
@@ -177,9 +178,11 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     spans = [(sh, remap(sh.start_s, anchors), total if k == len(script.shots) - 1 else remap(sh.end_s, anchors))
              for k, sh in enumerate(script.shots)]
     offsets = {}
+    clips = {n: ep_dir / "clips" / v["clip"] for n, v in by_n.items() if v["clip"]}
+    kural = KuralStore(s.path("kurals")).by_number.get(script.kural_number)
+    clips, moves = edit.prepare(s, ep_dir, script, kural, clips)  # cuts, kural card, sharpening (edit.json)
     if (s.raw.get("lipsync") or {}).get("enabled", True):
-        clips = {n: ep_dir / "clips" / v["clip"] for n, v in by_n.items() if v["clip"]}
-        segs, offsets, notes = lipsync.fit(s, ep_dir, script, segs, spans, clips)
+        segs, offsets, notes = lipsync.fit(s, ep_dir, script, segs, spans, clips, moves)
         for note in notes:
             print(f"lip sync: {note}")
 
@@ -190,7 +193,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
         for j, (off, length, punch) in enumerate(_pieces_for(s, sh, start, end)):
             off += offsets.get(sh.n, 0.0)
             out = pdir / f"shot{sh.n:02d}_{j}.mp4"
-            clip = ep_dir / "clips" / v["clip"] if v["clip"] else None
+            clip = clips.get(sh.n)
             if clip:
                 _clip_piece(s, clip, off, length, punch, out)
             else:

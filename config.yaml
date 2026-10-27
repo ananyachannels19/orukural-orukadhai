@@ -188,6 +188,8 @@ assembly:
   natural_sound: {enabled: true, volume_db: -6, mute_talking_shots: true}
   # No zooms or pans: a punch-in is a cut to a tighter crop of the same clip. 1.0 = off.
   punch_in: 1.0
+  # edit.json "cut": the part of a clip after a cut is punched in this much, so the jump reads as a cut-in
+  cut_punch: 1.12
   split_story_shots_over: 3.5 # seconds; only used when punch_in > 1.0
   # A shot that should have a clip but doesn't yet:
   #   wait  — stop and list the missing clips (make them after Flow credits reset)

@@ -432,6 +432,77 @@ def test_lipsync_lays_our_voice_on_flows_speech(studio, tmp_path):
     assert abs(out2[4]["voice_seconds"] - 1.9) < 0.1
 
 
+def test_lipsync_fits_each_phrase_onto_flows(studio, tmp_path):
+    from orukural import edit, lipsync
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    ep = tmp_path / "K0301"
+    (ep / "voice").mkdir(parents=True)
+    (ep / "clips").mkdir()
+
+    def tone(out, talk, d, video=False):
+        src = ["-f", "lavfi", "-i", f"sine=f=300:d={d},volume='if({talk},1,0)':eval=frame"]
+        if video:
+            src = ["-f", "lavfi", "-i", f"color=c=gray:s=72x128:d={d}"] + src + ["-shortest", "-c:v", "libx264"]
+        subprocess.run(["ffmpeg", "-v", "error", "-y", *src, str(out)], check=True)
+
+    # Flow: Kavin says two phrases with a long breath between (0.8-1.6, 2.6-3.4), Thatha 4.5-6.0
+    clip = ep / "clips" / "shot06.mp4"
+    tone(clip, "between(t,0.8,1.6)+between(t,2.6,3.4)+between(t,4.5,6.0)", 8, video=True)
+    # ours: the same two phrases with only a short pause (0.2-1.0, 1.3-2.1)
+    tone(ep / "voice" / "seg05.wav", "between(t,0.2,1.0)+between(t,1.3,2.1)", 2.4)
+    tone(ep / "voice" / "seg06.wav", "between(t,0.2,1.7)", 2.0)
+    segs = [{"n": i + 1, "file": f"seg{i + 1:02d}.wav", "start": g.start_s, "end": g.end_s,
+             "voice_seconds": g.end_s - g.start_s - 0.5} for i, g in enumerate(sc.segments)]
+    spans = [(sh, sh.start_s, sh.end_s) for sh in sc.shots]
+
+    def sounds(f):
+        gaps = media.pauses(f, min_seconds=0.12, noise_db=-40)
+        return lipsync._parts(gaps, 0.0, media.duration(f))
+
+    out, _, notes = lipsync.fit(studio, ep, sc, segs, spans, {6: clip})
+    # our second phrase now starts where Flow's does, 1.8 s after the first: the mouth closes in our pause
+    kavin = sounds(Path(out[4]["file"]))
+    assert len(kavin) == 2 and abs(kavin[1][0] - 1.8) < 0.1, (kavin, notes)
+    assert len(out[4]["lipsync"]["tempo"]) == 2
+    # phrases pinned in the clip's own seconds still land right after a cut drops 1.7-2.4 s of the clip
+    (ep / "lipsync.json").write_text('{"6": [[[0.8, 1.6], [2.6, 3.4]], [4.5, 6.0]]}')
+    (ep / "edit.json").write_text('{"6": {"cut": [[1.7, 2.4]]}}')
+    cut, moves = edit.prepare(studio, ep, sc, None, {6: clip})
+    out2, _, _ = lipsync.fit(studio, ep, sc, segs, spans, cut, moves)
+    assert out2[4]["lipsync"]["flow_speech"][1] == [1.9, 2.7]
+    (a, b), = out2[5]["lipsync"]["flow_speech"]
+    assert abs(a - 3.8) < 0.1 and abs(b - 5.3) < 0.1
+
+
+def test_edit_cuts_sharpens_and_maps_time(studio, tmp_path):
+    from PIL import features
+
+    from orukural import edit
+    assert edit.kept([[2, 3], [5, 9]], 8) == [(0, 2), (3, 5)]
+    move = edit.to_clip(edit.kept([[2, 3]], 8))
+    assert move(1.5) == 1.5 and move(2.5) == 2.0 and move(4.0) == 3.0
+    ep = tmp_path / "K0301"
+    (ep / "clips").mkdir(parents=True)
+    _mp4(ep / "clips" / "shot06.mp4", secs=4)
+    _mp4(ep / "clips" / "shot09.mp4", secs=2)
+    spec = {"6": {"cut": [[1.0, 2.0]]}, "9": {"sharpen": {"box": [600, 400, 400, 600], "amount": 1.5}}}
+    (ep / "edit.json").write_text(json.dumps(spec))
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    clips = {n: ep / "clips" / f"shot{n:02d}.mp4" for n in (6, 9)}
+    out, moves = edit.prepare(studio, ep, sc, None, clips)
+    # the cut drops a second of picture and sound together, at the film's size
+    assert abs(media.duration(out[6]) - 3.0) < 0.1 and media.has_audio(out[6])
+    size = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v", "-show_entries", "stream=width,height",
+                           "-of", "csv=p=0", str(out[9])], capture_output=True, text=True).stdout.strip()
+    assert size == "1080,1920" and abs(media.duration(out[9]) - 2.0) < 0.1
+    assert moves[6](1.5) == 1.0 and moves[6](2.5) == 1.5 and moves[9](1.5) == 1.5
+    if features.check("raqm"):  # the kural card needs Tamil shaping (studio.py sets that up on a Mac)
+        kural = {"verse": {"line1": "செல்லிடத்துக் காப்பான் சினங்காப்பான் அல்லிடத்துக்", "line2": "காக்கின்என் காவாக்கா லென்?"}}
+        (ep / "edit.json").write_text('{"6": {"card": "kural"}}')
+        out, _ = edit.prepare(studio, ep, sc, kural, clips)
+        assert (ep / "render" / "edit" / "card06.png").exists() and media.duration(out[6]) > 3.9
+
+
 def test_voice_pitch_tells_a_man_from_a_child(tmp_path):
     for hz in (110, 260):
         f = tmp_path / f"{hz}.wav"
