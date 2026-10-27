@@ -9,7 +9,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from orukural import assemble, config, continuity, visuals, voice
+from orukural import assemble, config, continuity, media, visuals, voice
 from orukural.kurals import KuralStore
 from orukural.schema import EpisodeScript
 
@@ -245,7 +245,11 @@ def test_gemini_tts_free_voice(studio, tmp_path, monkeypatch):
     assert len(sent) == 9 and m["cost_usd"] == 0
     assert sent[0]["model"] == "gemini-3.8-flash-tts" and sent[0]["response_format"]["type"] == "audio"
     # seg 1 is Kavin, seg 2 the narrator, seg 4 Thatha
-    assert [sent[i]["generation_config"]["speech_config"]["voice"] for i in (0, 1, 3)] == ["Puck", "Charon", "Iapetus"]
+    # what the SDK really sends: a bare dict here lost the voice, so every line came out in one default voice
+    from google.genai._gaos.types.interactions.generationconfig import GenerationConfig
+    wire = [GenerationConfig.model_validate(sent[i]["generation_config"]).model_dump(exclude_none=True) for i in (0, 1, 3)]
+    assert [w["speech_config"][0]["voice"] for w in wire] == ["Leda", "Charon", "Algenib"]
+    assert all(w["speech_config"][0]["language"] == "ta-IN" for w in wire)
     assert all(abs(x["seconds"] - 1.2) < 0.2 for x in m["segments"])
 
 
@@ -320,10 +324,16 @@ def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
 def test_clip_prompts_say_who_talks(studio):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     by_n = {sh.n: sh for sh in sc.shots}
-    assert "Thatha is talking" in continuity.clip_prompt(studio, sc, by_n[5], 4)
+    # Thatha's whole line is in shot 5: Flow says the real words (lip sync), and the clip gets room for them
+    p5 = continuity.clip_prompt(studio, sc, by_n[5], 8)
+    assert "Thatha says this line aloud in Tamil" in p5 and sc.segments[3].narration_ta.strip() in p5
+    assert visuals.clip_seconds(studio, by_n[5], sc) >= 5
+    # the kural runs on past shot 7, so there Thatha only mimes it
+    assert "Thatha is talking" in continuity.clip_prompt(studio, sc, by_n[7], 4)
     # Thatha recites over a close-up of Kavin: Kavin's mouth must stay shut
     assert "nobody on screen talks" in continuity.clip_prompt(studio, sc, by_n[8], 4)
     assert "Kavin keeps their mouth closed" in continuity.clip_prompt(studio, sc, by_n[9], 8)
+    assert "no voice or speech is heard" in continuity.clip_prompt(studio, sc, by_n[2], 8)
     _, warns = continuity.check(studio, sc)
     assert any("shot 8" in w and "wrong person" in w for w in warns)
 
@@ -382,3 +392,43 @@ def test_caption_row_without_punctuation_still_takes_a_close_pause(tmp_path):
                     f"sine=f=300:d=5.0,volume='if({talk},1,0)':eval=frame", str(wav)], check=True)
     times = captions._row_times(["ஆஆஆஆஆஆஆஆஆ", "ஆஆஆஆஆஆஆஆஆ"], 5.0, wav)
     assert 2.85 <= times[1] <= 3.0, times
+
+
+def test_lipsync_lays_our_voice_on_flows_speech(studio, tmp_path):
+    from orukural import lipsync
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    shot6 = next(sh for sh in sc.shots if sh.n == 6)
+    assert lipsync.spoken_lines(sc, shot6) == [4, 5]  # Kavin's line, then Thatha's reply
+    ep = tmp_path / "K0301"
+    (ep / "voice").mkdir(parents=True)
+    (ep / "clips").mkdir()
+
+    def tone(out, talk, d, video=False):
+        src = ["-f", "lavfi", "-i", f"sine=f=300:d={d},volume='if({talk},1,0)':eval=frame"]
+        if video:
+            src = ["-f", "lavfi", "-i", f"color=c=gray:s=72x128:d={d}"] + src + ["-shortest", "-c:v", "libx264"]
+        subprocess.run(["ffmpeg", "-v", "error", "-y", *src, str(out)], check=True)
+
+    # Flow: Kavin speaks 0.8-2.6 s, Thatha 3.3-5.1 s of an 8 s clip
+    tone(ep / "clips" / "shot06.mp4", "between(t,0.8,2.6)+between(t,3.3,5.1)", 8, video=True)
+    # ours: 0.2 s of lead-in, then 2.0 s of speech each
+    tone(ep / "voice" / "seg05.wav", "between(t,0.2,2.2)", 2.4)
+    tone(ep / "voice" / "seg06.wav", "between(t,0.2,2.2)", 2.4)
+    segs = [{"n": i + 1, "file": f"seg{i + 1:02d}.wav", "start": g.start_s, "end": g.end_s,
+             "voice_seconds": g.end_s - g.start_s - 0.5} for i, g in enumerate(sc.segments)]
+    spans = [(sh, sh.start_s, sh.end_s) for sh in sc.shots]
+    out, offsets, notes = lipsync.fit(studio, ep, sc, segs, spans, {6: ep / "clips" / "shot06.mp4"})
+    # the picture starts 0.8 s into the clip so Kavin's first word lands on his line at 19 s
+    assert abs(offsets[6] - 0.8) < 0.1, notes
+    assert abs(out[4]["start"] - 19.0) < 0.1 and abs(out[5]["start"] - 21.5) < 0.1, notes
+    # each voice is squeezed from 2.0 s to Flow's 1.8 s
+    assert abs(out[4]["voice_seconds"] - 1.8) < 0.1 and out[4]["lipsync"]["shot"] == 6
+    assert out[3] == segs[3]  # other lines untouched
+
+
+def test_voice_pitch_tells_a_man_from_a_child(tmp_path):
+    for hz in (110, 260):
+        f = tmp_path / f"{hz}.wav"
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
+                        f"sine=f={hz}:d=1.5,aformat=channel_layouts=mono", str(f)], check=True)
+        assert abs(media.median_pitch(f) - hz) < 8

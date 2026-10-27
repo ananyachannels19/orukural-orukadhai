@@ -115,7 +115,9 @@ def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float,
                 model=cfg["model"],
                 input=[{"type": "text", "text": text}],
                 response_format={"type": "audio", "mime_type": "audio/wav"},
-                generation_config={"speech_config": {"voice": voice, "language": cfg["language"]}},
+                # a list of speaker configs: a bare dict is read as a multi-speaker config and its voice and
+                # language are silently dropped, so every line came out in the same default voice
+                generation_config={"speech_config": [{"voice": voice, "language": cfg["language"]}]},
             )
             break
         except Exception as e:  # rate limit or a hung request: back off and try again
@@ -177,7 +179,8 @@ def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text:
     vid = voice_for(s, speaker)
     cache_file = s.path("cache") / "voice_audio" / cache_name
     if name == "gemini_tts":
-        inputs = {"provider": name, "model": cfg["model"], "voice": vid, "text": text}
+        # "api": 2 — lines made before the voice was really applied are not reused
+        inputs = {"provider": name, "model": cfg["model"], "voice": vid, "text": text, "api": 2}
         call = lambda: _gemini(s, vid, text, cache_file)  # noqa: E731
     elif name == "google_tts":
         inputs = {"provider": name, "voice": vid, "rate": cfg["speaking_rate"], "text": text}
@@ -225,11 +228,19 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
             alignment, cached = res.value.get("alignment"), res.cached
             spent += res.cost_usd
         dur = media.duration(out)
+        pitch = None if s.dry_run else media.median_pitch(out)
+        lo, hi = (s["voice"].get("expect_pitch_hz") or {}).get(seg.speaker, (0, 10_000))
+        if pitch and not lo <= pitch <= hi:
+            msg = (f"line {i + 1} ({seg.speaker}) speaks at about {pitch} Hz, outside the {lo}-{hi} Hz set for "
+                   f"{seg.speaker}: wrong voice? Check config.yaml voice.{s['voice']['provider']}.speaker_voices")
+            print(f"  voice: {msg}", flush=True)
+            live.emit(s, episode_id, "voice", "info", msg)
         (vdir / f"{out.stem}.alignment.json").write_text(
             json.dumps({"text_written": seg.narration_ta, "text_spoken": text, "alignment": alignment},
                        ensure_ascii=False, indent=1), "utf-8")
         items.append({"n": i + 1, "beat": seg.beat, "speaker": seg.speaker, "file": out.name,
-                      "seconds": round(dur, 3), "planned": [seg.start_s, seg.end_s], "cached": cached})
+                      "seconds": round(dur, 3), "planned": [seg.start_s, seg.end_s], "cached": cached,
+                      "pitch_hz": pitch})
 
     manifest = {"dry_run": s.dry_run, "provider": s["voice"]["provider"], "segments": items, "cost_usd": round(spent, 4)}
     (vdir / "voice.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), "utf-8")
@@ -244,7 +255,7 @@ def voice_test(s: Settings, text: str, voices: list[str], out_dir: Path) -> list
     for v in voices:
         out = out_dir / f"{v}.mp3"
         if name == "gemini_tts":
-            res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"tts": name, "voice": v, "text": text},
+            res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"tts": name, "voice": v, "text": text, "api": 2},
                              estimate_usd=0.0, call=lambda: _gemini(s, v, text, s.path("cache") / "voice_test" / out.name))
         elif name == "google_tts":
             res = ledger.run(episode_id="VOICE_TEST", step="voice", inputs={"voice": v, "text": text},

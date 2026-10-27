@@ -39,10 +39,11 @@ def has_audio(path: Path) -> bool:
     return bool(out.strip())
 
 
-def pauses(path: Path, min_seconds: float = 0.15, noise_db: int = -35) -> list[tuple[float, float]]:
-    """(start, end) of every quiet stretch in an audio file, from ffmpeg's silencedetect."""
-    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af",
-                          f"silencedetect=noise={noise_db}dB:d={min_seconds}", "-f", "null", "-"],
+def pauses(path: Path, min_seconds: float = 0.15, noise_db: int = -35, af: str = "") -> list[tuple[float, float]]:
+    """(start, end) of every quiet stretch in an audio file, from ffmpeg's silencedetect (af: filters first)."""
+    chain = f"{af}," if af else ""
+    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-vn", "-af",
+                          f"{chain}silencedetect=noise={noise_db}dB:d={min_seconds}", "-f", "null", "-"],
                          capture_output=True, text=True).stderr
     out, start = [], None
     for line in err.splitlines():
@@ -54,6 +55,32 @@ def pauses(path: Path, min_seconds: float = 0.15, noise_db: int = -35) -> list[t
     if start is not None:
         out.append((start, duration(path)))
     return out
+
+
+def median_pitch(path: Path, frames: int = 60) -> float | None:
+    """Typical voice pitch (Hz) of a speech file, YIN-style on up to `frames` voiced 50 ms frames.
+    Grown men speak around 85-155 Hz, women and children around 165-300 Hz."""
+    import array
+    import statistics
+    sr, w = 8000, 200
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", str(path), "-ac", "1", "-ar", str(sr), "-f", "s16le", "-"],
+                         capture_output=True, check=True).stdout
+    x = array.array("h", raw)
+    starts = [i for i in range(0, len(x) - 2 * w, w)
+              if sum(v * v for v in x[i:i + w:4]) / (w / 4) > 1000 ** 2]
+    step = max(1, len(starts) // frames)
+    found = []
+    for i in starts[::step]:
+        fr = x[i:i + 2 * w]
+        d = [sum((fr[j] - fr[j + tau]) ** 2 for j in range(w)) for tau in range(sr // 400, sr // 60)]
+        run, cm = 0.0, []
+        for k, v in enumerate(d, 1):
+            run += v
+            cm.append(v * k / run if run else 1.0)
+        k = next((k for k in range(len(cm) - 1) if cm[k] < 0.15 and cm[k] <= cm[k + 1]), None)
+        if k is not None:
+            found.append(sr / (k + sr // 400))
+    return round(statistics.median(found)) if len(found) >= 5 else None
 
 
 def silence(path: Path, seconds: float) -> None:

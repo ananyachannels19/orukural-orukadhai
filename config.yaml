@@ -112,7 +112,7 @@ flow:
   monthly_credits: 200
   # `flow-sheet N --use-monthly` adds this many monthly credits to day 1 so one episode
   # (10 clips, ~85 credits) is made in a single day. Without the flag only daily credits are used.
-  monthly_top_up_per_episode: 35
+  monthly_top_up_per_episode: 40
   video_model: "Omni Flash 720p"
   credits_per_clip: {4: 7, 8: 12, 10: 15}
   image_model: "Nano Banana 2 Lite"   # free in Flow
@@ -128,15 +128,17 @@ voice:
   provider: gemini_tts        # gemini_tts | google_tts | elevenlabs
   language_code: ta
   gap_seconds: 0.15           # silence between spoken segments
+  # Each new line's pitch is measured: one outside its speaker's range means the wrong voice was used.
+  expect_pitch_hz: {thatha: [70, 165], narrator: [70, 175], kavin: [170, 360]}
   gemini_tts:
     # Free on a Google AI Studio API key: no billing, no card (checked 25 Oct 2026).
     # Free-tier inputs/outputs may be used by Google to improve its models; fine for
     # public story scripts. Outputs are ours to use commercially (Gemini API terms).
     model: gemini-3.8-flash-tts
-    voice: Charon                        # narrator; try others with `studio.py voice-test`
+    voice: Charon                        # narrator: informative, male; try others with `studio.py voice-test`
     speaker_voices:
-      thatha: Iapetus
-      kavin: Puck
+      thatha: Algenib                    # gravelly, older male
+      kavin: Leda                        # youthful and light, reads as a child
     language: ta-IN
     price_per_1k_chars: 0.0
     # The free tier allows only a few requests a minute and can hang instead of
@@ -165,8 +167,13 @@ voice:
     stability: 0.5
     similarity_boost: 0.8
 
+# Exact lip sync: a character who says a line on screen says it in the Flow clip too; our voice is
+# then fitted onto Flow's speech (orukural/lipsync.py). Pin speech spans in episodes/<id>/lipsync.json.
+lipsync:
+  enabled: true
+
 music:
-  dir: assets/music
+  dir: assets/music           # our own tracks from tools/make_music.py; any royalty-free file works too
   volume_db: -20              # music bed level under the narration
   duck: true                  # dip the music further while someone is speaking
 
