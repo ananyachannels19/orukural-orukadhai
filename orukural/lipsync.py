@@ -106,9 +106,10 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
             g = segs[i]
             fitted = out_dir / f"seg{i + 1:02d}.wav"
             if shot.n in flow_voice:  # Flow's own voice, cut straight from the clip
-                media.run(["-ss", f"{max(0.0, a - 0.05):.3f}", "-t", f"{b - a + 0.1:.3f}", "-i", str(clip), "-vn",
+                lead = max(0.0, min(0.05, a, start + a - offset))  # never before the clip or the film starts
+                media.run(["-ss", f"{a - lead:.3f}", "-t", f"{b - a + lead + 0.05:.3f}", "-i", str(clip), "-vn",
                            "-ar", "44100", "-ac", "2", str(fitted)])
-                g.update(start=round(start + a - 0.05 - offset, 3), voice_seconds=round(media.duration(fitted), 3),
+                g.update(start=round(start + a - lead - offset, 3), voice_seconds=round(media.duration(fitted), 3),
                          file=str(fitted), path=str(fitted),
                          lipsync={"shot": shot.n, "flow_speech": [round(a, 2), round(b, 2)], "voice": "flow"})
                 notes.append(f"shot {shot.n}: line {i + 1} uses Flow's own voice ({a:.2f}-{b:.2f} s)")
