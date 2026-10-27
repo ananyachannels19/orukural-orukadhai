@@ -206,8 +206,8 @@ captions:
   # One subtitle per spoken line, all in the same style and place, one at a time.
   fonts_dir: assets/fonts
   font: Noto Sans Tamil ExtraBold
-  size: 60
-  margin: 560               # px above the bottom edge: clear of the Shorts/Reels buttons and caption
+  size: 52
+  margin: 400               # px above the bottom edge: clear of the Shorts/Reels buttons and caption
 
 budget:
   currency: USD
