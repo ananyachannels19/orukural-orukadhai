@@ -503,6 +503,16 @@ def test_edit_cuts_sharpens_and_maps_time(studio, tmp_path):
         assert (ep / "render" / "edit" / "card06.png").exists() and media.duration(out[6]) > 3.9
 
 
+def test_final_master_is_slower_and_nearer_lossless(studio):
+    m = assemble.master(studio)
+    assert (m["assembly"]["crf"], m["assembly"]["preset"], m["assembly"]["audio_kbps"]) == (16, "slow", 256)
+    assert m["assembly"]["output_name"] == "final" and "output_name" not in studio["assembly"]
+    enc = assemble._encode(m)
+    assert enc[enc.index("-crf") + 1] == "16" and enc[enc.index("-preset") + 1] == "slow"
+    assert studio["assembly"]["crf"] == 18  # the draft settings are left alone
+    assert "flags=lanczos" in media.fill_frame()
+
+
 def test_voice_pitch_tells_a_man_from_a_child(tmp_path):
     for hz in (110, 260):
         f = tmp_path / f"{hz}.wav"

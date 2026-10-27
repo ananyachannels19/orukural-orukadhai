@@ -196,6 +196,10 @@ assembly:
   #   still — hold the still image without any movement
   missing_clip: wait
   crf: 18
+  preset: medium
+  audio_kbps: 192
+  # `studio.py assemble 301 --final`: the upload master, slower and nearer lossless -> render/<id>_final.mp4
+  final: {crf: 16, preset: slow, audio_kbps: 256}
   # Flow's sparkle watermark sits about here on every 1080x1920 frame; the badge covers it.
   watermark_cover:
     image: assets/brand/logo_badge.png   # the channel logo, small, over Flow's sparkle

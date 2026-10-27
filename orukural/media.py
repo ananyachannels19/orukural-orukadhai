@@ -88,6 +88,6 @@ def silence(path: Path, seconds: float) -> None:
 
 
 def fill_frame(scale: float = 1.0) -> str:
-    """Scale-and-crop filter that fills a 1080x1920 frame, optionally punched in."""
+    """Scale-and-crop filter that fills a 1080x1920 frame, optionally punched in (lanczos: sharpest upscale)."""
     w, h = int(W * scale), int(H * scale)
-    return f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1"
+    return f"scale={w}:{h}:force_original_aspect_ratio=increase:flags=lanczos,crop={W}:{H},setsar=1"

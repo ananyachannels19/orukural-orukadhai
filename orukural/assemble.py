@@ -10,6 +10,7 @@ subtitle and branding step (phase 3) reads.
 
 from __future__ import annotations
 
+import copy
 import hashlib
 import json
 from bisect import bisect_right
@@ -44,7 +45,7 @@ def remap(x: float, anchors: list[tuple[float, float]]) -> float:
 
 
 def _encode(s: Settings) -> list[str]:
-    return ["-an", "-c:v", "libx264", "-preset", "medium", "-crf", str(s["assembly"]["crf"]),
+    return ["-an", "-c:v", "libx264", "-preset", s["assembly"].get("preset", "medium"), "-crf", str(s["assembly"]["crf"]),
             "-pix_fmt", "yuv420p", "-r", str(s["assembly"]["fps"])]
 
 
@@ -126,11 +127,21 @@ def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music:
     else:
         filters.append("[narr]anull[mix]")
     filters.append(f"[mix]loudnorm=I=-14:TP=-1.5:LRA=11,atrim=0:{total:.3f}[out]")
-    media.run([*args, "-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "aac", "-b:a", "192k",
+    media.run([*args, "-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "aac", "-b:a", f"{s['assembly'].get('audio_kbps', 192)}k",
                "-ar", "48000", str(out)])
 
 
-def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) -> dict:
+def master(s: Settings) -> Settings:
+    """The same settings with assembly.final (crf, preset, audio) applied: the slower upload master."""
+    m = copy.deepcopy(s)
+    m.raw["assembly"].update(m.raw["assembly"].get("final") or {})
+    m.raw["assembly"]["output_name"] = "final"
+    return m
+
+
+def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, final: bool = False) -> dict:
+    if final:
+        s = master(s)
     if s.dry_run:
         return _assemble(s, ep_dir, script, episode_id)
     live.emit(s, episode_id, "render", "start")
@@ -222,7 +233,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     audio = rdir / "audio.m4a"
     _mix_audio(s, ep_dir, segs, total, music, audio, fx)
 
-    final = rdir / f"{episode_id}_draft.mp4"
+    final = rdir / f"{episode_id}_{s['assembly'].get('output_name', 'draft')}.mp4"
     inputs = ["-i", str(video_only)]
     segs = [{**g, "path": str(ep_dir / "voice" / g["file"])} for g in segs]  # subtitles follow the voice's pauses
     if captions.ffmpeg_has_ass():
@@ -244,7 +255,8 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     else:
         graph += ";[t]null[v]"
     media.run([*inputs, "-i", str(audio), "-filter_complex", graph, "-map", "[v]", "-map", f"{len(inputs) // 2}:a",
-               "-c:v", "libx264", "-crf", str(s["assembly"]["crf"]), "-pix_fmt", "yuv420p", "-c:a", "copy",
+               "-c:v", "libx264", "-preset", s["assembly"].get("preset", "medium"), "-crf", str(s["assembly"]["crf"]),
+               "-pix_fmt", "yuv420p", "-c:a", "copy",
                "-t", f"{total:.3f}", "-movflags", "+faststart", str(final)])
 
     lo, hi = s["episode"]["target_seconds"]

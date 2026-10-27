@@ -84,7 +84,7 @@ def _punch(s: Settings, p: float) -> str:
         w, h = Image.open(s.root / cover["image"]).size
         ax, ay = cover["x"] + w / 2, cover["y"] + h / 2
     return (f",crop={1080 / p:.0f}:{1920 / p:.0f}:{ax * (1 - 1 / p):.0f}:{ay * (1 - 1 / p):.0f},"
-            f"scale=1080:1920,setsar=1")
+            f"scale=1080:1920:flags=lanczos,setsar=1")
 
 
 def _render(s: Settings, clip: Path, spec: dict, card: Path | None, out: Path) -> list[tuple[float, float]]:

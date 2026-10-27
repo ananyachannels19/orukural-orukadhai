@@ -17,6 +17,7 @@ Phase 2 commands:
   python studio.py voice-test            one kural line in 8 Tamil voices → review/voice_test/
   python studio.py visuals 301 [--shots 2,5]   collect (Flow) or make (Gemini) stills and clips
   python studio.py assemble 301          cut and mix → episodes/K0301/render/K0301_draft.mp4
+  python studio.py assemble 301 --final  the upload master (slower, nearer lossless) → K0301_final.mp4
   python studio.py render 301            voice + visuals + assemble in one go
 
 Studio Live:
@@ -181,7 +182,7 @@ def cmd_visuals(s, args):
 def cmd_assemble(s, args):
     from orukural import assemble
     k, ep_dir, sc = _episode(s, args.kural)
-    t = assemble.assemble(s, ep_dir, sc, k["id"])
+    t = assemble.assemble(s, ep_dir, sc, k["id"], final=getattr(args, "final", False))
     note = "" if t["within_target"] else "  ← outside the 35–45 s target"
     print(f"{ep_dir.relative_to(s.root)}/render/{t['output']}: {t['total_seconds']:.1f}s{note}"
           f" · music: {t['music'] or 'none (add files to assets/music)'}")
@@ -273,6 +274,8 @@ def main(argv=None):
         c.add_argument("kural")
         c.add_argument("--force", action="store_true", help="ignore the cache and pay again")
         c.add_argument("--shots", help="visuals only: comma-separated shot numbers to (re)make")
+        c.add_argument("--final", action="store_true",
+                       help="assemble/render: the upload master (assembly.final: crf, preset, audio) -> <id>_final.mp4")
         c.add_argument("--dry-run", action="store_true", default=None, dest="sub_dry_run")
         c.set_defaults(fn=fn)
 
