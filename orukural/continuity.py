@@ -189,9 +189,12 @@ def speech_direction(s: Settings, script: EpisodeScript, shot: Shot) -> str:
             others = [label(c) for c in shot.characters if c != seg.speaker]
             verb = "keeps their mouth closed and listens" if len(others) == 1 else "keep their mouths closed and listen"
             rest = f" Meanwhile {' and '.join(others)} {verb}." if others else ""
-            lines.append(f"From about {max(a, 0.5):.1f} s, {label(seg.speaker)} says this line aloud in Tamil, "
-                         f"clearly and naturally, lips and jaw matching every word, the body acting it out, face "
-                         f"in view while speaking: \"{seg.narration_ta.strip()}\"{rest}")
+            voice = (s["voice"].get("flow_voices") or {}).get(seg.speaker)
+            sound = f" in {voice.rstrip('.')}" if voice else ""
+            lines.append(f"From about {max(a, 0.5):.1f} s, {label(seg.speaker)} says this line aloud{sound}, "
+                         f"pronouncing every word exactly in clear standard Tamil, lips and jaw matching every "
+                         f"word, the body acting it out, face in view while speaking: "
+                         f"\"{seg.narration_ta.strip()}\"{rest}")
         elif seg.speaker in shot.characters:
             others = [label(c) for c in shot.characters if c != seg.speaker]
             verb = "keeps their mouth closed and listens" if len(others) == 1 else "keep their mouths closed and listen"

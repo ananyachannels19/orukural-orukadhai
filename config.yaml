@@ -130,6 +130,11 @@ voice:
   gap_seconds: 0.15           # silence between spoken segments
   # Each new line's pitch is measured: one outside its speaker's range means the wrong voice was used.
   expect_pitch_hz: {thatha: [70, 165], narrator: [70, 175], kavin: [170, 360]}
+  # How each character sounds when Flow speaks their line in a clip (lip sync): the same words in every
+  # prompt so Flow picks a similar voice each time (it can't take a voice sample).
+  flow_voices:
+    thatha: "the deep, slightly gravelly, warm voice of a 70-year-old Tamil grandfather, slow and kind"
+    kavin: "the clear, high voice of an 8-year-old Tamil boy"
   gemini_tts:
     # Free on a Google AI Studio API key: no billing, no card (checked 25 Oct 2026).
     # Free-tier inputs/outputs may be used by Google to improve its models; fine for

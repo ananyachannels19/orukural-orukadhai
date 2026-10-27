@@ -11,7 +11,11 @@ heard (the talking shots' clip sound is muted).
 
 Speech is found from the clip's sound by energy in the voice band. When that guess is wrong (a loud
 bark, music), `episodes/<id>/lipsync.json` can pin it: {"6": [[0.6, 2.9], [3.4, 5.5]]} gives the
-speech spans of shot 6 in clip seconds, one per spoken line in order."""
+speech spans of shot 6 in clip seconds, one per spoken line in order.
+
+Flow's own voice can be kept instead where it says the right words in a voice that suits the
+character: {"flow_voice": [5, 9]} in the same file. Its lines then play straight from the clip's
+sound (perfect sync by construction); the narrator and lines it gets wrong stay on our voice."""
 from __future__ import annotations
 
 import json
@@ -75,10 +79,12 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         clips: dict[int, Path]) -> tuple[list[dict], dict[int, float], list[str]]:
     """Move each on-screen line onto Flow's speech. shots: (shot, real start, real end).
     Returns the updated segments, a picture offset (clip seconds) per shot, and notes for the log."""
-    pinned = {}
+    pinned, flow_voice = {}, set()
     pin_file = ep_dir / "lipsync.json"
     if pin_file.exists():
-        pinned = {int(k): [tuple(x) for x in v] for k, v in json.loads(pin_file.read_text("utf-8")).items()}
+        raw = json.loads(pin_file.read_text("utf-8"))
+        flow_voice = {int(n) for n in raw.pop("flow_voice", [])}
+        pinned = {int(k): [tuple(x) for x in v] for k, v in raw.items()}
     out_dir = ep_dir / "render" / "fit"
     segs = [dict(g) for g in segs]
     offsets, notes = {}, []
@@ -98,13 +104,21 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         offsets[shot.n] = offset
         for i, (a, b) in zip(lines, spans):
             g = segs[i]
+            fitted = out_dir / f"seg{i + 1:02d}.wav"
+            if shot.n in flow_voice:  # Flow's own voice, cut straight from the clip
+                media.run(["-ss", f"{max(0.0, a - 0.05):.3f}", "-t", f"{b - a + 0.1:.3f}", "-i", str(clip), "-vn",
+                           "-ar", "44100", "-ac", "2", str(fitted)])
+                g.update(start=round(start + a - 0.05 - offset, 3), voice_seconds=round(media.duration(fitted), 3),
+                         file=str(fitted), path=str(fitted),
+                         lipsync={"shot": shot.n, "flow_speech": [round(a, 2), round(b, 2)], "voice": "flow"})
+                notes.append(f"shot {shot.n}: line {i + 1} uses Flow's own voice ({a:.2f}-{b:.2f} s)")
+                continue
             src = ep_dir / "voice" / g["file"]
             v0, v1 = _voice_bounds(src)
             speed = (v1 - v0) / (b - a)
             tempo = min(STRETCH[1], max(STRETCH[0], speed))
             if tempo != speed:
                 notes.append(f"shot {shot.n}: line {i + 1} needed {speed:.2f}x to fit Flow's speech; capped at {tempo:.2f}x")
-            fitted = out_dir / f"seg{i + 1:02d}.wav"
             media.run(["-ss", f"{v0:.3f}", "-t", f"{v1 - v0:.3f}", "-i", str(src), "-af",
                        f"atempo={tempo:.4f}", "-ar", "44100", str(fitted)])
             g["start"] = round(start + a - offset, 3)

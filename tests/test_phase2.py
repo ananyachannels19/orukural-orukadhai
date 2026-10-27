@@ -326,7 +326,8 @@ def test_clip_prompts_say_who_talks(studio):
     by_n = {sh.n: sh for sh in sc.shots}
     # Thatha's whole line is in shot 5: Flow says the real words (lip sync), and the clip gets room for them
     p5 = continuity.clip_prompt(studio, sc, by_n[5], 8)
-    assert "Thatha says this line aloud in Tamil" in p5 and sc.segments[3].narration_ta.strip() in p5
+    assert "Thatha says this line aloud in the deep" in p5 and sc.segments[3].narration_ta.strip() in p5
+    assert "pronouncing every word exactly" in p5
     assert visuals.clip_seconds(studio, by_n[5], sc) >= 5
     # the kural runs on past shot 7, so there Thatha only mimes it
     assert "Thatha is talking" in continuity.clip_prompt(studio, sc, by_n[7], 4)
@@ -424,6 +425,11 @@ def test_lipsync_lays_our_voice_on_flows_speech(studio, tmp_path):
     # each voice is squeezed from 2.0 s to Flow's 1.8 s
     assert abs(out[4]["voice_seconds"] - 1.8) < 0.1 and out[4]["lipsync"]["shot"] == 6
     assert out[3] == segs[3]  # other lines untouched
+    # or keep Flow's own voice for that shot: the line plays straight from the clip, at the same moment
+    (ep / "lipsync.json").write_text('{"flow_voice": [6]}')
+    out2, _, _ = lipsync.fit(studio, ep, sc, segs, spans, {6: ep / "clips" / "shot06.mp4"})
+    assert out2[4]["lipsync"]["voice"] == "flow" and abs(out2[4]["start"] - 18.95) < 0.1
+    assert abs(out2[4]["voice_seconds"] - 1.9) < 0.1
 
 
 def test_voice_pitch_tells_a_man_from_a_child(tmp_path):
