@@ -21,7 +21,7 @@ from pathlib import Path
 
 import yaml
 
-from . import continuity, live, media
+from . import continuity, lipsync, live, media
 from .config import Settings
 from .ledger import Ledger
 from .schema import EpisodeScript, Shot
@@ -171,9 +171,11 @@ def animated_shots(s: Settings, script: EpisodeScript) -> set[int]:
     return set(chosen[:limit])
 
 
-def clip_seconds(s: Settings, shot: Shot) -> int:
+def clip_seconds(s: Settings, shot: Shot, script: EpisodeScript | None = None) -> int:
+    """The shot's planned length, or longer when a character on screen says a line in it (lip sync)."""
     lo, hi = s["video"]["clip_seconds"]
-    return int(min(hi, max(lo, -(-(shot.end_s - shot.start_s) // 1))))
+    need = max(shot.end_s - shot.start_s, lipsync.needed_seconds(script, shot) if script else 0.0)
+    return int(min(hi, max(lo, -(-need // 1))))
 
 
 def _gen_clip(s: Settings, image: Path, prompt: str, out: Path) -> tuple[dict, float, dict]:
@@ -216,7 +218,7 @@ def _gen_clip(s: Settings, image: Path, prompt: str, out: Path) -> tuple[dict, f
 def shot_clip(s: Settings, ep_dir: Path, episode_id: str, script: EpisodeScript, shot: Shot, image: Path,
               force: bool = False) -> Path:
     out = ep_dir / "clips" / f"shot{shot.n:02d}.mp4"
-    secs = clip_seconds(s, shot)
+    secs = clip_seconds(s, shot, script)
     out.parent.mkdir(parents=True, exist_ok=True)
     if s.dry_run:
         media.run(["-loop", "1", "-i", str(image), "-t", str(secs), "-vf",
@@ -267,7 +269,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         sh = next(x for x in script.shots if x.n == n)
         if (ep_dir / "clips" / f"shot{n:02d}.mp4").exists():
             continue
-        secs = min(table, key=lambda k: (k < clip_seconds(s, sh), abs(k - clip_seconds(s, sh))))
+        secs = min(table, key=lambda k: (k < clip_seconds(s, sh, script), abs(k - clip_seconds(s, sh, script))))
         credits += table[secs]
         cap = daily + (pool if day == 1 else 0)  # monthly credits only top up day 1
         if day_used + table[secs] > cap:  # spread clips over days as Flow's daily credits reset

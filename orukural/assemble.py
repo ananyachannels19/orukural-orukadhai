@@ -15,7 +15,7 @@ import json
 from bisect import bisect_right
 from pathlib import Path
 
-from . import captions, continuity, live, media
+from . import captions, continuity, lipsync, live, media
 from .config import Settings
 from .schema import EpisodeScript, Shot
 
@@ -174,13 +174,21 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     pdir = rdir / "pieces"
     pdir.mkdir(parents=True, exist_ok=True)
 
+    spans = [(sh, remap(sh.start_s, anchors), total if k == len(script.shots) - 1 else remap(sh.end_s, anchors))
+             for k, sh in enumerate(script.shots)]
+    offsets = {}
+    if (s.raw.get("lipsync") or {}).get("enabled", True):
+        clips = {n: ep_dir / "clips" / v["clip"] for n, v in by_n.items() if v["clip"]}
+        segs, offsets, notes = lipsync.fit(s, ep_dir, script, segs, spans, clips)
+        for note in notes:
+            print(f"lip sync: {note}")
+
     nat = s["assembly"].get("natural_sound") or {}
     shot_rows, pieces, fx_pieces = [], [], []
-    for k, sh in enumerate(script.shots):
-        start = remap(sh.start_s, anchors)
-        end = total if k == len(script.shots) - 1 else remap(sh.end_s, anchors)
+    for sh, start, end in spans:
         v = by_n[sh.n]
         for j, (off, length, punch) in enumerate(_pieces_for(s, sh, start, end)):
+            off += offsets.get(sh.n, 0.0)
             out = pdir / f"shot{sh.n:02d}_{j}.mp4"
             clip = ep_dir / "clips" / v["clip"] if v["clip"] else None
             if clip:

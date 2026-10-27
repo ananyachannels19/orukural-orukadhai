@@ -20,7 +20,7 @@ from pathlib import Path
 
 import yaml
 
-from . import media
+from . import lipsync, media
 from .config import Settings
 from .schema import EpisodeScript, Shot
 
@@ -177,13 +177,22 @@ def speech_direction(s: Settings, script: EpisodeScript, shot: Shot) -> str:
     close-up "says" someone else's line, or the speaker sits silent while their voice plays."""
     names = cast(sheet(s))
     label = lambda c: names.get(c, {}).get("name", c).split(" (")[0] if c in names else c.replace("_", " ")
-    lines = []
-    for seg in script.segments:
+    lines, spoken = [], lipsync.spoken_lines(script, shot)
+    for i, seg in enumerate(script.segments):
         a, b = max(seg.start_s, shot.start_s), min(seg.end_s, shot.end_s)
         if b - a < 0.5:
             continue
         a, b = a - shot.start_s, b - shot.start_s
-        if seg.speaker in shot.characters:
+        if i in spoken:
+            # Flow says the real words, so lips, jaw, breath and gesture follow them; our voice replaces its
+            # voice later, laid exactly where Flow's speech is (see lipsync.py)
+            others = [label(c) for c in shot.characters if c != seg.speaker]
+            verb = "keeps their mouth closed and listens" if len(others) == 1 else "keep their mouths closed and listen"
+            rest = f" Meanwhile {' and '.join(others)} {verb}." if others else ""
+            lines.append(f"From about {max(a, 0.5):.1f} s, {label(seg.speaker)} says this line aloud in Tamil, "
+                         f"clearly and naturally, lips and jaw matching every word, the body acting it out, face "
+                         f"in view while speaking: \"{seg.narration_ta.strip()}\"{rest}")
+        elif seg.speaker in shot.characters:
             others = [label(c) for c in shot.characters if c != seg.speaker]
             verb = "keeps their mouth closed and listens" if len(others) == 1 else "keep their mouths closed and listen"
             rest = f" {' and '.join(others)} {verb}." if others else ""
@@ -204,8 +213,15 @@ def clip_prompt(s: Settings, script: EpisodeScript, shot: Shot, secs: int) -> st
     return (f"{shot.motion_prompt_en.strip()} Camera: {shot.camera_en.strip()} About {secs} seconds, one continuous "
             f"shot, no cuts. {speech_direction(s, script, shot)} Keep every character's face, hair, clothes and "
             f"size, the place, the light and every object exactly as in the start frame; nothing appears, "
-            f"disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene "
-            f"(footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.")
+            f"disappears or changes colour. No on-screen text. {_sound(script, shot)}")
+
+
+def _sound(script: EpisodeScript, shot: Shot) -> str:
+    if lipsync.spoken_lines(script, shot):
+        return ("Sound: only the spoken line(s) above and the natural sounds of the scene; no music, "
+                "no other voices.")
+    return ("Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, "
+            "and no voice or speech is heard.")
 
 
 # ---- script checks -----------------------------------------------------------------
