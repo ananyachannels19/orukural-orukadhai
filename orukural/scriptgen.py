@@ -352,6 +352,20 @@ def render_markdown(s: Settings, kural: dict, sc: EpisodeScript, errors: list[st
     plan = visuals.clip_plan(s, sc)
     out += [f"**Flow clips:** {len(plan)} ({', '.join(f'{c['seconds']} s' for c in plan)}) · "
             f"{sum(c['credits'] for c in plan)} credits", ""]
+    # what Flow is actually told for each clip, including who says which Tamil line (lip sync)
+    secs = {c["n"]: (c["seconds"], c["credits"]) for c in plan}
+    out += ["## Shot prompts (what Flow gets)", "",
+            f"The full start-image prompts, with reference images, are in `episodes/{kural['id']}/flow/README.md` "
+            f"(`python studio.py flow-sheet {kural['number']}`). Each clip prompt below goes to Flow with the shot's "
+            "approved image as its start frame.", ""]
+    for sh in sc.shots:
+        if sh.clip_from:
+            out += [f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · no new clip: a second cut from shot "
+                    f"{sh.clip_from}'s clip, from {sh.clip_offset_s:g} s", ""]
+            continue
+        n, cr = secs.get(sh.n, (visuals.clip_seconds(s, sh, sc), 0))
+        out += [f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · {n} s clip · {cr} credits", "",
+                "```", continuity.clip_prompt(s, sc, sh, n), "```", ""]
     out += [
         "## YouTube", "",
         f"**Title:** {sc.youtube.title}", "",

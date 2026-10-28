@@ -104,6 +104,56 @@ Back to the night: the headlight sweeps over Saro in the doorway again, leading 
 
 **Flow clips:** 7 (8 s, 4 s, 4 s, 4 s, 8 s, 8 s, 4 s) · 64 credits
 
+## Shot prompts (what Flow gets)
+
+The full start-image prompts, with reference images, are in `episodes/K0788/flow/README.md` (`python studio.py flow-sheet 788`). Each clip prompt below goes to Flow with the shot's approved image as its start frame.
+
+**Shot 1** · 0–3 s · 8 s clip · 12 credits
+
+```
+Saro speaks urgently into the phone. After he finishes, a bright white motorbike headlight sweeps across his face from the street; he lowers the phone a little, turns towards the gate and squints into the light, breathing hard. Camera: Static medium close-up at eye level, slight handheld feel. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Saro says this line aloud in a husky, breathless 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+```
+
+**Shot 2** · 3–8 s · no new clip: a second cut from shot 1's clip, from 3 s
+
+**Shot 3** · 8–12 s · 4 s clip · 7 credits
+
+```
+Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his hand. Camera: Medium two-shot from the street side, eye level. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Vignesh says this line aloud in a calm, friendly, low and steady 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "சாவியக் குடு. நீ அப்பா கூட இரு." Meanwhile Saro keeps their mouth closed and listens. From 3 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+```
+
+**Shot 4** · 12–16 s · 4 s clip · 7 credits
+
+```
+The auto pulls away from the gate and rolls towards the camera down the empty night street; the streetlight slides over them. Camera: Wide shot from the front of the auto, slightly low. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 5** · 16–19 s · 4 s clip · 7 credits
+
+```
+Vignesh slides the card under the grille, nods, and takes back a printed slip. Camera: Medium shot from beside the counter window. About 4 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 6** · 19–26 s · 8 s clip · 12 credits
+
+```
+Saro speaks first, voice cracking; then Vignesh answers with a small smile and a light shrug, miming a hand catching something; Saro laughs once through tired eyes. Camera: Static medium two-shot, eye level, both faces in view. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Saro says this line aloud in a husky, breathless 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "நான் உன்னக் கூப்பிடவே இல்லையேடா..." Meanwhile Vignesh keeps their mouth closed and listens. From about 3.0 s, Vignesh says this line aloud in a calm, friendly, low and steady 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "லுங்கி நழுவுனா, கை permission கேட்டுட்டா பிடிக்குது?" Meanwhile Saro keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+```
+
+**Shot 7** · 26–34 s · 8 s clip · 12 credits
+
+```
+Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 8** · 34–38 s · 4 s clip · 7 credits
+
+```
+They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 1 s nobody on screen talks: every mouth stays closed. From 1 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 9** · 38–43 s · no new clip: a second cut from shot 1's clip, from 3 s
+
 ## YouTube
 
 **Title:** குறள் 788 | 3 மணிக்கு வந்த நண்பன் | Thirukkural Story #Shorts
