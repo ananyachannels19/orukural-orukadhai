@@ -219,7 +219,8 @@ def too_long(s: Settings, script: EpisodeScript, voice: dict) -> list[str]:
     out = []
     for item in voice["segments"]:
         seg = script.segments[item["n"] - 1]
-        need = expected_seconds(s, seg.narration_ta)
+        # what the line may take: its slot in the script, or what its text needs at the usual pace if longer
+        need = max(expected_seconds(s, seg.narration_ta), seg.end_s - seg.start_s)
         if item["seconds"] > MAX_STRETCH * need + 0.5:
             out.append(f"line {item['n']} ({seg.speaker}) is {item['seconds']:.1f} s for ~{need:.1f} s of text")
     return out

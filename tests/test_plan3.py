@@ -361,7 +361,8 @@ def test_flow_progress_counts_saved_files(studio, k788):
 
 def test_voice_lines_too_long_block_the_render(studio, k788):
     sc = EpisodeScript.model_validate(k788)
-    need = voice.expected_seconds(studio, sc.segments[0].narration_ta)
+    g = sc.segments[0]
+    need = max(voice.expected_seconds(studio, g.narration_ta), g.end_s - g.start_s)   # the line's slot or its text
     ok = {"segments": [{"n": 1, "seconds": need * 1.2}]}
     bad = {"segments": [{"n": 1, "seconds": need * 1.5 + 2.0}]}          # e.g. an English note read aloud first
     assert voice.too_long(studio, sc, ok) == []
