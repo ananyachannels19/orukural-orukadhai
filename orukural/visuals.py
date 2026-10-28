@@ -287,6 +287,22 @@ def record_flow_project(s: Settings, episode_id: str, url: str) -> None:
     s.raw["flow"].setdefault("projects", {})[episode_id] = url
 
 
+def reuse_entries(script: EpisodeScript, source: int, mark: str, only: int | None = None) -> list[str]:
+    """An entry for each shot cut from `source`'s clip: nothing new is made, but the shot is listed with what
+    the viewer sees and the narration over it, so every shot has its place in the sheet."""
+    out = []
+    for sh in script.shots:
+        if sh.clip_from != source or (only and sh.n != only):
+            continue
+        a, b = sh.clip_offset_s, sh.clip_offset_s + sh.end_s - sh.start_s
+        said = [f"{g.speaker}: {g.narration_ta}" for g in script.segments
+                if min(g.end_s, sh.end_s) - max(g.start_s, sh.start_s) >= 0.5]
+        out += [f"{mark} Shot {sh.n} ({sh.start_s:g}–{sh.end_s:g} s): no new generation", "",
+                f"Uses seconds {a:g}–{b:g} of shot {source}'s clip. On screen: {sh.action_en}",
+                f"Over it: {' / '.join(said) or 'no speech'}", ""]
+    return out
+
+
 def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, pool: int = 0) -> dict:
     """Write flow/jobs.json + flow/README.md: everything a Flow session must make, and where to save it.
     `pool`: monthly plan credits to add on top of day 1's daily credits (0 = daily credits only)."""
@@ -394,6 +410,12 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         if j.get("start_frame"):
             lines.append(f"Start frame: `{j['start_frame']}`")
         lines += [f"Aspect {j['aspect_ratio']} · {j['model']}", "", "```", j["prompt"], "```", ""]
+        if j["kind"] == "clip":
+            lines += reuse_entries(script, j["shot"], "##")
+    made = {j["shot"] for j in jobs if j["kind"] == "clip"}
+    for sh in script.shots:  # cuts from clips already made still get their entry
+        if sh.clip_from and sh.clip_from not in made:
+            lines += reuse_entries(script, sh.clip_from, "##", only=sh.n)
     (fdir / "README.md").write_text("\n".join(lines), "utf-8")
     return sheet
 

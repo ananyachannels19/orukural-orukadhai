@@ -37,7 +37,8 @@ class CastMember(BaseModel):
     look_en: str = Field(description="Face, hair, build, skin tone, glasses/beard: fixed for the episode")
     outfit_en: str = Field(description="What they wear for the whole episode")
     gender: Literal["male", "female"] = Field(description="Their voice must match: a male voice for a man")
-    age_group: Literal["child", "adult"] = Field(default="adult", description="child (4-15) or adult (22-35)")
+    age_group: Literal["child", "adult", "elder"] = Field(
+        default="adult", description="child (4-15), adult (22-35) or elder (50-80, a parent or grandparent)")
     personality: str = Field(default="", description="A few words on how they come across, e.g. calm, friendly; "
                              "used to pick their voice")
     voice: str = Field(default="", description="Gemini TTS voice (casting.voices). Leave empty: script-check picks one "

@@ -32,6 +32,14 @@ def k788():
     return json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"]
 
 
+def _without_appa(raw):
+    """K0788 with only the two friends, leaving room for another character."""
+    raw["cast"] = [c for c in raw["cast"] if c["id"] != "appa"]
+    for sh in raw["shots"]:
+        sh["characters"] = [c for c in sh["characters"] if c != "appa"]
+    return raw
+
+
 def _checks(s, raw):
     sc = EpisodeScript.model_validate(raw)
     store = KuralStore(s.path("kurals"))
@@ -73,7 +81,7 @@ def test_cast_rules(studio, k788):
 
 
 def test_one_child_when_the_story_needs_one(studio, k788):
-    raw = copy.deepcopy(k788)
+    raw = _without_appa(copy.deepcopy(k788))
     raw["cast"].append({"id": "nila", "name_ta": "நிலா", "age": 7, "job": "school girl", "gender": "female",
                         "age_group": "child", "look_en": "x", "outfit_en": "y", "voice": "Kore"})
     raw["shots"][7]["characters"] = ["saro", "vignesh", "nila"]
@@ -104,7 +112,7 @@ def test_thatha_cameo(studio, k788):
     assert voice.voice_for(studio, "thatha", sc) == "Algenib"
     continuity.log_cast(studio, sc, "K0788")
     entry = continuity.cast_log(studio)[-1]
-    assert entry["cameo"] == "thatha" and [c["id"] for c in entry["characters"]] == ["vignesh", "saro"]
+    assert entry["cameo"] == "thatha" and [c["id"] for c in entry["characters"]] == ["vignesh", "saro", "appa"]
 
 
 def test_cast_log_flags_repeats(studio, k788):
@@ -138,7 +146,11 @@ def test_clip_reuse_and_credit_cap(studio, k788):
     assert 2 not in images and 9 not in images and 2 not in clips   # shots 2 and 9 cut from shot 1's clip
     assert clips[1] == 8                                              # long enough for the later cuts
     refs = [j["save_as"] for j in sheet["jobs"] if j["kind"] == "character_ref"]
-    assert refs == ["episodes/K0788/refs/characters/saro.png", "episodes/K0788/refs/characters/vignesh.png"]
+    assert refs == ["episodes/K0788/refs/characters/appa.png", "episodes/K0788/refs/characters/saro.png",
+                    "episodes/K0788/refs/characters/vignesh.png"]
+    readme = (ep / "flow" / "README.md").read_text("utf-8")   # every shot has its entry, reused ones too
+    assert "## Shot 2 (3–8 s): no new generation" in readme and "Uses seconds 3–8 of shot 1's clip" in readme
+    assert "## Shot 9 (38–43 s): no new generation" in readme
     studio.raw["budget"]["per_reel_credits"] = 60
     assert visuals.credit_check(studio, sc) and "64 Flow credits" in visuals.credit_check(studio, sc)[0]
     raw = copy.deepcopy(k788)
@@ -198,7 +210,7 @@ def test_publish_pack_has_no_schedule_and_a_checklist(studio, k788):
 
 def test_voice_source_review_choice(studio, k788, tmp_path):
     sc = EpisodeScript.model_validate(k788)
-    assert lipsync.voice_sources(sc, {}) == {"vignesh": "tts", "saro": "tts"}   # default: our voice
+    assert lipsync.voice_sources(sc, {}) == {"vignesh": "tts", "saro": "tts", "appa": "tts"}   # default: ours
     assert lipsync.voice_sources(sc, {"voice_source": {"saro": "flow"}})["saro"] == "flow"
 
 
@@ -272,7 +284,7 @@ def test_voice_picker_makes_no_api_calls(studio, k788, monkeypatch):
     monkeypatch.setattr(voice.requests, "post", no_calls)
     monkeypatch.setattr(voice, "_gemini_client", no_calls)
     monkeypatch.setattr(voice, "synthesize", no_calls)
-    raw = copy.deepcopy(k788)
+    raw = _without_appa(copy.deepcopy(k788))
     for c in raw["cast"]:
         c["voice"] = ""
     raw["cast"][0]["personality"] = "calm, friendly"
@@ -320,3 +332,16 @@ def test_no_subtitles_while_the_kural_is_on_screen(studio, k788):
     studio.raw["signature"]["enabled"] = False             # no kural reveal: the verse is subtitled as before
     cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
     assert any(a < kural.end_s and b > kural.start_s for _, a, b in cues)
+
+
+def test_an_elder_when_the_story_needs_one(studio, k788):
+    sc = EpisodeScript.model_validate(k788)
+    appa = next(c for c in sc.cast if c.id == "appa")
+    assert appa.age_group == "elder" and _checks(studio, k788)[0] == []
+    table = continuity.sheet(studio)["casting"]["voices"]
+    assert table[appa.voice]["gender"] == "male" and table[appa.voice].get("older")   # an older-sounding voice
+    assert "appa" in sc.shots[3].characters                  # shown in the auto, with no lines of his own
+    assert not any(g.speaker == "appa" for g in sc.segments)
+    raw = copy.deepcopy(k788)
+    raw["cast"][2]["age"] = 40
+    assert any("appa is 40 but age_group elder is 50–80" in e for e in _checks(studio, raw)[0])

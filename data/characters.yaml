@@ -19,12 +19,17 @@ casting:
   age: [22, 35]               # the adults in the cast
   child_age: [4, 15]          # a child, only when the story needs one
   max_children: 1
+  elder_age: [50, 80]         # an elder (a parent or grandparent), only when the story needs one
+  max_elders: 1
   # Names, looks and voices used in this many recent episodes (data/cast_log.yaml) are not reused.
   no_repeat_episodes: 12
   rules:
     - Every episode invents its own characters: new names, jobs, faces, outfits and places.
     - The cast is mostly adults aged 22-35. Add a child (a son or daughter, a younger sibling, a niece
-      or nephew, aged 4-15) only when the story needs one, and at most one per episode.
+      or nephew, aged 4-15) only when the story needs one, and at most one per episode. In the same way,
+      one elder (a parent or grandparent, aged 50-80) may appear when the story needs them, ideally with
+      few or no lines; an ill elder is shown calmly (resting, breathing hard), never blood, tubes or
+      medical close-ups.
     - Never show an adult shouting at, pointing at, grabbing or towering over a child; show the
       child's reaction instead and let the narration carry what the adult did.
     - Names are everyday Tamil names (given names only), different from the recent cast log.
@@ -36,8 +41,9 @@ casting:
       below), not used by the others in the episode and not used in the last few episodes. The narrator is always
       Charon, and only the narrator says the kural.
     - The wiser character asks a question instead of lecturing.
-  # Gemini TTS voices: gender and feel. A man gets a male voice, a woman a female voice, and a child
-  # one of the youngest-sounding voices (young: true). Charon is kept for the narrator.
+  # Gemini TTS voices: gender and feel. A man gets a male voice, a woman a female voice, a child one of
+  # the youngest-sounding voices (young: true), an elder an older-sounding one where free (older: true).
+  # Charon is kept for the narrator.
   voices:
     Puck: {gender: male, feel: upbeat, young: true}
     Fenrir: {gender: male, feel: excitable}
@@ -53,7 +59,7 @@ casting:
     Achird: {gender: male, feel: friendly}
     Zubenelgenubi: {gender: male, feel: casual}
     Sadachbia: {gender: male, feel: lively}
-    Sadaltager: {gender: male, feel: knowledgeable}
+    Sadaltager: {gender: male, feel: knowledgeable, older: true}
     Zephyr: {gender: female, feel: bright, young: true}
     Leda: {gender: female, feel: youthful, young: true}
     Laomedeia: {gender: female, feel: upbeat, young: true}
@@ -64,7 +70,7 @@ casting:
     Despina: {gender: female, feel: smooth}
     Erinome: {gender: female, feel: clear}
     Achernar: {gender: female, feel: soft}
-    Gacrux: {gender: female, feel: mature}
+    Gacrux: {gender: female, feel: mature, older: true}
     Pulcherrima: {gender: female, feel: forward}
     Vindemiatrix: {gender: female, feel: gentle}
     Sulafat: {gender: female, feel: warm}

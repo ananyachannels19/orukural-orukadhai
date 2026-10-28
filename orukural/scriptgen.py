@@ -360,8 +360,9 @@ def render_markdown(s: Settings, kural: dict, sc: EpisodeScript, errors: list[st
             "approved image as its start frame.", ""]
     for sh in sc.shots:
         if sh.clip_from:
-            out += [f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · no new clip: a second cut from shot "
-                    f"{sh.clip_from}'s clip, from {sh.clip_offset_s:g} s", ""]
+            entry = visuals.reuse_entries(sc, sh.clip_from, "", only=sh.n)
+            out += [f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · no new generation · 0 credits  ",
+                    entry[2] + "  ", entry[3], ""]
             continue
         n, cr = secs.get(sh.n, (visuals.clip_seconds(s, sh, sc), 0))
         out += [f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · {n} s clip · {cr} credits", "",

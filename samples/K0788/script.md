@@ -14,6 +14,7 @@
 
 - **விக்னேஷ்** (vignesh), 29, bank clerk. Lean build, long oval face, wheatish skin, short neatly side-parted black hair, thin black rectangular glasses, clean-shaven, calm eyes. *Wears:* Grey track pants, navy blue half-sleeve T-shirt with a blue-and-white checked shirt thrown on open over it, black rubber slippers, a silver wristwatch. *Voice:* Achird
 - **சரோ** (saro), 29, auto mechanic. Stocky build, broad round face, dark skin, thick curly black hair, full short beard and moustache, a small scar through his left eyebrow, strong hands. *Wears:* Faded maroon sleeveless vest, a green-and-white checked lungi, a black thread on his right wrist, barefoot. *Voice:* Enceladus
+- **அப்பா** (appa), 62, retired lorry driver. Thin, elderly, short grey hair, grey stubble, deep lines on a kind face, dark skin, bony shoulders. *Wears:* A white cotton banian and a plain white veshti, a thin towel over one shoulder. *Voice:* Sadaltager
 
 ## Hooks
 
@@ -31,7 +32,7 @@
 | 0–3 s | hook | saro (panicked, breathless, close to tears) | விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா! | ராத்திரி 3 மணி. ஒரு call. |
 | 3–8 s | story | narrator (hushed, tense) | சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு bike வெளிச்சம். |  |
 | 8–11 s | story | vignesh (calm, firm and quick) | சாவியக் குடு. நீ அப்பா கூட இரு. |  |
-| 11–16 s | story | narrator (urgent) | சரோவோட ஆட்டோவ, விக்னேஷ் ஓட்டினான். | கூப்பிடும் முன்னே வருபவன் யார்? |
+| 11–16 s | story | narrator (urgent, low) | விக்னேஷ் ஆட்டோ ஓட்டினான். பின்னால, அப்பாவ தாங்கிக்கிட்டு சரோ. | கூப்பிடும் முன்னே வருபவன் யார்? |
 | 16–19 s | story | narrator (quiet, warm) | சரோ கேக்கும் முன்னே, பணமும் கட்டிட்டான். |  |
 | 19–22 s | story | saro (tired, tearful, grateful) | நான் உன்னக் கூப்பிடவே இல்லையேடா... |  |
 | 22–26 s | story | vignesh (gently teasing, warm) | லுங்கி நழுவுனா, கை permission கேட்டுட்டா பிடிக்குது? |  |
@@ -72,10 +73,10 @@ At the gate Vignesh holds out his hand for the auto key and tells Saro to stay w
 🖼 `At the green gate at night, Vignesh stands on the right beside his motorbike, its headlight still on behind him, holding out his open palm towards Saro; Saro on the left clutches the auto key, looking at him.`  
 🎞 `Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his hand.`
 
-**Shot 4** · 12–16 s · story · vignesh, saro · saro_gate · props: auto  
-Vignesh drives Saro's auto away from the gate; Saro sits in the back, half in shadow. *Camera:* Wide shot from the front of the auto, slightly low.  
-🖼 `Vignesh at the handlebar of Saro's auto, leaning forward, focused; Saro behind him in the dark back seat, turned towards the seat beside him; the house and gate behind them.`  
-🎞 `The auto pulls away from the gate and rolls towards the camera down the empty night street; the streetlight slides over them.`
+**Shot 4** · 12–16 s · story · vignesh, saro, appa · saro_gate · props: auto  
+Inside the moving auto at night: Vignesh drives; in the back Saro holds his father, who leans on him, eyes half-closed, breathing hard, a hand on his chest. *Camera:* Medium shot from just in front of the auto, looking in at all three, eye level.  
+🖼 `Inside Saro's auto at night: Vignesh at the handlebar in front, eyes on the road; in the back seat Saro sits with his arm around his father, who leans his head on Saro's shoulder, eyes half-closed, one hand resting on his chest; Saro looks down at him, worried. Calm and gentle, nothing medical in view.`  
+🎞 `The auto moves down the empty night street; passing streetlights slide over their faces. The father breathes slowly and heavily, chest rising; Saro tightens his arm around him and rubs his shoulder; Vignesh glances back once, then forward. Nobody speaks.`
 
 **Shot 5** · 16–19 s · story · vignesh · hospital_corridor  
 At the billing counter Vignesh pays before Saro has asked. *Camera:* Medium shot from beside the counter window.  
@@ -114,7 +115,9 @@ The full start-image prompts, with reference images, are in `episodes/K0788/flow
 Saro speaks urgently into the phone. After he finishes, a bright white motorbike headlight sweeps across his face from the street; he lowers the phone a little, turns towards the gate and squints into the light, breathing hard. Camera: Static medium close-up at eye level, slight handheld feel. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Saro says this line aloud in a husky, breathless 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 2** · 3–8 s · no new clip: a second cut from shot 1's clip, from 3 s
+**Shot 2** · 3–8 s · no new generation · 0 credits  
+Uses seconds 3–8 of shot 1's clip. On screen: The headlight reaches Saro before he has finished the call.  
+Over it: narrator: சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு bike வெளிச்சம்.
 
 **Shot 3** · 8–12 s · 4 s clip · 7 credits
 
@@ -125,7 +128,7 @@ Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his 
 **Shot 4** · 12–16 s · 4 s clip · 7 credits
 
 ```
-The auto pulls away from the gate and rolls towards the camera down the empty night street; the streetlight slides over them. Camera: Wide shot from the front of the auto, slightly low. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+The auto moves down the empty night street; passing streetlights slide over their faces. The father breathes slowly and heavily, chest rising; Saro tightens his arm around him and rubs his shoulder; Vignesh glances back once, then forward. Nobody speaks. Camera: Medium shot from just in front of the auto, looking in at all three, eye level. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
 ```
 
 **Shot 5** · 16–19 s · 4 s clip · 7 credits
@@ -152,7 +155,9 @@ Saro takes the tea, they both lean on the window sill and look out at the sunris
 They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 1 s nobody on screen talks: every mouth stays closed. From 1 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
 ```
 
-**Shot 9** · 38–43 s · no new clip: a second cut from shot 1's clip, from 3 s
+**Shot 9** · 38–43 s · no new generation · 0 credits  
+Uses seconds 3–8 of shot 1's clip. On screen: Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call.  
+Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். / narrator: அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?
 
 ## YouTube
 

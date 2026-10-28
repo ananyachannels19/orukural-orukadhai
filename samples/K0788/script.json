@@ -42,6 +42,20 @@
     "voice": "Enceladus",
     "voice_en": "a husky, breathless 29-year-old Tamil man's voice",
     "voice_source": "tts"
+   },
+   {
+    "id": "appa",
+    "name_ta": "அப்பா",
+    "age": 62,
+    "job": "retired lorry driver",
+    "look_en": "Thin, elderly, short grey hair, grey stubble, deep lines on a kind face, dark skin, bony shoulders.",
+    "outfit_en": "A white cotton banian and a plain white veshti, a thin towel over one shoulder.",
+    "gender": "male",
+    "age_group": "elder",
+    "personality": "frail, quiet, gentle",
+    "voice": "Sadaltager",
+    "voice_en": "a weak, hoarse 62-year-old Tamil man's voice",
+    "voice_source": "tts"
    }
   ],
   "thatha_cameo": false,
@@ -146,8 +160,8 @@
     "start_s": 11.0,
     "end_s": 16.0,
     "speaker": "narrator",
-    "narration_ta": "சரோவோட ஆட்டோவ, விக்னேஷ் ஓட்டினான்.",
-    "delivery": "urgent",
+    "narration_ta": "விக்னேஷ் ஆட்டோ ஓட்டினான். பின்னால, அப்பாவ தாங்கிக்கிட்டு சரோ.",
+    "delivery": "urgent, low",
     "on_screen_ta": "கூப்பிடும் முன்னே வருபவன் யார்?"
    },
    {
@@ -275,17 +289,18 @@
     "end_s": 16.0,
     "characters": [
      "vignesh",
-     "saro"
+     "saro",
+     "appa"
     ],
     "location": "saro_gate",
     "props": [
      "auto"
     ],
-    "action_en": "Vignesh drives Saro's auto away from the gate; Saro sits in the back, half in shadow.",
-    "camera_en": "Wide shot from the front of the auto, slightly low.",
-    "image_prompt_en": "Vignesh at the handlebar of Saro's auto, leaning forward, focused; Saro behind him in the dark back seat, turned towards the seat beside him; the house and gate behind them.",
-    "motion_prompt_en": "The auto pulls away from the gate and rolls towards the camera down the empty night street; the streetlight slides over them.",
-    "motion_priority": 3,
+    "action_en": "Inside the moving auto at night: Vignesh drives; in the back Saro holds his father, who leans on him, eyes half-closed, breathing hard, a hand on his chest.",
+    "camera_en": "Medium shot from just in front of the auto, looking in at all three, eye level.",
+    "image_prompt_en": "Inside Saro's auto at night: Vignesh at the handlebar in front, eyes on the road; in the back seat Saro sits with his arm around his father, who leans his head on Saro's shoulder, eyes half-closed, one hand resting on his chest; Saro looks down at him, worried. Calm and gentle, nothing medical in view.",
+    "motion_prompt_en": "The auto moves down the empty night street; passing streetlights slide over their faces. The father breathes slowly and heavily, chest rising; Saro tightens his arm around him and rubs his shoulder; Vignesh glances back once, then forward. Nobody speaks.",
+    "motion_priority": 2,
     "clip_from": null,
     "clip_offset_s": 0.0
    },

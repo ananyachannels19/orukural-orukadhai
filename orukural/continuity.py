@@ -360,12 +360,14 @@ def _cast_errors(s: Settings, sh: dict, script: EpisodeScript, on_screen: set[st
     errors = []
     casting = sh.get("casting") or {}
     amin, amax = casting.get("age", [22, 35])
-    cmin, cmax = casting.get("child_age", [4, 15])
+    ranges = {"adult": (amin, amax), "child": tuple(casting.get("child_age", [4, 15])),
+              "elder": tuple(casting.get("elder_age", [50, 80]))}
     narrator = s["voice"]["gemini_tts"]["voice"]
     children = [c for c in script.cast if c.age_group == "child"]
+    elders = [c for c in script.cast if c.age_group == "elder"]
     table = casting.get("voices") or {}
     for c in script.cast:
-        lo, hi = (cmin, cmax) if c.age_group == "child" else (amin, amax)
+        lo, hi = ranges[c.age_group]
         if not lo <= c.age <= hi:
             errors.append(f"cast {c.id} is {c.age} but age_group {c.age_group} is {lo}–{hi}")
         errors += voice_mismatch(c, table)
@@ -374,6 +376,9 @@ def _cast_errors(s: Settings, sh: dict, script: EpisodeScript, on_screen: set[st
     if len(children) > casting.get("max_children", 1):
         errors.append(f"{len(children)} children in the cast ({', '.join(c.id for c in children)}); at most "
                       f"{casting.get('max_children', 1)}, only when the story needs one")
+    if len(elders) > casting.get("max_elders", 1):
+        errors.append(f"{len(elders)} elders in the cast ({', '.join(c.id for c in elders)}); at most "
+                      f"{casting.get('max_elders', 1)}, only when the story needs one")
     if len(children) >= len(script.cast) - len(children):
         errors.append("the cast is mostly adults: more adults than children")
     voices = [c.voice for c in script.cast]
@@ -420,8 +425,9 @@ def pick_voices(s: Settings, script: EpisodeScript) -> dict[str, str]:
 
         def score(item):
             name, v = item
+            older = bool(v.get("older"))
             return (name not in taken, len(words & set(v["feel"].split("-")) | words & {v["feel"]}),
-                    not v.get("older"))
+                    older if c.age_group == "elder" else not older)
         if not fits:
             continue
         name = max(fits, key=score)[0]  # max keeps the table's order among equals, so the pick is stable

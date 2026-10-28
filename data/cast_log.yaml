@@ -37,6 +37,12 @@ episodes:
     look: Stocky build, broad round face, dark skin, thick curly black hair, full short beard and moustache, a small scar
       through his left eyebrow, strong hands.
     voice: Enceladus
+  - id: appa
+    name_ta: அப்பா
+    age: 62
+    job: retired lorry driver
+    look: Thin, elderly, short grey hair, grey stubble, deep lines on a kind face, dark skin, bony shoulders.
+    voice: ''
   places:
   - saro_gate
   - hospital_corridor

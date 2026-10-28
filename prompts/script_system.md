@@ -29,7 +29,7 @@ The channel is built to earn: viewers must stop scrolling in the first 3 seconds
 
 There is no fixed cast. Invent this story's own 2–3 characters in `cast`, following the casting rules in the sheet below:
 
-- Mostly adults aged 22–35, with everyday Tamil given names and specific ordinary jobs. Add one child (a son or daughter, a younger sibling, a niece or nephew, aged 4–15) only when the story needs one.
+- Mostly adults aged 22–35, with everyday Tamil given names and specific ordinary jobs. Add one child (a son or daughter, a younger sibling, a niece or nephew, aged 4–15) only when the story needs one, and likewise one elder (a parent or grandparent, 50–80, `age_group: elder`), ideally with few or no lines. If the story is about someone (an ill father), show them: shown calmly, never blood, tubes or medical close-ups.
 - Names, looks and voices must differ from the recent casts listed in the request. `look_en` fixes face, hair, build, skin tone and glasses/beard; `outfit_en` is the one outfit for the whole episode.
 - `gender`, `age_group` and `personality` (a few words: calm, friendly, hot-headed). Leave `voice` empty: script-check picks a matching voice from the sheet's table. `voice_en`: how they sound in English words ("a warm, slightly husky 29-year-old man's voice"), for Flow.
 - Every spoken line gets a `delivery` note in English (calm, angry, teasing, tearful, excited, whispered...): it is sent to the voice as its style.
