@@ -154,13 +154,16 @@ def slim_leaf(s: Settings, line1: str, line2: str, label: str, out: Path) -> Pat
 
 def clean_text(s: Settings, line1: str, line2: str, label: str, out_dir: Path) -> list[Path]:
     """Style B: two full-frame layers (label + line 1, then line 2): white ExtraBold, a thin gold underline each."""
-    from PIL import Image, ImageDraw
+    from PIL import Image, ImageChops, ImageDraw
     c = (_cfg(s).get("kural") or {})
-    y0 = c.get("text_y", 820)
     out_dir.mkdir(parents=True, exist_ok=True)
     probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     font = _fit(s, probe, [line1, line2], media.W * 0.86, 66, 40)
     gap = round(font.size * 1.9)
+    # "center": the block (label, two lines, underlines) sits in the middle of the frame
+    top, bottom = -70 - 34, gap + 25  # label cap height above line 1's baseline; line 2's underline below it
+    y0 = c.get("text_y", "center")
+    y0 = round(media.H / 2 - (top + bottom) / 2) if y0 == "center" else y0
     layers = []
     for k, line in enumerate((line1, line2)):
         im = Image.new("RGBA", (media.W, media.H), (0, 0, 0, 0))
@@ -172,10 +175,19 @@ def clean_text(s: Settings, line1: str, line2: str, label: str, out_dir: Path) -
                stroke_width=2, stroke_fill=(0, 0, 0, 120))
         w = d.textlength(line, font=font)
         d.line([(media.W / 2 - w * 0.42, y + 22), (media.W / 2 + w * 0.42, y + 22)], fill=GOLD + (230,), width=3)
+        layers.append(im)
+    if c.get("text_y", "center") == "center":  # move the whole block so its drawn box sits at the exact centre
+        boxes = [im.getbbox() for im in layers]
+        x0, y0b = min(b[0] for b in boxes), min(b[1] for b in boxes)
+        x1, y1b = max(b[2] for b in boxes), max(b[3] for b in boxes)
+        dx, dy = round(media.W / 2 - (x0 + x1) / 2), round(media.H / 2 - (y0b + y1b) / 2)
+        layers = [ImageChops.offset(im, dx, dy) for im in layers]
+    paths = []
+    for k, im in enumerate(layers):
         path = out_dir / f"kural_line{k + 1}.png"
         im.save(path)
-        layers.append(path)
-    return layers
+        paths.append(path)
+    return paths
 
 
 def logo_ending(s: Settings, out: Path) -> Path:

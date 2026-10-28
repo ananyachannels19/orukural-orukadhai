@@ -247,14 +247,22 @@ def test_signature_parts_and_previews(studio):
     assert leaf.getpixel((leaf.width // 2, 8))[3] < 255                        # see-through
     segs = [{"beat": "hook", "start": 0, "end": 3}, {"beat": "kural", "start": 25.4, "end": 34.0}]
     plan = signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r")
-    assert plan["kural"]["style"] == "slim_leaf" and plan["kural"]["start"] == 25.4
+    assert plan["kural"]["style"] == "clean_text" and plan["kural"]["start"] == 25.4   # the chosen style
     assert "badge" not in plan and "flute_hook" not in plan
-    ins, chain, _ = signature.video_graph(plan, "w", 3)
-    assert ins.count("-i") == 2                              # the leaf and the ending
-    studio.raw["signature"]["kural"]["style"] = "clean_text"
-    plan = signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r")
     assert len(plan["kural"]["layers"]) == 2 and plan["kural"]["dim"] == 0.45
     assert any("colorchannelmixer" in c for c in signature.video_graph(plan, "w", 3)[1])
+    # the verse block is centred on screen
+    boxes = [Image.open(p).getbbox() for p in plan["kural"]["layers"]]
+    left, top = min(b[0] for b in boxes), min(b[1] for b in boxes)
+    right, bottom = max(b[2] for b in boxes), max(b[3] for b in boxes)
+    assert abs((left + right) / 2 - media.W / 2) <= 1 and abs((top + bottom) / 2 - media.H / 2) <= 1
+    # clear of the Shorts/Reels buttons (right edge, bottom quarter) and the logo badge over Flow's mark
+    cover = studio["assembly"]["watermark_cover"]
+    assert right <= media.W - 60 and bottom < media.H * 0.75 and bottom < cover["y"]
+    studio.raw["signature"]["kural"]["style"] = "slim_leaf"
+    plan = signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r")
+    ins, chain, _ = signature.video_graph(plan, "w", 3)
+    assert ins.count("-i") == 2                              # the leaf and the ending
     studio.raw["signature"]["enabled"] = False
     assert signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r") is None
 
@@ -305,7 +313,7 @@ def test_no_subtitles_while_the_kural_is_on_screen(studio, k788):
     kural = next(g for g in sc.segments if g.beat == "kural")
     cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
     assert cues and not any(a < kural.end_s and b > kural.start_s for _, a, b in cues)
-    # the slim leaf sits in the subtitle zone instead
+    # with the slim leaf, it sits in the subtitle zone instead
     k = studio["signature"]["kural"]
     sub_y = 1920 - studio["captions"]["margin"]
     assert k["y"] < sub_y < k["y"] + k["height"] * 1920

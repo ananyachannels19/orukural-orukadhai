@@ -222,10 +222,10 @@ assembly:
 signature:
   enabled: true
   dir: assets/brand/signature
-  # The kural while the narrator says it. style: slim_leaf (a thin see-through palm-leaf strip in the lower
-  # third, the story keeps playing) or clean_text (the story dims, the verse writes in line by line).
-  # Subtitles are off while the kural is on screen; the slim leaf sits where they normally are (y ~1230-1540).
-  kural: {style: slim_leaf, width: 0.88, height: 0.16, opacity: 0.88, y: 1230, dim: 0.45, text_y: 820}
+  # The kural while the narrator says it. style: clean_text (chosen 28 Oct: the story dims to `dim`, the verse
+  # writes in line by line, white, centred on screen) or slim_leaf (a thin see-through palm-leaf strip in the
+  # subtitle zone, y ~1230-1540, the story keeps playing). Subtitles are off while the kural is on screen.
+  kural: {style: clean_text, dim: 0.45, text_y: center, width: 0.88, height: 0.16, opacity: 0.88, y: 1230}
   flute: {volume_db: -14, sa: 293.66}      # the closing bansuri phrase under the logo ending
   ending: {image: assets/brand/logo_badge.png, seconds: 2.0}
 
