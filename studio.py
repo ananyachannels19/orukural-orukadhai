@@ -207,6 +207,15 @@ def cmd_render(s, args):
     print(f"episode spend so far: ${ledger.spent(k['id']):.2f} of ${ledger.cap:.2f}")
 
 
+def cmd_flow_project(s, args):
+    from orukural import visuals
+    k = KuralStore(s.path("kurals")).get(args.kural)
+    if not args.url.startswith("https://flow.google.com/"):
+        raise SystemExit("that doesn't look like a Flow project link (https://flow.google.com/...)")
+    visuals.record_flow_project(s, k["id"], args.url)
+    print(f"flow.projects.{k['id']}: {args.url}")
+
+
 def cmd_publish_pack(s, args):
     from orukural import publish
     k, ep_dir, sc = _episode(s, args.kural)
@@ -332,6 +341,11 @@ def main(argv=None):
     ev.add_argument("--requests", type=int, help="TTS requests this step used")
     ev.add_argument("--seconds", type=float)
     ev.set_defaults(fn=cmd_event)
+
+    fp = sub.add_parser("flow-project", help="record an episode's own Flow project link in config.yaml")
+    fp.add_argument("kural")
+    fp.add_argument("url")
+    fp.set_defaults(fn=cmd_flow_project)
 
     pp = sub.add_parser("publish-pack", help="the YouTube/Instagram posting package and checklist")
     pp.add_argument("kural")

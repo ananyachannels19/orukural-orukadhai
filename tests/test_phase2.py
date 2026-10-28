@@ -298,10 +298,19 @@ def test_gemini_tts_stops_at_once_on_daily_limit(studio, tmp_path, monkeypatch):
     assert len(calls) == 1
 
 
-def test_flow_project_per_adhikaram(studio):
-    assert visuals.flow_project(studio, 301)["url"].startswith("https://flow.google.com/project/")
-    other = visuals.flow_project(studio, 151)  # adhikaram 16, no project yet
-    assert other["adhikaram"] == 16 and other["url"] is None
+def test_flow_project_per_episode(studio):
+    assert visuals.flow_project(studio, "K0301")["url"].startswith("https://flow.google.com/project/")
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    other = visuals.flow_project(studio, "K0788", sc)
+    assert other["url"] is None and other["name"] == "K0788 – The friend at the gate at 3 am"
+    ep = studio.path("episodes") / "K0788"
+    visuals.flow_sheet(studio, ep, sc, "K0788")
+    assert "No Flow project yet for K0788" in (ep / "flow" / "README.md").read_text("utf-8")
+    visuals.record_flow_project(studio, "K0788", "https://flow.google.com/project/abc")
+    assert config.load(studio.root / "config.yaml")["flow"]["projects"]["K0788"] == "https://flow.google.com/project/abc"
+    assert "# One Flow project per episode" in (studio.root / "config.yaml").read_text("utf-8")  # comments kept
+    sheet = visuals.flow_sheet(studio, ep, sc, "K0788")
+    assert sheet["flow_project"] == "https://flow.google.com/project/abc"
 
 
 def test_reference_cap(studio):

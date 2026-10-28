@@ -108,10 +108,13 @@ video:
 
 flow:
   # Google AI Plus: 50 credits every day (use them or lose them) plus 200 a month.
-  # One Flow project per adhikaram (10 episodes), keyed by adhikaram number.
-  # Add the next link before starting a new adhikaram; the flow sheet reminds you.
+  # One Flow project per episode ("K0788 – <short title>"), keyed by episode id, plus one shared
+  # "recurring" project with Thatha and Kavin's references (kids' specials, video-call cameos).
+  # The flow sheet asks for a new episode's link before its first image; record it with
+  # `studio.py flow-project N <link>`.
   projects:
-    31: https://flow.google.com/project/b7755f8b-6f52-4abf-8563-86ab7a09d09d   # வெகுளாமை
+    recurring: null   # "Orukural – recurring": not created yet (Thatha/Kavin refs are in K0301's project for now)
+    K0301: https://flow.google.com/project/b7755f8b-6f52-4abf-8563-86ab7a09d09d
   daily_credits: 50
   monthly_credits: 200
   # `flow-sheet N --use-monthly` adds this many monthly credits to day 1 so one episode

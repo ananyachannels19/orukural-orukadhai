@@ -265,12 +265,26 @@ def shot_clip(s: Settings, ep_dir: Path, episode_id: str, script: EpisodeScript,
     return out
 
 
-def flow_project(s: Settings, kural_number: int) -> dict:
-    """The Flow project for this kural's adhikaram (one project per 10 episodes)."""
-    from .kurals import KuralStore
-    adh = KuralStore(s.path("kurals")).get(kural_number)["adhikaram"]
-    url = (s["flow"].get("projects") or {}).get(adh["number"])
-    return {"adhikaram": adh["number"], "name": adh["name_ta"], "url": url}
+def flow_project(s: Settings, episode_id: str, script: EpisodeScript | None = None) -> dict:
+    """The episode's own Flow project (one per story), plus the shared recurring one (Thatha and Kavin refs)."""
+    projects = s["flow"].get("projects") or {}
+    title = script.story_title_en if script else ""
+    return {"episode_id": episode_id, "name": f"{episode_id} – {title}" if title else episode_id,
+            "url": projects.get(episode_id), "recurring": projects.get("recurring")}
+
+
+def record_flow_project(s: Settings, episode_id: str, url: str) -> None:
+    """Write an episode's Flow project link under flow.projects in config.yaml (keeping the file's comments)."""
+    f = s.root / "config.yaml"
+    lines = f.read_text("utf-8").splitlines()
+    at = next(i for i, ln in enumerate(lines) if ln.strip() == "projects:")
+    end = at + 1
+    while end < len(lines) and lines[end].startswith("    "):
+        end += 1
+    keep = [ln for ln in lines[at + 1:end] if not ln.strip().startswith(f"{episode_id}:")]
+    lines[at + 1:end] = keep + [f"    {episode_id}: {url}"]
+    f.write_text("\n".join(lines) + "\n", "utf-8")
+    s.raw["flow"].setdefault("projects", {})[episode_id] = url
 
 
 def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, pool: int = 0) -> dict:
@@ -319,14 +333,17 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
     fdir.mkdir(parents=True, exist_ok=True)
     (fdir / "jobs.json").write_text(json.dumps(sheet, ensure_ascii=False, indent=1), "utf-8")
     n = episode_id.lstrip("K0")
-    project = flow_project(s, script.kural_number)
+    project = flow_project(s, episode_id, script)
     sheet["flow_project"] = project["url"]
     (fdir / "jobs.json").write_text(json.dumps(sheet, ensure_ascii=False, indent=1), "utf-8")
-    project_line = (f"Use the Flow project for adhikaram {project['adhikaram']} ({project['name']}): {project['url']}"
+    project_line = (f"Use this episode's own Flow project, \"{project['name']}\": {project['url']}"
                     if project["url"] else
-                    f"**No Flow project yet for adhikaram {project['adhikaram']} ({project['name']}).** Ask the user to "
-                    f"create one in Flow named \"{project['adhikaram']} · {project['name']}\" and send its link, then add "
-                    f"it under `flow.projects` in config.yaml. Do not make anything until it is set.")
+                    f"**No Flow project yet for {episode_id}.** Before the first image, ask the user to create one in "
+                    f"Flow named \"{project['name']}\" and send its link, then record it with "
+                    f"`python studio.py flow-project {n} <link>`. Do not make anything until it is set.")
+    if project["recurring"] and (script.thatha_cameo or not script.cast):
+        project_line += (f" Thatha and Kavin's references are in the shared \"Orukural – recurring\" project "
+                         f"({project['recurring']}); reuse them from there, never redraw them.")
     lines = [
         f"# Flow jobs for {episode_id}", "",
         "Make each item in Google Flow and save it to `save_as` (paths are relative to the repo). " + project_line,
