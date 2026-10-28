@@ -1,0 +1,43 @@
+# Who each episode cast: names, looks and voices, so new episodes don't reuse them soon.
+# `studio.py script-check N` adds or refreshes the episode's entry from its script's `cast`.
+# The newest episode is last; casting rules skip anything in the last
+# casting.no_repeat_episodes entries (data/characters.yaml).
+episodes:
+- episode: K0301
+  cast_set: kumbakonam
+  characters:
+  - id: thatha
+    name_ta: தாத்தா
+    age: 72
+    look: silver hair, short white beard, round steel glasses
+    voice: Algenib
+  - id: kavin
+    name_ta: கவின்
+    age: 10
+    look: messy black hair with a cowlick, gap in front teeth
+    voice: Leda
+  places:
+  - thatha_gate
+  - thatha_thinnai
+  - school_ground
+  - town_street
+- episode: K0788
+  characters:
+  - id: vignesh
+    name_ta: விக்னேஷ்
+    age: 29
+    job: bank clerk
+    look: Lean build, long oval face, wheatish skin, short neatly side-parted black hair, thin black rectangular glasses,
+      clean-shaven, calm eyes.
+    voice: Achird
+  - id: saro
+    name_ta: சரோ
+    age: 29
+    job: auto mechanic
+    look: Stocky build, broad round face, dark skin, thick curly black hair, full short beard and moustache, a small scar
+      through his left eyebrow, strong hands.
+    voice: Enceladus
+  places:
+  - saro_gate
+  - hospital_corridor
+  - hospital_front

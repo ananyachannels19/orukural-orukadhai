@@ -64,16 +64,29 @@ Flow has no API we can call from Python, so the hand-off is file based: `studio.
 ## Commands (phase 2)
 
 ```bash
-python studio.py voice-test            # one kural line in 8 Tamil voices → review/voice_test/, pick by ear
 python studio.py flow-sheet 301        # what to make in Flow and where to save it (refs, images, review, clips)
 python studio.py continuity-sheet 301  # contact sheets + review file for the continuity check
 python studio.py render 301            # voice → collect visuals → assemble → episodes/K0301/render/K0301_draft.mp4
 python studio.py render 301 --dry-run  # whole pipeline with placeholder cards and silence, in episodes/K0301/dryrun/
 ```
 
-- **Voice** (`orukural/voice.py`): each script segment is voiced on its own. Narrator, Thatha and Kavin can have separate voices (`speaker_voices`). `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only.
+- **Voice** (`orukural/voice.py`): each script segment is voiced on its own, once: the reel's final lines are the only TTS requests (the free Gemini quota is small, so there are no trial calls and `voice-test` is not part of the weekly run). The narrator is Charon. Each character's voice is picked by `script-check` from the table in `data/characters.yaml` by gender, age group and personality, and each line's `delivery` (calm, angry, teasing, tearful, excited) is sent as the voice's style. `studio.py voice-ab N` compares Flow's own clip audio with those final lines, without new requests. `data/pronunciation_fixes.yaml` respellings are applied to the spoken text only.
 - **Visuals** (`orukural/visuals.py`): reference images for characters, places and props are attached to every shot image (see Consistency above). `video.animate: all` (default) makes a clip for every shot; `key` would animate only the first, last and highest `motion_priority` shots, and `none` none.
 - **Assembly** (`orukural/assemble.py`): each segment gets its planned time or the real voice length, whichever is longer; shots move with their segments. Shots are shown as made, with no pan, zoom or punch-in (`assembly.punch_in: 1.0`). Narration is mixed over a track from `assets/music/` (ducked under speech) and loudness-normalised to −14 LUFS. Subtitles, kural badge, on-screen Tamil text and the end card come in phase 3.
+
+## Three a week (plan from 28 Oct 2026)
+
+- **New people every story.** `data/characters.yaml` holds the world, the casting rules and a voice table; each script brings its own `cast` (2–3 people, mostly adults 22–35, one child only when the story needs one). `data/cast_log.yaml` remembers names, looks and voices so they don't repeat soon. Thatha and Kavin stay as the `kumbakonam` cast for the monthly kids' special (`kids_special`, `special: kids` in the lineup), and Thatha may cameo on a video call (`thatha_cameo: true`).
+- **Order and schedule.** `lineup` in config.yaml sets which kural comes next and the relationship it is about. `schedule` is for planning only: no description, caption or card names a posting day or time, and script-check and publish-pack refuse one.
+- **Credits.** Aim for 7 clips (~69 credits); `clip_from`/`clip_offset_s` reuse one clip for two cuts. `budget.per_reel_credits` (75) is enforced by script-check.
+- **Signature** (`orukural/signature.py`, `studio.py signature`): ~1 s badge flick with a bansuri phrase over the hook, the kural on a palm leaf from ~25 s, a 2 s logo ending. Added by assemble; no Flow credits.
+- **Posting** (`studio.py publish-pack N`): the YouTube/Instagram package with the checklist (AI label on before Share, cover as the YouTube thumbnail before Publish).
+
+```bash
+python studio.py signature 788 --background episodes/K0301/images/shot09.png   # previews → review/signature/
+python studio.py publish-pack 788
+python studio.py voice-ab 788          # Flow's clip audio vs our final lines, per character (no new TTS calls)
+```
 
 ## Studio Live (watch every step)
 

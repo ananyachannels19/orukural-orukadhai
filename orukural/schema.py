@@ -21,9 +21,30 @@ class Segment(BaseModel):
     beat: Beat
     start_s: float
     end_s: float
-    speaker: Literal["narrator", "thatha", "kavin", "other"]
+    speaker: str = Field(description="'narrator', or the id of a character in the episode's cast")
     narration_ta: str = Field(description="Spoken Tamil for this segment, exactly as it should be voiced")
+    delivery: str = Field(default="", description="How the line is said, in English: calm, angry, teasing, tearful, "
+                          "excited, whispered...; sent to the voice as its style")
     on_screen_ta: str = Field(description="Extra on-screen Tamil text besides subtitles, or empty string")
+
+
+class CastMember(BaseModel):
+    """One of the episode's own characters, invented for this story (see data/characters.yaml casting)."""
+    id: str = Field(description="snake_case id used in shots and segments, e.g. vignesh")
+    name_ta: str = Field(description="Name as the dialogue says it, in Tamil")
+    age: int = Field(description="22-35 for adults; 4-15 for a child, only when the story needs one")
+    job: str = Field(description="Specific everyday job, in English, e.g. bank clerk")
+    look_en: str = Field(description="Face, hair, build, skin tone, glasses/beard: fixed for the episode")
+    outfit_en: str = Field(description="What they wear for the whole episode")
+    gender: Literal["male", "female"] = Field(description="Their voice must match: a male voice for a man")
+    age_group: Literal["child", "adult"] = Field(default="adult", description="child (4-15) or adult (22-35)")
+    personality: str = Field(default="", description="A few words on how they come across, e.g. calm, friendly; "
+                             "used to pick their voice")
+    voice: str = Field(default="", description="Gemini TTS voice (casting.voices). Leave empty: script-check picks one "
+                       "by gender, age group and personality")
+    voice_en: str = Field(default="", description="How they sound, in English, for Flow's lip-synced lines")
+    voice_source: Literal["tts", "flow"] = Field(
+        default="tts", description="tts: our voice fitted onto Flow's speech; flow: Flow's own voice from the clips")
 
 
 class Location(BaseModel):
@@ -56,7 +77,7 @@ class Shot(BaseModel):
     beat: Beat
     start_s: float
     end_s: float
-    characters: list[str] = Field(description="Character ids from the character sheet, e.g. thatha, kavin")
+    characters: list[str] = Field(description="Character ids from the episode's cast")
     location: str = Field(description="A location id from continuity.locations")
     props: list[str] = Field(default_factory=list, description="Prop ids from continuity.props visible in this shot")
     action_en: str = Field(description="What happens in the shot, in English")
@@ -66,6 +87,9 @@ class Shot(BaseModel):
     motion_prompt_en: str = Field(description="Prompt for the 3–8 s image-to-video clip")
     motion_priority: int = Field(
         default=5, description="1 (clip made first, carries the story) to 5 (calm shot, made last)")
+    clip_from: int | None = Field(
+        default=None, description="Reuse an earlier shot's clip instead of making a new one (that shot's number)")
+    clip_offset_s: float = Field(default=0.0, description="With clip_from: where in that clip this cut starts")
 
 
 class YouTubeMeta(BaseModel):
@@ -88,6 +112,9 @@ class EpisodeScript(BaseModel):
     originality_note_en: str = Field(description="What in this story is new and specific to our series")
     meaning_ta: str = Field(description="Our own plain-Tamil meaning of the kural, 1–2 sentences")
     meaning_en: str = Field(description="Our own plain-English meaning, 1–2 sentences")
+    cast: list[CastMember] = Field(default_factory=list, description="The episode's own 2–3 characters")
+    thatha_cameo: bool = Field(default=False, description="Thatha (kumbakonam cast) appears as this family's "
+                               "grandfather on a video call, on a phone or laptop screen in the shot")
     continuity: Continuity
     hooks: list[Hook]
     chosen_hook: int = Field(description="Index (0-based) of the hook used in the segments")
@@ -95,6 +122,8 @@ class EpisodeScript(BaseModel):
     shots: list[Shot]
     lesson_ta: str = Field(description="One shareable lesson line, at most 12 words")
     tease_ta: str = Field(description="One line teasing the next kural without naming its answer")
+    tag_question_ta: str = Field(default="", description="One question asking viewers to tag a friend, partner or "
+                                 "sibling, used in the caption, pinned comment and last card")
     loop_note_en: str = Field(description="How the last frame and line flow back into the first")
     youtube: YouTubeMeta
     instagram: InstagramMeta
@@ -109,6 +138,23 @@ def tamil_letters(text: str) -> int:
     """Letters as a reader sees them (consonant+vowel sign counts once)."""
     text = unicodedata.normalize("NFC", text)
     return sum(1 for ch in _MARKS.sub("", text) if "஀" <= ch <= "௿")
+
+
+# A posting day or time promised anywhere viewers read it ("new kural every Mon, Wed & Sat, 7:30 pm").
+# A bare hour inside a story ("உங்க 3 AM நண்பன்") is fine; a clock time or a weekday is not.
+SCHEDULE_WORDS = re.compile(
+    r"\b(mon|tue|wed|thu|fri|sat|sun)(day|nesday|urday|sday)?\b|\b\d{1,2}[:.]\d{2}\s*(am|pm)?\b|\bIST\b"
+    r"|திங்கள்|செவ்வாய்|புதன்|வியாழன்|வெள்ளிக்கிழமை|சனிக்கிழமை|சனி\s|ஞாயிறு",
+    re.IGNORECASE)
+
+
+def schedule_mentions(script: EpisodeScript) -> list[str]:
+    """Text viewers read that names a posting day or time; we never promise one."""
+    texts = {"youtube title": script.youtube.title, "description": script.youtube.description_intro_ta,
+             "pinned comment": script.youtube.pinned_comment_ta, "instagram caption": script.instagram.caption_ta,
+             "tease": script.tease_ta, "tag question": script.tag_question_ta}
+    texts.update({f"on-screen text at {g.start_s:g} s": g.on_screen_ta for g in script.segments})
+    return [f"{where}: {m.group(0)!r}" for where, text in texts.items() if (m := SCHEDULE_WORDS.search(text or ""))]
 
 
 def _norm(s: str) -> str:
@@ -192,8 +238,28 @@ def check(script: EpisodeScript, kural: dict, cfg: dict) -> tuple[list[str], lis
     for a, b in zip(script.shots, script.shots[1:]):
         if abs(a.end_s - b.start_s) > 0.05:
             errors.append(f"gap/overlap between shots {a.n} and {b.n}")
-    if not any("thatha" in s.characters for s in script.shots) or not any("kavin" in s.characters for s in script.shots):
-        errors.append("Thatha and Kavin must both appear on screen")
+    by_n = {sh.n: sh for sh in script.shots}
+    for sh in script.shots:
+        if sh.clip_from is None:
+            continue
+        src = by_n.get(sh.clip_from)
+        if not src or src.n >= sh.n or src.clip_from is not None:
+            errors.append(f"shot {sh.n}: clip_from must name an earlier shot that has its own clip")
+        elif sh.clip_offset_s + (sh.end_s - sh.start_s) > 8 + 0.05:
+            errors.append(f"shot {sh.n}: reuses shot {src.n}'s clip from {sh.clip_offset_s:g} s, past its 8 s end")
+
+    for where in schedule_mentions(script):
+        errors.append(f"names a posting day or time ({where}); never promise a schedule")
+    if script.cast:  # the per-episode cast format (3 a week plan)
+        if any(g.speaker != "narrator" for g in segs if g.beat == "kural"):
+            errors.append("the narrator says the kural, over the lesson card")
+        teaser = [g for g in segs if g.on_screen_ta.strip() and g.start_s <= 12 and g.end_s >= 10 and g.beat == "story"]
+        if not teaser:
+            warns.append("no one-line lesson teaser on screen at 10–12 s")
+        if "save this" not in segs[-1].on_screen_ta.lower():
+            warns.append("the last card should be the short lesson line plus \"Save this\"")
+        if not script.tag_question_ta.strip():
+            warns.append("no tag question (tag a friend, partner or sibling)")
 
     yt = script.youtube
     if len(yt.title) > 100:

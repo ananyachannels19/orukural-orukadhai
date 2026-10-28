@@ -55,9 +55,15 @@ def cmd_status(s, args):
 
 
 def cmd_plan(s, args):
+    from orukural.kurals import kids_specials_per_month
     store = KuralStore(s.path("kurals"))
+    per = (s.raw.get("kids_special") or {}).get("per_month", 1)
+    counts = kids_specials_per_month(s["lineup"], s["schedule"]["episodes_per_week"])
+    if any(c != per for c in counts):
+        print(f"note: kids' specials per month in the lineup: {counts} (want {per}); add one as "
+              f"{{kural: N, relationship: family, special: kids}}")
     print("next up:")
-    for k in store.next_planned(s["adhikaram_order"], args.n):
+    for k in store.next_planned(s["lineup"], args.n):
         a = k["adhikaram"]
         print(f"  #{k['number']:>4}  {a['name_ta']} ({a['name_en']}) {a['position']}/10 · {k['theme']}")
         print("         " + verse_text(k, " / "))
@@ -201,6 +207,35 @@ def cmd_render(s, args):
     print(f"episode spend so far: ${ledger.spent(k['id']):.2f} of ${ledger.cap:.2f}")
 
 
+def cmd_publish_pack(s, args):
+    from orukural import publish
+    k, ep_dir, sc = _episode(s, args.kural)
+    print(publish.write(s, k, sc, ep_dir, args.video or "").relative_to(s.root))
+
+
+def cmd_signature(s, args):
+    from orukural import signature
+    store = KuralStore(s.path("kurals"))
+    for name, p in signature.build(s, force=args.force).items():
+        print(f"{name}: {p.relative_to(s.root)}")
+    bg = s.root / args.background if args.background else None
+    for p in signature.previews(s, store.get(args.kural), bg, s.root / "review" / "signature"):
+        print(p.relative_to(s.root))
+
+
+def cmd_voice_ab(s, args):
+    import json
+    from orukural import lipsync
+    k, ep_dir, sc = _episode(s, args.kural)
+    vis = json.loads((ep_dir / "visuals.json").read_text("utf-8"))
+    clips = {v["n"]: ep_dir / "clips" / v["clip"] for v in vis["shots"] if v.get("clip")}
+    made = lipsync.ab_preview(s, ep_dir, sc, clips, s.root / "review" / k["id"])
+    for p in made:
+        print(p.relative_to(s.root))
+    print("Each line: Flow's voice, then ours. Set lipsync.json \"voice_source\": {\"<id>\": \"flow\"} only where "
+          "Flow's Tamil is clear and the voice stays the same in every clip; otherwise leave tts.")
+
+
 def cmd_spend(s, args):
     ledger = Ledger(s.path("ledger"), s.path("cache"), s["budget"]["per_episode_cap"])
     rows = [e for e in ledger.entries() if not args.episode or e["episode_id"] == args.episode]
@@ -297,6 +332,21 @@ def main(argv=None):
     ev.add_argument("--requests", type=int, help="TTS requests this step used")
     ev.add_argument("--seconds", type=float)
     ev.set_defaults(fn=cmd_event)
+
+    pp = sub.add_parser("publish-pack", help="the YouTube/Instagram posting package and checklist")
+    pp.add_argument("kural")
+    pp.add_argument("--video", help="path of the final video to name in the package")
+    pp.set_defaults(fn=cmd_publish_pack)
+
+    sg = sub.add_parser("signature", help="build the channel signature and render preview clips")
+    sg.add_argument("kural", nargs="?", default="788", help="the kural shown on the olai preview")
+    sg.add_argument("--background", help="an image to preview the signature over")
+    sg.add_argument("--force", action="store_true", help="rebuild the fixed parts")
+    sg.set_defaults(fn=cmd_signature)
+
+    ab = sub.add_parser("voice-ab", help="Flow's voice vs ours for each character's lines, to choose voice_source")
+    ab.add_argument("kural")
+    ab.set_defaults(fn=cmd_voice_ab)
 
     sp = sub.add_parser("spend")
     sp.add_argument("episode", nargs="?")

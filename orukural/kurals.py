@@ -35,27 +35,38 @@ class KuralStore:
         tmp.write_text(json.dumps(self.items, ensure_ascii=False, indent=1) + "\n", "utf-8")
         tmp.replace(self.path)
 
-    def adhikaram_sequence(self, order: list[int]) -> list[int]:
-        rest = [a for a in range(1, 134) if a not in order]
-        return list(order) + rest
+    def sequence(self, lineup: list[dict]) -> list[dict]:
+        """Production order: the lineup's kurals first, in its order, then the rest in book order."""
+        first = [self.get(x["kural"]) for x in lineup]
+        picked = {k["number"] for k in first}
+        return first + [k for k in self.items if k["number"] not in picked]
 
-    def next_planned(self, order: list[int], count: int) -> list[dict]:
-        """Next `count` planned kurals, finishing the current adhikaram before starting another."""
-        picked = []
-        for adh in self.adhikaram_sequence(order):
-            for k in self.adhikaram(adh):
-                if k["status"] == "planned":
-                    picked.append(k)
-                    if len(picked) == count:
-                        return picked
-        return picked
+    def next_planned(self, lineup: list[dict], count: int) -> list[dict]:
+        """Next `count` planned kurals in production order."""
+        return [k for k in self.sequence(lineup) if k["status"] == "planned"][:count]
 
-    def after(self, kural: dict, order: list[int]) -> dict | None:
+    def after(self, kural: dict, lineup: list[dict]) -> dict | None:
         """The kural that follows this one in production order (for the 'next kural' tease)."""
-        seq = [k for adh in self.adhikaram_sequence(order) for k in self.adhikaram(adh)]
+        seq = self.sequence(lineup)
         idx = next(i for i, k in enumerate(seq) if k["number"] == kural["number"])
         return seq[idx + 1] if idx + 1 < len(seq) else None
 
 
+def relationship(lineup: list[dict], themes: dict, kural: dict) -> str:
+    """What the story is about between its people: the lineup's tag, else the adhikaram's default."""
+    picked = next((x.get("relationship") for x in lineup if x["kural"] == kural["number"]), None)
+    return picked or (themes.get("relationship") or {}).get(kural["adhikaram"]["number"], "friends")
+
+
 def verse_text(k: dict, sep: str = "\n") -> str:
     return f"{k['verse']['line1']}{sep}{k['verse']['line2']}"
+
+
+def lineup_entry(lineup: list[dict], kural: dict) -> dict:
+    return next((x for x in lineup if x["kural"] == kural["number"]), {})
+
+
+def kids_specials_per_month(lineup: list[dict], per_week: int) -> list[int]:
+    """How many kids' specials fall in each ~4-week block of the lineup (episodes_per_week × 4 entries)."""
+    block = per_week * 4
+    return [sum(1 for x in lineup[i:i + block] if x.get("special") == "kids") for i in range(0, len(lineup), block)]

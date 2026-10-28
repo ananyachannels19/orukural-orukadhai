@@ -133,3 +133,49 @@
 131: love
 132: love
 133: love
+
+# Relationship tag: whose bond the story is about. config.yaml's lineup sets it per episode;
+# otherwise an adhikaram's default below is used (anything not listed: friends).
+# Tags: friends, couple, love, siblings, office, colleagues, family, neighbours, strangers.
+relationship:
+  5: family
+  6: couple
+  7: family
+  8: love
+  10: siblings
+  11: friends
+  19: colleagues
+  47: office
+  52: office
+  64: office
+  79: friends
+  80: friends
+  81: friends
+  82: friends
+  83: friends
+  108: love
+  109: love
+  110: love
+  111: love
+  112: love
+  113: love
+  114: love
+  115: love
+  116: love
+  117: love
+  118: love
+  119: love
+  120: love
+  121: love
+  122: love
+  123: love
+  124: love
+  125: love
+  126: love
+  127: love
+  128: love
+  129: couple
+  130: couple
+  131: couple
+  132: couple
+  133: couple

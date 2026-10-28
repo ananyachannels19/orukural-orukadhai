@@ -26,9 +26,6 @@ from .config import Settings
 from .ledger import Ledger
 from .schema import EpisodeScript, Shot
 
-MAIN_CHARACTERS = ("thatha", "kavin")
-
-
 def _client():
     from google import genai
     if not os.environ.get("GEMINI_API_KEY"):
@@ -88,8 +85,8 @@ def _placeholder(out: Path, label: str, size: tuple[int, int] = (1080, 1920)) ->
     img.save(out)
 
 
-def character_prompt(s: Settings, cid: str) -> str:
-    return continuity.character_ref_prompt(s, cid)
+def character_prompt(s: Settings, cid: str, script: EpisodeScript | None = None) -> str:
+    return continuity.character_ref_prompt(s, cid, script)
 
 
 def find_media(stem: Path, kinds: tuple[str, ...]) -> Path | None:
@@ -156,8 +153,9 @@ def shot_image(s: Settings, ep_dir: Path, episode_id: str, script: EpisodeScript
 # ---- clips -------------------------------------------------------------------------
 
 def animated_shots(s: Settings, script: EpisodeScript) -> set[int]:
+    """Shots that get a clip of their own (a shot with clip_from reuses another shot's clip)."""
     mode = s["video"]["animate"]
-    shots = script.shots
+    shots = [sh for sh in script.shots if sh.clip_from is None]
     if mode == "all":
         return {sh.n for sh in shots}
     if mode == "none" or not shots:
@@ -175,7 +173,35 @@ def clip_seconds(s: Settings, shot: Shot, script: EpisodeScript | None = None) -
     """The shot's planned length, or longer when a character on screen says a line in it (lip sync)."""
     lo, hi = s["video"]["clip_seconds"]
     need = max(shot.end_s - shot.start_s, lipsync.needed_seconds(script, shot) if script else 0.0)
+    for later in (script.shots if script else []):  # later cuts taken from this clip
+        if later.clip_from == shot.n:
+            need = max(need, later.clip_offset_s + later.end_s - later.start_s)
     return int(min(hi, max(lo, -(-need // 1))))
+
+
+def source_shot(script: EpisodeScript, shot: Shot) -> Shot:
+    """The shot whose image and clip this shot uses: itself, or the one named in clip_from."""
+    return next((x for x in script.shots if x.n == shot.clip_from), shot) if shot.clip_from else shot
+
+
+def clip_plan(s: Settings, script: EpisodeScript) -> list[dict]:
+    """Every clip to make in Flow, with its length and credits."""
+    table = {int(k): v for k, v in s["flow"]["credits_per_clip"].items()}
+    out = []
+    for n in sorted(animated_shots(s, script)):
+        sh = next(x for x in script.shots if x.n == n)
+        need = clip_seconds(s, sh, script)
+        secs = min(table, key=lambda k: (k < need, abs(k - need)))
+        out.append({"n": n, "seconds": secs, "credits": table[secs]})
+    return out
+
+
+def credit_check(s: Settings, script: EpisodeScript) -> list[str]:
+    """Errors when the clips would cost more Flow credits than one reel may use."""
+    cap = s["budget"].get("per_reel_credits")
+    total = sum(c["credits"] for c in clip_plan(s, script))
+    return [f"clips need {total} Flow credits, over the {cap} a reel may use; reuse a clip for two cuts or "
+            f"shorten shots"] if cap and total > cap else []
 
 
 def _gen_clip(s: Settings, image: Path, prompt: str, out: Path) -> tuple[dict, float, dict]:
@@ -253,7 +279,7 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
     rel = lambda p: str(Path(p).relative_to(s.root))  # noqa: E731
     jobs = continuity.ref_jobs(s, ep_dir, script, rel)
     for sh in script.shots:
-        if find_media(ep_dir / "images" / f"shot{sh.n:02d}", IMAGE_EXT):
+        if sh.clip_from or find_media(ep_dir / "images" / f"shot{sh.n:02d}", IMAGE_EXT):
             continue
         refs = continuity.shot_refs(s, ep_dir, script, sh)
         jobs.append({
@@ -264,24 +290,23 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         })
     credits, day, day_used, pool_used = 0, 1, 0, 0
     daily = s["flow"]["daily_credits"]
-    table = {int(k): v for k, v in s["flow"]["credits_per_clip"].items()}
-    for n in sorted(animated_shots(s, script)):
+    for plan in clip_plan(s, script):
+        n, secs, cost = plan["n"], plan["seconds"], plan["credits"]
         sh = next(x for x in script.shots if x.n == n)
         if (ep_dir / "clips" / f"shot{n:02d}.mp4").exists():
             continue
-        secs = min(table, key=lambda k: (k < clip_seconds(s, sh, script), abs(k - clip_seconds(s, sh, script))))
-        credits += table[secs]
+        credits += cost
         cap = daily + (pool if day == 1 else 0)  # monthly credits only top up day 1
-        if day_used + table[secs] > cap:  # spread clips over days as Flow's daily credits reset
+        if day_used + cost > cap:  # spread clips over days as Flow's daily credits reset
             day, day_used = day + 1, 0
-        day_used += table[secs]
+        day_used += cost
         if day == 1:
             pool_used = max(0, day_used - daily)
         jobs.append({
             "kind": "clip", "shot": n, "day": day, "priority": sh.motion_priority,
             "save_as": rel(ep_dir / "clips" / f"shot{n:02d}.mp4"),
             "start_frame": rel(ep_dir / "images" / f"shot{n:02d}.png"),
-            "model": s["flow"]["video_model"], "seconds": secs, "aspect_ratio": "9:16", "credits": table[secs],
+            "model": s["flow"]["video_model"], "seconds": secs, "aspect_ratio": "9:16", "credits": cost,
             "prompt": continuity.clip_prompt(s, script, sh, secs),
         })
     for j in jobs:  # stable names, so a job can be found in the Flow project instead of being made twice
@@ -325,7 +350,8 @@ def flow_sheet(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str
         "--credits C --credits-left L --detail \"...\"`, with stage refs/images/image_check/clips/clip_check and "
         "status start/done/fail/retry/blocked. Log credits_left from Flow after every clip.",
         "", "Work in this order:", "",
-        "1. **References** (characters, places, props). Made once; series ones are reused by every episode.",
+        "1. **References** (characters, places, props). The episode's own cast and places are made for this "
+        "episode (`refs/`); series ones are made once and reused.",
         "2. **Shot images**, attaching every listed reference image in the listed order.",
         f"3. **Image review.** Run `python studio.py continuity-sheet {n}` and follow the continuity-review skill "
         "(`.claude/skills/continuity-review/SKILL.md`): compare every image with the references, redo any that "
@@ -364,6 +390,11 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
     shots, missing = [], []
     for sh in script.shots:
         if only and sh.n not in only:
+            continue
+        if sh.clip_from:  # a second cut from an earlier shot's clip: no image or clip of its own
+            src = next((x for x in shots if x["n"] == sh.clip_from), None)
+            if src:
+                shots.append({"n": sh.n, "image": src["image"], "clip": src["clip"], "clip_from": sh.clip_from})
             continue
         if flow_images:
             img = find_media(ep_dir / "images" / f"shot{sh.n:02d}", IMAGE_EXT)

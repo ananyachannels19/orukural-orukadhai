@@ -15,4 +15,13 @@ concrete: what to do more of, what to stop.
 
 ## From analytics
 
-_No published episodes analysed yet._
+### K0301 (posted 27 Oct 2026, 45 s)
+
+- The hook works: 82% of YouTube and 59% of Instagram viewers kept watching past 3 s.
+- The average Instagram viewer left at about 12.7 s, long before the kural at 25 s. Put a
+  one-line lesson teaser on screen at 10–12 s so they know where the story is going, and keep
+  something happening every 2–3 s up to the kural.
+- Zero saves, shares and comments. End on a short lesson card with "Save this", ask one
+  tag question (tag a friend, partner or sibling) instead of a general one, and make the
+  story about a bond viewers want to send to someone.
+- The 45 s cut works: keep 35–45 s.

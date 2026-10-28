@@ -1,5 +1,98 @@
 {
  "$defs": {
+  "CastMember": {
+   "description": "One of the episode's own characters, invented for this story (see data/characters.yaml casting).",
+   "properties": {
+    "id": {
+     "description": "snake_case id used in shots and segments, e.g. vignesh",
+     "title": "Id",
+     "type": "string"
+    },
+    "name_ta": {
+     "description": "Name as the dialogue says it, in Tamil",
+     "title": "Name Ta",
+     "type": "string"
+    },
+    "age": {
+     "description": "22-35 for adults; 4-15 for a child, only when the story needs one",
+     "title": "Age",
+     "type": "integer"
+    },
+    "job": {
+     "description": "Specific everyday job, in English, e.g. bank clerk",
+     "title": "Job",
+     "type": "string"
+    },
+    "look_en": {
+     "description": "Face, hair, build, skin tone, glasses/beard: fixed for the episode",
+     "title": "Look En",
+     "type": "string"
+    },
+    "outfit_en": {
+     "description": "What they wear for the whole episode",
+     "title": "Outfit En",
+     "type": "string"
+    },
+    "gender": {
+     "description": "Their voice must match: a male voice for a man",
+     "enum": [
+      "male",
+      "female"
+     ],
+     "title": "Gender",
+     "type": "string"
+    },
+    "age_group": {
+     "default": "adult",
+     "description": "child (4-15) or adult (22-35)",
+     "enum": [
+      "child",
+      "adult"
+     ],
+     "title": "Age Group",
+     "type": "string"
+    },
+    "personality": {
+     "default": "",
+     "description": "A few words on how they come across, e.g. calm, friendly; used to pick their voice",
+     "title": "Personality",
+     "type": "string"
+    },
+    "voice": {
+     "default": "",
+     "description": "Gemini TTS voice (casting.voices). Leave empty: script-check picks one by gender, age group and personality",
+     "title": "Voice",
+     "type": "string"
+    },
+    "voice_en": {
+     "default": "",
+     "description": "How they sound, in English, for Flow's lip-synced lines",
+     "title": "Voice En",
+     "type": "string"
+    },
+    "voice_source": {
+     "default": "tts",
+     "description": "tts: our voice fitted onto Flow's speech; flow: Flow's own voice from the clips",
+     "enum": [
+      "tts",
+      "flow"
+     ],
+     "title": "Voice Source",
+     "type": "string"
+    }
+   },
+   "required": [
+    "id",
+    "name_ta",
+    "age",
+    "job",
+    "look_en",
+    "outfit_en",
+    "gender"
+   ],
+   "title": "CastMember",
+   "type": "object"
+  },
   "Continuity": {
    "description": "The episode's fixed bible: every image and clip prompt is built from it.",
    "properties": {
@@ -187,18 +280,19 @@
      "type": "number"
     },
     "speaker": {
-     "enum": [
-      "narrator",
-      "thatha",
-      "kavin",
-      "other"
-     ],
+     "description": "'narrator', or the id of a character in the episode's cast",
      "title": "Speaker",
      "type": "string"
     },
     "narration_ta": {
      "description": "Spoken Tamil for this segment, exactly as it should be voiced",
      "title": "Narration Ta",
+     "type": "string"
+    },
+    "delivery": {
+     "default": "",
+     "description": "How the line is said, in English: calm, angry, teasing, tearful, excited, whispered...; sent to the voice as its style",
+     "title": "Delivery",
      "type": "string"
     },
     "on_screen_ta": {
@@ -244,7 +338,7 @@
      "type": "number"
     },
     "characters": {
-     "description": "Character ids from the character sheet, e.g. thatha, kavin",
+     "description": "Character ids from the episode's cast",
      "items": {
       "type": "string"
      },
@@ -289,6 +383,25 @@
      "description": "1 (clip made first, carries the story) to 5 (calm shot, made last)",
      "title": "Motion Priority",
      "type": "integer"
+    },
+    "clip_from": {
+     "anyOf": [
+      {
+       "type": "integer"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "description": "Reuse an earlier shot's clip instead of making a new one (that shot's number)",
+     "title": "Clip From"
+    },
+    "clip_offset_s": {
+     "default": 0.0,
+     "description": "With clip_from: where in that clip this cut starts",
+     "title": "Clip Offset S",
+     "type": "number"
     }
    },
    "required": [
@@ -372,6 +485,20 @@
    "title": "Meaning En",
    "type": "string"
   },
+  "cast": {
+   "description": "The episode's own 2–3 characters",
+   "items": {
+    "$ref": "#/$defs/CastMember"
+   },
+   "title": "Cast",
+   "type": "array"
+  },
+  "thatha_cameo": {
+   "default": false,
+   "description": "Thatha (kumbakonam cast) appears as this family's grandfather on a video call, on a phone or laptop screen in the shot",
+   "title": "Thatha Cameo",
+   "type": "boolean"
+  },
   "continuity": {
    "$ref": "#/$defs/Continuity"
   },
@@ -409,6 +536,12 @@
   "tease_ta": {
    "description": "One line teasing the next kural without naming its answer",
    "title": "Tease Ta",
+   "type": "string"
+  },
+  "tag_question_ta": {
+   "default": "",
+   "description": "One question asking viewers to tag a friend, partner or sibling, used in the caption, pinned comment and last card",
+   "title": "Tag Question Ta",
    "type": "string"
   },
   "loop_note_en": {

@@ -36,8 +36,9 @@ def _mp3(path: Path, secs=1.5):
 
 @pytest.fixture
 def studio(tmp_path, monkeypatch):
-    for item in ("config.yaml", "data", "prompts"):
+    for item in ("config.yaml", "data", "prompts", "assets/brand", "assets/fonts"):
         src = ROOT / item
+        (tmp_path / item).parent.mkdir(parents=True, exist_ok=True)
         (shutil.copytree if src.is_dir() else shutil.copy)(src, tmp_path / item)
     s = config.load(tmp_path / "config.yaml", dry_run=False)
     s.raw["budget"]["per_episode_cap"] = 50
@@ -93,7 +94,11 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
 
     # references: 2 characters + 4 places + 4 props, then 10 shot images
     assert calls == {"image": 2 + 4 + 4 + 10, "video": 4, "tts": 9}
-    assert (ep / "render" / "K0301_draft.mp4").exists() and t["total_seconds"] >= 35
+    assert (ep / "render" / "K0301_draft.mp4").exists() and t["story_seconds"] >= 35
+    # the signature: badge over the hook, the olai at the kural, a 2 s logo ending after the story
+    assert t["signature"] and abs(t["total_seconds"] - t["story_seconds"] - 2.0) < 0.01
+    assert abs(media.duration(ep / "render" / "K0301_draft.mp4") - t["total_seconds"]) < 0.2
+    assert (ep / "render" / "olai.png").exists()
     assert (ep / "render" / "natural_sound.wav").exists()  # the clips' own sound goes under the voice
     # second run: everything comes from the cache, nothing is paid for again
     voice.generate(studio, ep, sc, "K0301")
@@ -220,7 +225,7 @@ def test_continuity_checks_catch_breaks(studio):
     errors, warns = continuity.check(studio, sc)
     text = " | ".join(errors + warns)
     assert "location 'kitchen'" in text
-    assert "more than one supporting character" in text and "no outfit in continuity for meena" in text
+    assert "4 characters on screen" in text and "no outfit in continuity for meena" in text
     assert "dialogue mentions குட்டி (puppy) but no shot shows it" in text
     assert "thatha speaks but is not on screen" in text
 

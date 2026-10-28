@@ -9,9 +9,9 @@ from pathlib import Path
 import anthropic
 import yaml
 
-from . import continuity
+from . import continuity, visuals
 from .config import Settings
-from .kurals import STATUSES, KuralStore, verse_text
+from .kurals import STATUSES, KuralStore, lineup_entry, relationship, verse_text
 from .ledger import Ledger
 from .schema import EpisodeScript, check
 
@@ -55,8 +55,18 @@ def recent_episodes(s: Settings, exclude: str) -> list[dict]:
     return out
 
 
-def user_prompt(s: Settings, kural: dict, nxt: dict | None, recent: list[dict]) -> str:
+def recent_casts(s: Settings, exclude: str) -> list[dict]:
+    """Names, looks and voices of the last few episodes' casts: not to be reused."""
+    keep = (continuity.sheet(s).get("casting") or {}).get("no_repeat_episodes", 12)
+    log = [e for e in continuity.cast_log(s) if e.get("episode") != exclude][-keep:]
+    return [{"episode": e["episode"], "cast": [{k: c.get(k) for k in ("name_ta", "job", "look", "voice") if c.get(k)}
+                                               for c in e.get("characters") or []]} for e in log]
+
+
+def user_prompt(s: Settings, kural: dict, nxt: dict | None, recent: list[dict],
+                casts: list[dict] | None = None) -> str:
     adh = kural["adhikaram"]
+    themes = yaml.safe_load((s.root / "data" / "themes.yaml").read_text("utf-8"))
     lines = [
         f"Write the episode for kural #{kural['number']}.",
         "",
@@ -65,6 +75,17 @@ def user_prompt(s: Settings, kural: dict, nxt: dict | None, recent: list[dict]) 
         "",
         f"Adhikaram {adh['number']}: {adh['name_ta']} ({adh['name_en']}), kural {adh['position']} of 10 in this chapter.",
         f"Paal: {kural['paal']['name_ta']} ({kural['paal']['name_en']}). Theme tag: {kural['theme']}.",
+        f"Relationship: {relationship(s['lineup'], themes, kural)} (the bond the story is about).",
+    ]
+    if lineup_entry(s["lineup"], kural).get("special") == "kids":
+        cs = (s.raw.get("kids_special") or {}).get("cast", "kumbakonam")
+        lines += [f"This is the monthly kids' special: use the {cs} series cast from the sheet (Thatha and Kavin, "
+                  f"their places and wardrobe) instead of inventing a cast; leave `cast` empty. Thatha may say the "
+                  f"kural's meaning, but the narrator says the kural itself."]
+    else:
+        lines += ["Optional: Thatha (kumbakonam cast) may appear once as this family's grandfather on a video call, "
+                  "seen on a phone or laptop screen; set `thatha_cameo: true` if he does."]
+    lines += [
         f"Fixed hashtags: {' '.join(s['script']['fixed_hashtags'])}",
     ]
     if nxt:
@@ -73,6 +94,9 @@ def user_prompt(s: Settings, kural: dict, nxt: dict | None, recent: list[dict]) 
     if recent:
         lines += ["", "Recent episodes (do not repeat their premise, hook or lesson wording):",
                   yaml.safe_dump(recent, allow_unicode=True, sort_keys=False)]
+    if casts:
+        lines += ["", "Recent casts (do not reuse these names or voices, and make the new faces look different):",
+                  yaml.safe_dump(casts, allow_unicode=True, sort_keys=False)]
     return "\n".join(lines)
 
 
@@ -125,27 +149,34 @@ def dry_run_script(kural: dict) -> dict:
     """A structurally valid placeholder so later phases can be exercised without spending."""
     v = kural["verse"]
     n = kural["number"]
-    beats = [("hook", 0, 3), ("story", 3, 25), ("kural", 25, 35), ("lesson", 35, 41), ("tease", 41, 43)]
+    beats = [("hook", 0, 3, "a"), ("story", 3, 12, "narrator"), ("story", 12, 25, "b"), ("kural", 25, 35, "narrator"),
+             ("lesson", 35, 41, "narrator"), ("tease", 41, 43, "narrator")]
     say = {"hook": "[DRY RUN] கேள்வி?", "story": "[DRY RUN] கதை.", "kural": f"{v['line1']} {v['line2']}",
            "lesson": "[DRY RUN] பாடம்.", "tease": "[DRY RUN] அடுத்த குறள்."}
-    shots = [(1, "hook", 0, 3), (2, "story", 3, 8), (3, "story", 8, 14), (4, "story", 14, 20),
-             (5, "story", 20, 25), (6, "kural", 25, 30), (7, "kural", 30, 35), (8, "lesson", 35, 43)]
+    screen = {12: "[DRY RUN] பாடம் வருது", 41: "[DRY RUN] பாடம்\nSave this"}
+    shots = [(1, "hook", 0, 3), (2, "story", 3, 11), (3, "story", 11, 19), (4, "story", 19, 25),
+             (5, "kural", 25, 33), (6, "lesson", 33, 41), (7, "tease", 41, 43)]
+    member = lambda cid, gender, voice: {"id": cid, "name_ta": f"[DRY RUN {cid}]", "age": 28,  # noqa: E731
+                                         "job": "clerk", "gender": gender, "look_en": "placeholder",
+                                         "outfit_en": "placeholder", "voice": voice}
     return EpisodeScript(
         kural_number=n, story_title_ta="[DRY RUN]", story_title_en="[DRY RUN]", logline_en="dry run",
         originality_note_en="dry run", meaning_ta="[DRY RUN]", meaning_en="[DRY RUN]",
+        cast=[member("a", "male", "Achird"), member("b", "female", "Kore")],
         hooks=[{"style": st, "on_screen_ta": "[DRY RUN]", "narration_ta": "[DRY RUN] கேள்வி?"}
                for st in ("question", "tense_moment", "surprising_line")],
         chosen_hook=0,
-        continuity={"locations": [{"id": "thatha_thinnai", "description_en": "", "light_en": "golden hour",
-                                   "blocking_en": "Thatha in his chair on the right, Kavin on the left"}],
-                    "props": [], "outfits": [{"character": "thatha", "outfit_en": "white veshti, cream shirt"},
-                                             {"character": "kavin", "outfit_en": "orange rocket T-shirt"}]},
-        segments=[{"beat": b, "start_s": a, "end_s": e, "speaker": "narrator", "narration_ta": say[b],
-                   "on_screen_ta": ""} for b, a, e in beats],
-        shots=[{"n": i, "beat": b, "start_s": a, "end_s": e, "characters": ["thatha", "kavin"],
-                "location": "thatha_thinnai", "action_en": "placeholder", "camera_en": "medium shot",
-                "image_prompt_en": "placeholder", "motion_prompt_en": "placeholder"} for i, b, a, e in shots],
-        lesson_ta="[DRY RUN]", tease_ta="[DRY RUN]", loop_note_en="dry run",
+        continuity={"locations": [{"id": "street", "description_en": "a quiet street", "light_en": "golden hour",
+                                   "blocking_en": "a on the left, b on the right"}],
+                    "props": [], "outfits": []},
+        segments=[{"beat": b, "start_s": a, "end_s": e, "speaker": who, "narration_ta": say[b],
+                   "on_screen_ta": screen.get(a, "")} for b, a, e, who in beats],
+        shots=[{"n": i, "beat": b, "start_s": a, "end_s": e, "characters": ["a", "b"],
+                "location": "street", "action_en": "placeholder", "camera_en": "medium shot",
+                "image_prompt_en": "placeholder", "motion_prompt_en": "placeholder",
+                **({"clip_from": 1} if b == "tease" else {})} for i, b, a, e in shots],
+        lesson_ta="[DRY RUN]", tease_ta="[DRY RUN]", tag_question_ta="[DRY RUN] tag பண்ணுங்க",
+        loop_note_en="dry run",
         youtube={"title": f"குறள் {n} | [DRY RUN]", "description_intro_ta": "[DRY RUN]",
                  "tags": ["thirukkural"], "pinned_comment_ta": "[DRY RUN]"},
         instagram={"caption_ta": "[DRY RUN]", "hashtags": ["#திருக்குறள்", "#thirukkural", "#ஒருகுறள்ஒருகதை"]},
@@ -156,9 +187,11 @@ def write_outputs(s: Settings, kural: dict, script: dict, meta: dict) -> tuple[l
     d = episode_dir(s, kural)
     d.mkdir(parents=True, exist_ok=True)
     parsed = EpisodeScript.model_validate(script)
+    if continuity.pick_voices(s, parsed):  # voices chosen from the table, written back into the script
+        script = parsed.model_dump()
     errors, warns = check(parsed, kural, s.raw)
     c_err, c_warn = continuity.check(s, parsed)
-    errors, warns = errors + c_err, warns + c_warn
+    errors, warns = errors + c_err + visuals.credit_check(s, parsed), warns + c_warn
     payload = {**meta, "kural_id": kural["id"], "errors": errors, "warnings": warns, "script": script}
     (d / "script.json").write_text(json.dumps(payload, ensure_ascii=False, indent=1) + "\n", "utf-8")
     (d / "script.md").write_text(render_markdown(s, kural, parsed, errors, warns), "utf-8")
@@ -168,9 +201,9 @@ def write_outputs(s: Settings, kural: dict, script: dict, meta: dict) -> tuple[l
 
 def generate(s: Settings, store: KuralStore, ref: int | str, force: bool = False) -> dict:
     kural = store.get(ref)
-    nxt = store.after(kural, s["adhikaram_order"])
+    nxt = store.after(kural, s["lineup"])
     system = system_prompt(s)
-    user = user_prompt(s, kural, nxt, recent_episodes(s, kural["id"]))
+    user = user_prompt(s, kural, nxt, recent_episodes(s, kural["id"]), recent_casts(s, kural["id"]))
     d = episode_dir(s, kural)
     d.mkdir(parents=True, exist_ok=True)
     (d / "script_prompt.md").write_text(f"# System\n\n{system}\n\n# User\n\n{user}\n", "utf-8")
@@ -223,6 +256,7 @@ def revalidate(s: Settings, store: KuralStore, ref: int | str) -> dict:
     meta = {k: v for k, v in payload.items() if k not in {"script", "errors", "warnings", "kural_id"}}
     errors, warns = write_outputs(s, kural, payload["script"], meta)
     if not errors and not payload.get("dry_run"):
+        continuity.log_cast(s, EpisodeScript.model_validate(payload["script"]), kural["id"])
         sc = payload["script"]
         store.set(kural["number"], status=max(kural["status"], "scripted", key=_status_rank),
                   episode_id=kural["id"], meaning_ta=sc["meaning_ta"], meaning_en=sc["meaning_en"])
@@ -282,15 +316,21 @@ def render_markdown(s: Settings, kural: dict, sc: EpisodeScript, errors: list[st
     ]
     if errors or warns:
         out += ["## Checks", ""] + [f"- ❌ {e}" for e in errors] + [f"- ⚠️ {w}" for w in warns] + [""]
+    if sc.cast:
+        out += ["## Cast", ""] + [f"- **{c.name_ta}** ({c.id}), {c.age}, {c.job}. {c.look_en} *Wears:* {c.outfit_en} "
+                                  f"*Voice:* {c.voice}" for c in sc.cast] + [""]
     out += ["## Hooks", ""]
     for i, h in enumerate(sc.hooks):
         mark = " ← used" if i == sc.chosen_hook else ""
         out.append(f"{i + 1}. **{h.on_screen_ta}** ({h.style}){mark}  \n   🎙 {h.narration_ta}")
     out += ["", "## Script", "", "| Time | Beat | Who | Narration | On screen |", "|---|---|---|---|---|"]
     for seg in sc.segments:
-        out.append(f"| {seg.start_s:g}–{seg.end_s:g} s | {seg.beat} | {seg.speaker} | "
+        out.append(f"| {seg.start_s:g}–{seg.end_s:g} s | {seg.beat} | {seg.speaker}{f' ({seg.delivery})' if seg.delivery else ''} | "
                    f"{seg.narration_ta} | {(seg.on_screen_ta or '').replace(chr(10), '<br>')} |")
-    out += ["", f"**Lesson:** {sc.lesson_ta}  ", f"**Tease:** {sc.tease_ta}  ", f"**Loop:** {sc.loop_note_en}",
+    out += ["", f"**Lesson:** {sc.lesson_ta}  ", f"**Tease:** {sc.tease_ta}  "]
+    if sc.tag_question_ta:
+        out.append(f"**Tag question:** {sc.tag_question_ta}  ")
+    out += [f"**Loop:** {sc.loop_note_en}",
             "", "## Continuity", ""]
     for loc in sc.continuity.locations:
         out.append(f"- **{loc.id}**: {loc.description_en} *Light:* {loc.light_en} *Blocking:* {loc.blocking_en}")
@@ -302,12 +342,16 @@ def render_markdown(s: Settings, kural: dict, sc: EpisodeScript, errors: list[st
     for sh in sc.shots:
         out += [
             f"**Shot {sh.n}** · {sh.start_s:g}–{sh.end_s:g} s · {sh.beat} · {', '.join(sh.characters)} · {sh.location}"
-            + (f" · props: {', '.join(sh.props)}" if sh.props else "") + "  ",
+            + (f" · props: {', '.join(sh.props)}" if sh.props else "")
+            + (f" · reuses shot {sh.clip_from}'s clip from {sh.clip_offset_s:g} s" if sh.clip_from else "") + "  ",
             f"{sh.action_en} *Camera:* {sh.camera_en}  ",
             f"🖼 `{sh.image_prompt_en}`  ",
             f"🎞 `{sh.motion_prompt_en}`",
             "",
         ]
+    plan = visuals.clip_plan(s, sc)
+    out += [f"**Flow clips:** {len(plan)} ({', '.join(f'{c['seconds']} s' for c in plan)}) · "
+            f"{sum(c['credits'] for c in plan)} credits", ""]
     out += [
         "## YouTube", "",
         f"**Title:** {sc.youtube.title}", "",

@@ -16,7 +16,7 @@ import json
 from bisect import bisect_right
 from pathlib import Path
 
-from . import captions, continuity, edit, lipsync, live, media
+from . import captions, continuity, edit, lipsync, live, media, signature
 from .config import Settings
 from .kurals import KuralStore
 from .schema import EpisodeScript, Shot
@@ -202,7 +202,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     for sh, start, end in spans:
         v = by_n[sh.n]
         for j, (off, length, punch) in enumerate(_pieces_for(s, sh, start, end)):
-            off += offsets.get(sh.n, 0.0)
+            off += offsets.get(sh.n, 0.0) + sh.clip_offset_s  # a second cut starts later in the clip it reuses
             out = pdir / f"shot{sh.n:02d}_{j}.mp4"
             clip = clips.get(sh.n)
             if clip:
@@ -235,6 +235,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
 
     final = rdir / f"{episode_id}_{s['assembly'].get('output_name', 'draft')}.mp4"
     inputs = ["-i", str(video_only)]
+    count = 1  # ffmpeg inputs so far
     segs = [{**g, "path": str(ep_dir / "voice" / g["file"])} for g in segs]  # subtitles follow the voice's pauses
     if captions.ffmpeg_has_ass():
         ass = captions.write_ass(s, script, segs, total, rdir / "captions.ass")
@@ -243,26 +244,48 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
         graph, last = "", "0:v"
         for k, (png, a, b, y) in enumerate(captions.render_pngs(s, script, segs, total, rdir / "subs")):
             inputs += ["-i", str(png)]
-            graph += f"[{last}][{k + 1}:v]overlay=0:{y}:enable='between(t,{a:.2f},{b:.2f})'[s{k}];"
-            last = f"s{k}"
+            graph += f"[{last}][{count}:v]overlay=0:{y}:enable='between(t,{a:.2f},{b:.2f})'[s{k}];"
+            last, count = f"s{k}", count + 1
         graph += f"[{last}]null[t]"
     cover = s["assembly"].get("watermark_cover") or {}
     badge = s.root / cover["image"] if cover.get("image") else None
     if badge and badge.exists():
         # Flow puts a sparkle watermark bottom-right on every image and clip: cover it with the channel badge.
         inputs += ["-i", str(badge)]
-        graph += f";[t][{len(inputs) // 2 - 1}:v]overlay={cover['x']}:{cover['y']}[v]"
+        graph += f";[t][{count}:v]overlay={cover['x']}:{cover['y']}[w]"
+        count += 1
     else:
-        graph += ";[t]null[v]"
-    media.run([*inputs, "-i", str(audio), "-filter_complex", graph, "-map", "[v]", "-map", f"{len(inputs) // 2}:a",
+        graph += ";[t]null[w]"
+    # the channel signature: badge flick over the hook, the kural on an olai, the logo ending
+    sig = signature.plan(s, kural, segs, total, rdir)
+    length = total
+    if sig:
+        ins, chain, vlab = signature.video_graph(sig, "w", count)
+        inputs += ins
+        count += ins.count("-i")
+        graph += ";" + ";".join(chain) + f";[{vlab}]null[v]"
+        length = total + sig["ending_seconds"]
+    else:
+        graph += ";[w]null[v]"
+    inputs += ["-i", str(audio)]
+    alab, count = f"{count}:a", count + 1
+    acodec = ["-c:a", "copy"]
+    if sig:
+        ins, chain, alab = signature.audio_graph(sig, alab, count)
+        inputs += ins
+        graph += ";" + ";".join(chain)
+        alab = f"[{alab}]"
+        acodec = ["-c:a", "aac", "-b:a", f"{s['assembly'].get('audio_kbps', 192)}k", "-ar", "48000"]
+    media.run([*inputs, "-filter_complex", graph, "-map", "[v]", "-map", alab,
                "-c:v", "libx264", "-preset", s["assembly"].get("preset", "medium"), "-crf", str(s["assembly"]["crf"]),
-               "-pix_fmt", "yuv420p", "-c:a", "copy",
-               "-t", f"{total:.3f}", "-movflags", "+faststart", str(final)])
+               "-pix_fmt", "yuv420p", *acodec,
+               "-t", f"{length:.3f}", "-movflags", "+faststart", str(final)])
 
     lo, hi = s["episode"]["target_seconds"]
     timeline = {
         "episode_id": episode_id, "dry_run": voice.get("dry_run") or visuals.get("dry_run"),
-        "total_seconds": round(total, 3), "within_target": lo <= total <= hi + 1,
+        "total_seconds": round(length, 3), "story_seconds": round(total, 3), "within_target": lo <= total <= hi + 1,
+        "signature": bool(sig),
         "music": music.name if music else None, "segments": segs, "shots": shot_rows,
         "output": final.name,
     }

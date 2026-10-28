@@ -8,32 +8,34 @@ series:
   language: ta
 
 schedule:
+  # Planning only (the calendar and the order episodes are made in). Never shown to viewers:
+  # no description, caption or card names a posting day or time.
   timezone: Asia/Kolkata
   post_days: [mon, wed, sat]
-  post_time: "19:30"
+  post_time: "19:00"
   episodes_per_week: 3
   weekly_job_day: sun
 
-# Order of adhikarams to work through. One adhikaram (10 kurals) at a time,
-# popular everyday themes first. Anything not listed comes after, in book order.
-adhikaram_order:
-  - 31   # வெகுளாமை — anger
-  - 16   # பொறையுடைமை — patience
-  - 79   # நட்பு — friendship
-  - 62   # ஆள்வினையுடைமை — hard work
-  - 10   # இனியவை கூறல் — kind speech
-  - 76   # பொருள் செயல்வகை — wealth
-  - 11   # செய்ந்நன்றியறிதல் — gratitude
-  - 40   # கல்வி — education
-  - 63   # இடுக்கண் அழியாமை — resilience
-  - 80   # நட்பாராய்தல் — choosing friends
-  - 61   # மடி இன்மை — laziness
-  - 30   # வாய்மை — truth
-  - 17   # அழுக்காறாமை — envy
-  - 8    # அன்புடைமை — love
-  - 49   # காலமறிதல் — timing
-  - 65   # சொல்வன்மை — speech
-  - 1    # கடவுள் வாழ்த்து — (series start, kural #001 already posted)
+# The order episodes are made in: each a kural and the relationship its story is about
+# (tags in data/themes.yaml). After the lineup, the remaining kurals follow in book order.
+lineup:
+  - {kural: 788, relationship: friends}
+  - {kural: 1330, relationship: couple}
+  - {kural: 100, relationship: siblings}
+  - {kural: 467, relationship: office}
+  - {kural: 785, relationship: friends}
+  - {kural: 1100, relationship: love}
+  - {kural: 190, relationship: colleagues}
+  - {kural: 104, relationship: friends}
+
+# Once a month a kids' special uses the kumbakonam series cast (Thatha, Kavin) instead of a new cast.
+# Put it in the lineup as {kural: N, relationship: family, special: kids}; script-check counts the
+# specials and the plan warns when a month has none or more than per_month.
+# A new-cast story may also show Thatha as its family's grandfather on a video call (script
+# thatha_cameo: true): his reference images and voice are reused and the cast log doesn't flag it.
+kids_special:
+  cast: kumbakonam
+  per_month: 1
 
 episode:
   target_seconds: [35, 45]
@@ -46,6 +48,8 @@ episode:
     kural: [25, 35]
     lesson_and_tease: [35, 45]
   shots_per_episode: [6, 10]
+  # Aim: 7 clips (four 8 s, three 4 s = 69 credits); a shot may reuse a clip for a second cut (clip_from).
+  target_clips: 7
   # Tamil narration pace used to sanity-check script length before paying for voice.
   # Measured in Tamil letters (grapheme clusters) per second; tune after phase 2.
   narration_letters_per_second: 11
@@ -82,7 +86,7 @@ script:
 
 images:
   provider: flow              # flow | gemini
-  characters_dir: assets/characters   # Thatha/Kavin reference images, made once and committed
+  characters_dir: assets/characters   # series cast references (kumbakonam); an episode's own cast goes in episodes/<id>/refs/characters
   # gemini (paid API)
   model: gemini-nano-banana-2.1
   image_size: 2K              # 1K | 2K | 4K (uppercase K)
@@ -128,6 +132,9 @@ voice:
   provider: gemini_tts        # gemini_tts | google_tts | elevenlabs
   language_code: ta
   gap_seconds: 0.15           # silence between spoken segments
+  # Voices are chosen per story: each character in the script's cast names its own Gemini TTS voice
+  # (and voice_en, how it sounds to Flow). The narrator is always gemini_tts.voice (Charon) and says the kural.
+  # The settings below are for the narrator and the optional kumbakonam series cast.
   # Each new line's pitch is measured: one outside its speaker's range means the wrong voice was used.
   expect_pitch_hz: {thatha: [70, 165], narrator: [70, 175], kavin: [170, 360]}
   # How each character sounds when Flow speaks their line in a clip (lip sync): the same words in every
@@ -140,7 +147,7 @@ voice:
     # Free-tier inputs/outputs may be used by Google to improve its models; fine for
     # public story scripts. Outputs are ours to use commercially (Gemini API terms).
     model: gemini-3.8-flash-tts
-    voice: Charon                        # narrator: informative, male; try others with `studio.py voice-test`
+    voice: Charon                        # narrator: informative, male. Characters' voices come from the cast (no trial calls)
     speaker_voices:
       thatha: Algenib                    # gravelly, older male
       kavin: Leda                        # youthful and light, reads as a child
@@ -154,7 +161,7 @@ voice:
   google_tts:
     # Free tier: 1M Chirp 3 HD characters a month, but Google Cloud billing must be
     # enabled first (in India that asks for a prepayment), so it is not the default.
-    voice: ta-IN-Chirp3-HD-Charon        # narrator; try others with `studio.py voice-test`
+    voice: ta-IN-Chirp3-HD-Charon        # narrator
     speaker_voices:
       thatha: ta-IN-Chirp3-HD-Iapetus
       kavin: ta-IN-Chirp3-HD-Puck
@@ -206,6 +213,16 @@ assembly:
     x: 825
     y: 1669
 
+# The channel signature, added by assemble (orukural/signature.py); made here, no Flow credits.
+# `studio.py signature` builds the fixed parts into assets/brand/signature and renders previews.
+signature:
+  enabled: true
+  dir: assets/brand/signature
+  badge: {image: assets/brand/badge.png, seconds: 1.0, width: 200, x: 820, y: 150}   # top right, over the hook
+  flute: {volume_db: -14, sa: 293.66}      # short bansuri phrase in Mohanam under the hook; a closing one at the end
+  olai: {y: 1120}                          # the kural on a palm leaf, from the kural's first word to its last
+  ending: {image: assets/brand/logo_badge.png, seconds: 2.0}
+
 captions:
   # One subtitle per spoken line, all in the same style and place, one at a time.
   fonts_dir: assets/fonts
@@ -216,6 +233,7 @@ captions:
 budget:
   currency: USD
   per_episode_cap: 3.00       # hard stop before any paid call that would exceed it
+  per_reel_credits: 75        # Flow clip credits one reel may use; script-check fails a plan above it
   weekly_cap: 10.00
   # Rough per-call estimates used by the guard before the real cost is known.
   estimates:

@@ -367,7 +367,7 @@ def _calendar(s: Settings, store, current: str | None, days: int = 14) -> list[d
     job_day = names.index(sched["weekly_job_day"]) if sched.get("weekly_job_day") in names else None
     queue = [k for k in store.items if k.get("status") in ("scripted", "rendered", "approved", "scheduled")]
     queue.sort(key=lambda k: (k["id"] != current, k["number"]))
-    queue += store.next_planned(s["adhikaram_order"], 6)
+    queue += store.next_planned(s["lineup"], 6)
     out = []
     for i in range(days):
         d = today + dt.timedelta(days=i)

@@ -9,8 +9,6 @@ Meaning: {meaning_en}
 
 📖 அதிகாரம் {adhikaram_number}: {adhikaram_ta} ({adhikaram_en}) · {paal_ta}
 {longform_line}
-🔔 ஒவ்வொரு திங்கள், புதன், சனி இரவு 7:30 மணிக்கு ஒரு புதிய குறள், ஒரு புதிய கதை.
-New kural every Mon, Wed & Sat, 7:30 pm IST.
 
 🔗 {link_in_bio}
 📚 Ebook: {ebook}

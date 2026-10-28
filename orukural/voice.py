@@ -47,9 +47,15 @@ def provider_cfg(s: Settings) -> tuple[str, dict]:
     return name, s["voice"][name]
 
 
-def voice_for(s: Settings, speaker: str) -> str:
+def voice_for(s: Settings, speaker: str, script: EpisodeScript | None = None) -> str:
+    """The narrator's voice, the voice the episode's cast sheet picked for a character, or config's."""
     name, cfg = provider_cfg(s)
     default = cfg["voice_id"] if name == "elevenlabs" else cfg["voice"]
+    picked = next((c.voice for c in (script.cast if script else []) if c.id == speaker), None)
+    if picked and name == "gemini_tts":
+        return picked
+    if picked and name == "google_tts":  # Chirp 3 HD voices carry the same names
+        return f"{cfg['voice'].rsplit('-', 1)[0]}-{picked}"
     vid = (cfg.get("speaker_voices") or {}).get(speaker) or default
     if not vid:
         raise SystemExit(f"no voice set for {speaker!r} in config.yaml voice.{name}")
@@ -100,8 +106,10 @@ def _gemini_client(timeout_s: float = 90):
 _last_call = [0.0]
 
 
-def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float, dict]:
+def _gemini(s: Settings, voice: str, text: str, out: Path, delivery: str = "") -> tuple[dict, float, dict]:
     cfg = s["voice"]["gemini_tts"]
+    # Gemini TTS takes its style from a short instruction before the words ("Say calmly: ...")
+    prompt = f"Say in a {delivery.strip().rstrip(':')} tone: {text}" if delivery.strip() else text
     client = _gemini_client(cfg.get("timeout_seconds", 90))
     tries = cfg.get("retries", 5)
     for attempt in range(tries):
@@ -113,7 +121,7 @@ def _gemini(s: Settings, voice: str, text: str, out: Path) -> tuple[dict, float,
         try:
             interaction = client.interactions.create(
                 model=cfg["model"],
-                input=[{"type": "text", "text": text}],
+                input=[{"type": "text", "text": prompt}],
                 response_format={"type": "audio", "mime_type": "audio/wav"},
                 # a list of speaker configs: a bare dict is read as a multi-speaker config and its voice and
                 # language are silently dropped, so every line came out in the same default voice
@@ -174,14 +182,16 @@ def _eleven(s: Settings, voice_id: str, text: str, prev: str, nxt: str, out: Pat
 
 
 def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text: str, prev: str, nxt: str,
-               cache_name: str, force: bool = False):
+               cache_name: str, force: bool = False, script: EpisodeScript | None = None, delivery: str = ""):
     name, cfg = provider_cfg(s)
-    vid = voice_for(s, speaker)
+    vid = voice_for(s, speaker, script)
     cache_file = s.path("cache") / "voice_audio" / cache_name
     if name == "gemini_tts":
         # "api": 2 — lines made before the voice was really applied are not reused
         inputs = {"provider": name, "model": cfg["model"], "voice": vid, "text": text, "api": 2}
-        call = lambda: _gemini(s, vid, text, cache_file)  # noqa: E731
+        if delivery:  # only then, so lines made before delivery notes existed stay cached
+            inputs["delivery"] = delivery
+        call = lambda: _gemini(s, vid, text, cache_file, delivery)  # noqa: E731
     elif name == "google_tts":
         inputs = {"provider": name, "voice": vid, "rate": cfg["speaking_rate"], "text": text}
         call = lambda: _google(s, vid, text, cache_file)  # noqa: E731
@@ -217,7 +227,8 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
             alignment, cached = None, False
         else:
             try:
-                res = synthesize(s, ledger, episode_id, seg.speaker, text, prev, nxt, f"{episode_id}_{out.name}", force)
+                res = synthesize(s, ledger, episode_id, seg.speaker, text, prev, nxt, f"{episode_id}_{out.name}", force,
+                                 script, seg.delivery)
             except Exception as e:
                 quota = "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e)
                 live.emit(s, episode_id, "voice", "wait" if quota else "fail", f"line {i + 1}: {str(e)[:200]}")

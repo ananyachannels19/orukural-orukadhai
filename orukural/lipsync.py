@@ -21,7 +21,12 @@ the clip as Flow made it, before any cut from edit.py.
 
 Flow's own voice can be kept instead where it says the right words in a voice that suits the
 character: {"flow_voice": [5, 9]} in the same file. Its lines then play straight from the clip's
-sound (perfect sync by construction); the narrator and lines it gets wrong stay on our voice."""
+sound (perfect sync by construction); the narrator and lines it gets wrong stay on our voice.
+
+Per character, the cast's `voice_source` (tts by default, or flow) does the same for every shot they
+speak in; the per-episode review sets it in lipsync.json, {"voice_source": {"vignesh": "flow"}}, after
+listening to `studio.py voice-ab N` (Flow's voice, then ours, for each line). Choose flow only when
+the Tamil is clear and the character sounds the same in all their clips."""
 from __future__ import annotations
 
 import json
@@ -136,17 +141,28 @@ def _span(v) -> list[tuple[float, float]]:
     return [tuple(v)] if isinstance(v[0], (int, float)) else [tuple(x) for x in v]
 
 
+def load_pins(ep_dir: Path) -> dict:
+    f = ep_dir / "lipsync.json"
+    return json.loads(f.read_text("utf-8")) if f.exists() else {}
+
+
+def voice_sources(script: EpisodeScript, pins: dict) -> dict[str, str]:
+    """Per character: "flow" (Flow's own voice) or "tts" (ours, fitted). The episode review overrides the cast."""
+    out = {c.id: c.voice_source for c in script.cast}
+    out.update(pins.get("voice_source") or {})
+    return out
+
+
 def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shots: list[tuple[Shot, float, float]],
         clips: dict[int, Path], to_clip: dict | None = None) -> tuple[list[dict], dict[int, float], list[str]]:
     """Move each on-screen line onto Flow's speech. shots: (shot, real start, real end).
     to_clip: per shot, a function from the original clip's seconds to the (edited) clip's, for pinned spans.
     Returns the updated segments, a picture offset (clip seconds) per shot, and notes for the log."""
-    pinned, flow_voice = {}, set()
-    pin_file = ep_dir / "lipsync.json"
-    if pin_file.exists():
-        raw = json.loads(pin_file.read_text("utf-8"))
-        flow_voice = {int(n) for n in raw.pop("flow_voice", [])}
-        pinned = {int(k): [_span(x) for x in v] for k, v in raw.items()}
+    raw = load_pins(ep_dir)
+    flow_voice = {int(n) for n in raw.pop("flow_voice", [])}
+    sources = voice_sources(script, raw)
+    raw.pop("voice_source", None)
+    pinned = {int(k): [_span(x) for x in v] for k, v in raw.items()}
     out_dir = ep_dir / "render" / "fit"
     segs = [dict(g) for g in segs]
     offsets, notes = {}, []
@@ -169,7 +185,7 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         for j, (i, (a, b)) in enumerate(zip(lines, spans)):
             g = segs[i]
             fitted = out_dir / f"seg{i + 1:02d}.wav"
-            if shot.n in flow_voice:  # Flow's own voice, cut straight from the clip
+            if shot.n in flow_voice or sources.get(script.segments[i].speaker) == "flow":  # Flow's own voice, cut from the clip
                 lead = max(0.0, min(0.05, a, start + a - offset))  # never before the clip or the film starts
                 media.run(["-ss", f"{a - lead:.3f}", "-t", f"{b - a + lead + 0.05:.3f}", "-i", str(clip), "-vn",
                            "-ar", "44100", "-ac", "2", str(fitted)])
@@ -204,3 +220,41 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         if prev["start"] + prev["voice_seconds"] > nxt["start"] + 0.05:
             notes.append(f"line {nxt['n']} starts before line {prev['n']} ends ({nxt['start']:.2f} s): check that cut")
     return segs, offsets, notes
+
+
+def ab_preview(s: Settings, ep_dir: Path, script: EpisodeScript, clips: dict[int, Path], out_dir: Path) -> list[Path]:
+    """Per character: each of their on-screen lines as Flow said it (A), a beat of silence, then ours (B),
+    so the review can pick voice_source by ear. Returns one .m4a per character."""
+    pins = {int(k): [_span(x) for x in v] for k, v in load_pins(ep_dir).items() if k.isdigit()}
+    out_dir.mkdir(parents=True, exist_ok=True)
+    parts: dict[str, list[Path]] = {}
+    tmp = out_dir / "ab_parts"
+    tmp.mkdir(exist_ok=True)
+    gap = tmp / "gap.wav"
+    media.run(["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", "0.6", str(gap)])
+    for shot in script.shots:
+        clip, lines = clips.get(shot.n), spoken_lines(script, shot)
+        if not clip or not lines:
+            continue
+        spans = [(x[0][0], x[-1][1]) for x in pins.get(shot.n, [])] or speech_spans(clip, len(lines))
+        if len(spans) != len(lines):
+            continue
+        for i, (a, b) in zip(lines, spans):
+            seg = script.segments[i]
+            flow = tmp / f"seg{i + 1:02d}_flow.wav"
+            ours = tmp / f"seg{i + 1:02d}_tts.wav"
+            media.run(["-ss", f"{a:.3f}", "-t", f"{b - a + 0.1:.3f}", "-i", str(clip), "-vn", "-ar", "44100", "-ac", "2",
+                       str(flow)])
+            src = next(ep_dir.glob(f"voice/seg{i + 1:02d}_*.mp3"), None)
+            if not src:
+                continue
+            media.run(["-i", str(src), "-ar", "44100", "-ac", "2", str(ours)])
+            parts.setdefault(seg.speaker, []).extend([flow, gap, ours, gap, gap])
+    made = []
+    for who, files in parts.items():
+        out = out_dir / f"voice_ab_{who}.m4a"
+        lst = tmp / f"{who}.txt"
+        lst.write_text("".join(f"file '{f.resolve()}'\n" for f in files), "utf-8")
+        media.run(["-f", "concat", "-safe", "0", "-i", str(lst), "-c:a", "aac", "-b:a", "160k", str(out)])
+        made.append(out)
+    return made
