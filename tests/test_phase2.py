@@ -301,6 +301,9 @@ def test_gemini_tts_stops_at_once_on_daily_limit(studio, tmp_path, monkeypatch):
 def test_flow_project_per_episode(studio):
     assert visuals.flow_project(studio, "K0301")["url"].startswith("https://flow.google.com/project/")
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    studio.raw["flow"]["projects"].pop("K0788", None)       # as before its link was recorded
+    text = (studio.root / "config.yaml").read_text("utf-8")
+    (studio.root / "config.yaml").write_text("\n".join(l for l in text.splitlines() if "K0788:" not in l) + "\n")
     other = visuals.flow_project(studio, "K0788", sc)
     assert other["url"] is None and other["name"] == "K0788 – The friend at the gate at 3 am"
     ep = studio.path("episodes") / "K0788"
