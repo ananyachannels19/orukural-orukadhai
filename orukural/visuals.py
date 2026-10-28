@@ -287,6 +287,25 @@ def record_flow_project(s: Settings, episode_id: str, url: str) -> None:
     s.raw["flow"].setdefault("projects", {})[episode_id] = url
 
 
+def progress(s: Settings, ep_dir: Path, kinds: tuple[str, ...] = ("character_ref", "location_ref", "prop_ref",
+                                                                    "image", "clip")) -> dict[str, dict]:
+    """Per job kind: how many of flow/jobs.json's jobs have their file saved, and which are still missing.
+    Finished = the file exists at save_as (any image extension for images), so a watcher can count it."""
+    sheet = json.loads((ep_dir / "flow" / "jobs.json").read_text("utf-8"))
+    out: dict[str, dict] = {}
+    for j in sheet["jobs"]:
+        if j["kind"] not in kinds:
+            continue
+        p = s.root / j["save_as"]
+        done = p.exists() if j["kind"] == "clip" else bool(find_media(p.with_suffix(""), IMAGE_EXT))
+        row = out.setdefault(j["kind"], {"done": 0, "total": 0, "missing": []})
+        row["total"] += 1
+        row["done"] += done
+        if not done:
+            row["missing"].append(j["flow_name"])
+    return out
+
+
 def reuse_entries(script: EpisodeScript, source: int, mark: str, only: int | None = None) -> list[str]:
     """An entry for each shot cut from `source`'s clip: nothing new is made, but the shot is listed with what
     the viewer sees and the narration over it, so every shot has its place in the sheet."""

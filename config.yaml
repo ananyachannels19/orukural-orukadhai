@@ -115,6 +115,7 @@ flow:
   projects:
     recurring: null   # "Orukural – recurring": not created yet (Thatha/Kavin refs are in K0301's project for now)
     K0301: https://flow.google.com/project/b7755f8b-6f52-4abf-8563-86ab7a09d09d
+    K0788: https://flow.google.com/project/17cdee32-abf4-4416-8c3d-321b921530b4
   daily_credits: 50
   monthly_credits: 200
   # `flow-sheet N --use-monthly` adds this many monthly credits to day 1 so one episode

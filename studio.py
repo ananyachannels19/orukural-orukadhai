@@ -207,6 +207,15 @@ def cmd_render(s, args):
     print(f"episode spend so far: ${ledger.spent(k['id']):.2f} of ${ledger.cap:.2f}")
 
 
+def cmd_flow_progress(s, args):
+    from orukural import visuals
+    k = KuralStore(s.path("kurals")).get(args.kural)
+    rows = visuals.progress(s, s.path("episodes") / k["id"])
+    for kind, r in rows.items():
+        print(f"{kind}: {r['done']}/{r['total']}" + (f"  missing: {', '.join(r['missing'])}" if r["missing"] else ""))
+    return 0 if all(r["done"] == r["total"] for r in rows.values()) else 1
+
+
 def cmd_flow_project(s, args):
     from orukural import visuals
     k = KuralStore(s.path("kurals")).get(args.kural)
@@ -341,6 +350,10 @@ def main(argv=None):
     ev.add_argument("--requests", type=int, help="TTS requests this step used")
     ev.add_argument("--seconds", type=float)
     ev.set_defaults(fn=cmd_event)
+
+    fg = sub.add_parser("flow-progress", help="how many of an episode's Flow jobs are saved, and which are missing")
+    fg.add_argument("kural")
+    fg.set_defaults(fn=cmd_flow_progress)
 
     fp = sub.add_parser("flow-project", help="record an episode's own Flow project link in config.yaml")
     fp.add_argument("kural")

@@ -345,3 +345,17 @@ def test_an_elder_when_the_story_needs_one(studio, k788):
     raw = copy.deepcopy(k788)
     raw["cast"][2]["age"] = 40
     assert any("appa is 40 but age_group elder is 50–80" in e for e in _checks(studio, raw)[0])
+
+
+def test_flow_progress_counts_saved_files(studio, k788):
+    sc = EpisodeScript.model_validate(k788)
+    ep = studio.root / "episodes/K0788"
+    visuals.flow_sheet(studio, ep, sc, "K0788")
+    before = visuals.progress(studio, ep)
+    assert before["image"] == {"done": 0, "total": 7, "missing": [f"K0788_shot{n:02d}_image" for n in (1, 3, 4, 5, 6, 7, 8)]}
+    (ep / "images").mkdir(parents=True)
+    (ep / "images" / "shot01.jpeg").write_bytes(b"x")      # Flow's jpeg counts for the .png job
+    (ep / "images" / "shot03.png").write_bytes(b"x")
+    after = visuals.progress(studio, ep)
+    assert after["image"]["done"] == 2 and "K0788_shot01_image" not in after["image"]["missing"]
+    assert after["clip"]["done"] == 0 and after["clip"]["total"] == 7
