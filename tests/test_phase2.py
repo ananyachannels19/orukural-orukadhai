@@ -42,6 +42,7 @@ def studio(tmp_path, monkeypatch):
         (shutil.copytree if src.is_dir() else shutil.copy)(src, tmp_path / item)
     s = config.load(tmp_path / "config.yaml", dry_run=False)
     s.raw["budget"]["per_episode_cap"] = 50
+    s.raw["flow"].update(daily_credits=50, monthly_credits=200, monthly_top_up_per_episode=40)  # the old plan's limits
     s.raw["images"]["provider"] = s.raw["video"]["provider"] = "gemini"
     s.raw["voice"]["provider"] = "elevenlabs"
     monkeypatch.setenv("GEMINI_API_KEY", "fake")
