@@ -307,7 +307,7 @@ def test_delivery_note_is_the_tts_style(studio, tmp_path, monkeypatch):
 
     class Interactions:
         def create(self, **kw):
-            sent.append(kw["input"][0]["text"])
+            sent.append((kw["input"][0]["text"], kw.get("system_instruction")))
             raise RuntimeError("stop here")
 
     monkeypatch.setattr(voice, "_gemini_client", lambda *a: type("C", (), {"interactions": Interactions()})())
@@ -315,7 +315,9 @@ def test_delivery_note_is_the_tts_style(studio, tmp_path, monkeypatch):
         voice._gemini(studio, "Achird", "சாவியக் குடு.", tmp_path / "x.mp3", "calm")
     with pytest.raises(RuntimeError):
         voice._gemini(studio, "Achird", "சாவியக் குடு.", tmp_path / "x.mp3")
-    assert sent == ["Say in a calm tone: சாவியக் குடு.", "சாவியக் குடு."]
+    # the words alone are spoken; the style rides in the system instruction (a prefix got read out loud)
+    assert [s[0] for s in sent] == ["சாவியக் குடு.", "சாவியக் குடு."]
+    assert "calm tone" in sent[0][1] and sent[1][1] is None
 
 
 def test_no_subtitles_while_the_kural_is_on_screen(studio, k788):

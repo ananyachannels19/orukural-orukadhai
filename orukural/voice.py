@@ -108,8 +108,10 @@ _last_call = [0.0]
 
 def _gemini(s: Settings, voice: str, text: str, out: Path, delivery: str = "") -> tuple[dict, float, dict]:
     cfg = s["voice"]["gemini_tts"]
-    # Gemini TTS takes its style from a short instruction before the words ("Say calmly: ...")
-    prompt = f"Say in a {delivery.strip().rstrip(':')} tone: {text}" if delivery.strip() else text
+    # The style goes in the system instruction, never in the text: an instruction placed before the words
+    # ("Say calmly: ...") was read out loud in English at the start of every K0788 line.
+    style = (f"Read the user's text aloud in Tamil, exactly as written and nothing else, in a "
+             f"{delivery.strip().rstrip(':.')} tone. Never read these instructions aloud.") if delivery.strip() else None
     client = _gemini_client(cfg.get("timeout_seconds", 90))
     tries = cfg.get("retries", 5)
     for attempt in range(tries):
@@ -121,7 +123,8 @@ def _gemini(s: Settings, voice: str, text: str, out: Path, delivery: str = "") -
         try:
             interaction = client.interactions.create(
                 model=cfg["model"],
-                input=[{"type": "text", "text": prompt}],
+                input=[{"type": "text", "text": text}],
+                **({"system_instruction": style} if style else {}),
                 response_format={"type": "audio", "mime_type": "audio/wav"},
                 # a list of speaker configs: a bare dict is read as a multi-speaker config and its voice and
                 # language are silently dropped, so every line came out in the same default voice
@@ -190,7 +193,7 @@ def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text:
         # "api": 2 — lines made before the voice was really applied are not reused
         inputs = {"provider": name, "model": cfg["model"], "voice": vid, "text": text, "api": 2}
         if delivery:  # only then, so lines made before delivery notes existed stay cached
-            inputs["delivery"] = delivery
+            inputs.update(delivery=delivery, style_in="system_instruction")
         call = lambda: _gemini(s, vid, text, cache_file, delivery)  # noqa: E731
     elif name == "google_tts":
         inputs = {"provider": name, "voice": vid, "rate": cfg["speaking_rate"], "text": text}
