@@ -108,10 +108,10 @@ _last_call = [0.0]
 
 def _gemini(s: Settings, voice: str, text: str, out: Path, delivery: str = "") -> tuple[dict, float, dict]:
     cfg = s["voice"]["gemini_tts"]
-    # The style goes in the system instruction, never in the text: an instruction placed before the words
-    # ("Say calmly: ...") was read out loud in English at the start of every K0788 line.
-    style = (f"Read the user's text aloud in Tamil, exactly as written and nothing else, in a "
-             f"{delivery.strip().rstrip(':.')} tone. Never read these instructions aloud.") if delivery.strip() else None
+    # Only the words are sent. A style note placed before them ("Say calmly: ...") was read out loud in English
+    # at the start of every K0788 line, and this model refuses a system instruction ("Developer instruction is
+    # not enabled"), so the delivery note steers Flow's acting (and voice_source: flow) but not this voice.
+    style = None
     client = _gemini_client(cfg.get("timeout_seconds", 90))
     tries = cfg.get("retries", 5)
     for attempt in range(tries):
@@ -192,9 +192,7 @@ def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text:
     if name == "gemini_tts":
         # "api": 2 — lines made before the voice was really applied are not reused
         inputs = {"provider": name, "model": cfg["model"], "voice": vid, "text": text, "api": 2}
-        if delivery:  # only then, so lines made before delivery notes existed stay cached
-            inputs.update(delivery=delivery, style_in="system_instruction")
-        call = lambda: _gemini(s, vid, text, cache_file, delivery)  # noqa: E731
+        call = lambda: _gemini(s, vid, text, cache_file)  # noqa: E731
     elif name == "google_tts":
         inputs = {"provider": name, "voice": vid, "rate": cfg["speaking_rate"], "text": text}
         call = lambda: _google(s, vid, text, cache_file)  # noqa: E731
@@ -209,8 +207,28 @@ def synthesize(s: Settings, ledger: Ledger, episode_id: str, speaker: str, text:
     return res
 
 
-def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, force: bool = False) -> dict:
-    """Voice every segment; returns and writes voice/voice.json with real durations."""
+MAX_STRETCH = 1.5  # a line this many times longer than its text needs is wrong (e.g. instructions read aloud)
+
+
+def expected_seconds(s: Settings, text: str) -> float:
+    return max(0.6, tamil_letters(text) / s["episode"]["narration_letters_per_second"])
+
+
+def too_long(s: Settings, script: EpisodeScript, voice: dict) -> list[str]:
+    """Lines whose audio is over MAX_STRETCH times what their Tamil text takes to say: they don't go to render."""
+    out = []
+    for item in voice["segments"]:
+        seg = script.segments[item["n"] - 1]
+        need = expected_seconds(s, seg.narration_ta)
+        if item["seconds"] > MAX_STRETCH * need + 0.5:
+            out.append(f"line {item['n']} ({seg.speaker}) is {item['seconds']:.1f} s for ~{need:.1f} s of text")
+    return out
+
+
+def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, force: bool = False,
+             only: set[int] | None = None) -> dict:
+    """Voice every segment (or only the line numbers in `only`, to check one before the rest); returns and writes
+    voice/voice.json with real durations (a partial run writes voice/voice_partial.json instead)."""
     media.require_ffmpeg()
     vdir = ep_dir / "voice"
     vdir.mkdir(parents=True, exist_ok=True)
@@ -220,6 +238,8 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
 
     items, spent = [], 0.0
     for i, seg in enumerate(segs):
+        if only and i + 1 not in only:
+            continue
         text = spoken_text(seg.narration_ta, fixes)
         prev = spoken_text(segs[i - 1].narration_ta, fixes) if i else ""
         nxt = spoken_text(segs[i + 1].narration_ta, fixes) if i + 1 < len(segs) else ""
@@ -254,10 +274,12 @@ def generate(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
                        ensure_ascii=False, indent=1), "utf-8")
         items.append({"n": i + 1, "beat": seg.beat, "speaker": seg.speaker, "file": out.name,
                       "seconds": round(dur, 3), "planned": [seg.start_s, seg.end_s], "cached": cached,
-                      "pitch_hz": pitch})
+                      "pitch_hz": pitch, "expected_seconds": round(expected_seconds(s, seg.narration_ta), 2)})
 
     manifest = {"dry_run": s.dry_run, "provider": s["voice"]["provider"], "segments": items, "cost_usd": round(spent, 4)}
-    (vdir / "voice.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), "utf-8")
+    manifest["too_long"] = too_long(s, script, manifest)
+    name = "voice_partial.json" if only else "voice.json"
+    (vdir / name).write_text(json.dumps(manifest, ensure_ascii=False, indent=1), "utf-8")
     return manifest
 
 

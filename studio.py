@@ -166,11 +166,14 @@ def cmd_continuity_sheet(s, args):
 def cmd_voice(s, args):
     from orukural import voice
     k, ep_dir, sc = _episode(s, args.kural)
-    m = voice.generate(s, ep_dir, sc, k["id"], force=args.force)
+    only = {int(x) for x in args.lines.split(",")} if getattr(args, "lines", None) else None
+    m = voice.generate(s, ep_dir, sc, k["id"], force=args.force, only=only)
     for seg in m["segments"]:
         lo, hi = seg["planned"]
         flag = "  ← longer than planned" if seg["seconds"] > hi - lo + 0.3 else ""
-        print(f"  {seg['file']:<22} {seg['seconds']:5.2f}s (planned {hi - lo:.1f}s){flag}")
+        print(f"  {seg['file']:<22} {seg['seconds']:5.2f}s (planned {hi - lo:.1f}s, text needs ~{seg['expected_seconds']:.1f}s){flag}")
+    for line in m.get("too_long", []):
+        print(f"  TOO LONG  {line}")
     cost = "dry run" if m["dry_run"] else f"${m['cost_usd']:.3f}"
     print(f"voice: {cost}")
 
@@ -327,6 +330,7 @@ def main(argv=None):
         c.add_argument("kural")
         c.add_argument("--force", action="store_true", help="ignore the cache and pay again")
         c.add_argument("--shots", help="visuals only: comma-separated shot numbers to (re)make")
+        c.add_argument("--lines", help="voice only: comma-separated line numbers to make (check one before the rest)")
         c.add_argument("--final", action="store_true",
                        help="assemble/render: the upload master (assembly.final: crf, preset, audio) -> <id>_final.mp4")
         c.add_argument("--dry-run", action="store_true", default=None, dest="sub_dry_run")

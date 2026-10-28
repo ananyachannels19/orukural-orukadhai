@@ -160,6 +160,10 @@ def assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str, 
 def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str) -> dict:
     media.require_ffmpeg()
     voice = json.loads((ep_dir / "voice" / "voice.json").read_text("utf-8"))
+    from .voice import too_long
+    if bad := ([] if voice.get("dry_run") else too_long(s, script, voice)):
+        raise SystemExit(f"{episode_id}: voice lines too long, not rendering: " + "; ".join(bad)
+                         + ". Listen to them; remake with `studio.py voice` once fixed.")
     visuals = json.loads((ep_dir / "visuals.json").read_text("utf-8"))
     by_n = {v["n"]: v for v in visuals["shots"]}
     missing = [sh.n for sh in script.shots if sh.n not in by_n]

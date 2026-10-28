@@ -302,23 +302,19 @@ def test_voice_picker_makes_no_api_calls(studio, k788, monkeypatch):
     assert continuity.pick_voices(studio, sc) == {}            # already chosen: left alone
 
 
-def test_delivery_note_is_the_tts_style(studio, tmp_path, monkeypatch):
+def test_tts_sends_only_the_words(studio, tmp_path, monkeypatch):
+    """A style note before the words was read aloud, and the model refuses a system instruction: words only."""
     sent = []
 
     class Interactions:
         def create(self, **kw):
-            sent.append((kw["input"][0]["text"], kw.get("system_instruction")))
+            sent.append(kw)
             raise RuntimeError("stop here")
 
     monkeypatch.setattr(voice, "_gemini_client", lambda *a: type("C", (), {"interactions": Interactions()})())
     with pytest.raises(RuntimeError):
         voice._gemini(studio, "Achird", "சாவியக் குடு.", tmp_path / "x.mp3", "calm")
-    with pytest.raises(RuntimeError):
-        voice._gemini(studio, "Achird", "சாவியக் குடு.", tmp_path / "x.mp3")
-    # the words alone are spoken; the style rides in the system instruction (a prefix got read out loud)
-    assert [s[0] for s in sent] == ["சாவியக் குடு.", "சாவியக் குடு."]
-    assert "calm tone" in sent[0][1] and sent[1][1] is None
-
+    assert sent[0]["input"][0]["text"] == "சாவியக் குடு." and "system_instruction" not in sent[0]
 
 def test_no_subtitles_while_the_kural_is_on_screen(studio, k788):
     from orukural import captions
@@ -361,3 +357,12 @@ def test_flow_progress_counts_saved_files(studio, k788):
     after = visuals.progress(studio, ep)
     assert after["image"]["done"] == 2 and "K0788_shot01_image" not in after["image"]["missing"]
     assert after["clip"]["done"] == 0 and after["clip"]["total"] == 7
+
+
+def test_voice_lines_too_long_block_the_render(studio, k788):
+    sc = EpisodeScript.model_validate(k788)
+    need = voice.expected_seconds(studio, sc.segments[0].narration_ta)
+    ok = {"segments": [{"n": 1, "seconds": need * 1.2}]}
+    bad = {"segments": [{"n": 1, "seconds": need * 1.5 + 2.0}]}          # e.g. an English note read aloud first
+    assert voice.too_long(studio, sc, ok) == []
+    assert "line 1 (saro)" in voice.too_long(studio, sc, bad)[0]
