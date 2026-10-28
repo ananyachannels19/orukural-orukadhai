@@ -95,10 +95,10 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     # references: 2 characters + 4 places + 4 props, then 10 shot images
     assert calls == {"image": 2 + 4 + 4 + 10, "video": 4, "tts": 9}
     assert (ep / "render" / "K0301_draft.mp4").exists() and t["story_seconds"] >= 35
-    # the signature: badge over the hook, the olai at the kural, a 2 s logo ending after the story
+    # the signature: the kural on a slim palm leaf while it is said, a 2 s logo ending after the story
     assert t["signature"] and abs(t["total_seconds"] - t["story_seconds"] - 2.0) < 0.01
     assert abs(media.duration(ep / "render" / "K0301_draft.mp4") - t["total_seconds"]) < 0.2
-    assert (ep / "render" / "olai.png").exists()
+    assert (ep / "render" / "kural_leaf.png").exists()
     assert (ep / "render" / "natural_sound.wav").exists()  # the clips' own sound goes under the voice
     # second run: everything comes from the cache, nothing is paid for again
     voice.generate(studio, ep, sc, "K0301")

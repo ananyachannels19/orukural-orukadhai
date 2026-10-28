@@ -5,7 +5,10 @@ upwards into the picture and only one row is ever on screen. The words are what 
 watched muted, so this is not optional.
 
 The text sits in the middle band: the bottom ~25% and the right edge are under YouTube's and
-Instagram's buttons and caption."""
+Instagram's buttons and caption.
+
+While the kural is on screen (the signature's kural reveal) there are no subtitles: the verse shown is
+the subtitle for the narrator's line, and the slim leaf sits in the subtitle zone, so they never overlap."""
 from __future__ import annotations
 
 import re
@@ -102,8 +105,9 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
     (start/end/voice_seconds per line, and the voice file's path when it is known)."""
     from PIL import Image, ImageDraw
     font, probe, out = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1))), []
+    kural_on_screen = bool((s.raw.get("signature") or {}).get("enabled"))
     for i, (seg, t) in enumerate(zip(script.segments, segs)):
-        if not seg.narration_ta.strip():
+        if not seg.narration_ta.strip() or (kural_on_screen and seg.beat == "kural"):
             continue
         end = total if i == len(segs) - 1 else t["end"]
         rows = _wrap(probe, seg.narration_ta.strip(), font, WIDTH)

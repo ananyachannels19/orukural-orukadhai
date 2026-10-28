@@ -256,7 +256,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
         count += 1
     else:
         graph += ";[t]null[w]"
-    # the channel signature: badge flick over the hook, the kural on an olai, the logo ending
+    # the channel signature: the kural reveal while it is said, then the logo ending
     sig = signature.plan(s, kural, segs, total, rdir)
     length = total
     if sig:

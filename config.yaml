@@ -217,13 +217,16 @@ assembly:
     y: 1669
 
 # The channel signature, added by assemble (orukural/signature.py); made here, no Flow credits.
+# No intro before the hook: the logo badge (watermark_cover) already sits in its corner.
 # `studio.py signature` builds the fixed parts into assets/brand/signature and renders previews.
 signature:
   enabled: true
   dir: assets/brand/signature
-  badge: {image: assets/brand/badge.png, seconds: 1.0, width: 200, x: 820, y: 150}   # top right, over the hook
-  flute: {volume_db: -14, sa: 293.66}      # short bansuri phrase in Mohanam under the hook; a closing one at the end
-  olai: {y: 1120}                          # the kural on a palm leaf, from the kural's first word to its last
+  # The kural while the narrator says it. style: slim_leaf (a thin see-through palm-leaf strip in the lower
+  # third, the story keeps playing) or clean_text (the story dims, the verse writes in line by line).
+  # Subtitles are off while the kural is on screen; the slim leaf sits where they normally are (y ~1230-1540).
+  kural: {style: slim_leaf, width: 0.88, height: 0.16, opacity: 0.88, y: 1230, dim: 0.45, text_y: 820}
+  flute: {volume_db: -14, sa: 293.66}      # the closing bansuri phrase under the logo ending
   ending: {image: assets/brand/logo_badge.png, seconds: 2.0}
 
 captions:

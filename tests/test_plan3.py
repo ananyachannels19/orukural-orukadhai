@@ -231,21 +231,32 @@ def test_voice_ab_preview_and_flow_voice(studio, k788, tmp_path):
 
 @ffmpeg
 def test_signature_parts_and_previews(studio):
-    parts = signature.build(studio)
+    from PIL import Image
     from orukural import media
-    assert abs(media.duration(parts["badge"]) - 1.0) < 0.1
+    parts = signature.build(studio)
+    assert set(parts) == {"flute_end", "ending"}            # no intro, no badge flick, no opening flute
     assert abs(media.duration(parts["ending"]) - 2.0) < 0.1
-    assert 0.8 < media.duration(parts["flute_hook"]) < 2.0
     store = KuralStore(studio.path("kurals"))
     made = signature.previews(studio, store.get(788), None, studio.root / "review" / "signature")
-    assert [p.name for p in made] == ["signature_badge_flick.mp4", "signature_olai_reveal.mp4",
+    assert [p.name for p in made] == ["signature_kural_A_slim_leaf.mp4", "signature_kural_A_slim_leaf.png",
+                                      "signature_kural_B_clean_text.mp4", "signature_kural_B_clean_text.png",
                                       "signature_logo_ending.mp4"]
+    assert abs(media.duration(made[0]) - 7.0) < 0.1          # subtitle, kural, lesson card
+    leaf = Image.open(studio.root / "review/signature/slim_leaf/kural_leaf.png")
+    assert leaf.width <= 0.9 * media.W and leaf.height <= 0.18 * media.H      # a strip, not a board
+    assert leaf.getpixel((leaf.width // 2, 8))[3] < 255                        # see-through
     segs = [{"beat": "hook", "start": 0, "end": 3}, {"beat": "kural", "start": 25.4, "end": 34.0}]
     plan = signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r")
-    assert plan["olai"]["start"] == 25.4 and plan["ending_seconds"] == 2.0
+    assert plan["kural"]["style"] == "slim_leaf" and plan["kural"]["start"] == 25.4
+    assert "badge" not in plan and "flute_hook" not in plan
+    ins, chain, _ = signature.video_graph(plan, "w", 3)
+    assert ins.count("-i") == 2                              # the leaf and the ending
+    studio.raw["signature"]["kural"]["style"] = "clean_text"
+    plan = signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r")
+    assert len(plan["kural"]["layers"]) == 2 and plan["kural"]["dim"] == 0.45
+    assert any("colorchannelmixer" in c for c in signature.video_graph(plan, "w", 3)[1])
     studio.raw["signature"]["enabled"] = False
     assert signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r") is None
-
 
 def test_voice_picker_makes_no_api_calls(studio, k788, monkeypatch):
     def no_calls(*a, **k):
@@ -285,3 +296,19 @@ def test_delivery_note_is_the_tts_style(studio, tmp_path, monkeypatch):
     with pytest.raises(RuntimeError):
         voice._gemini(studio, "Achird", "சாவியக் குடு.", tmp_path / "x.mp3")
     assert sent == ["Say in a calm tone: சாவியக் குடு.", "சாவியக் குடு."]
+
+
+def test_no_subtitles_while_the_kural_is_on_screen(studio, k788):
+    from orukural import captions
+    sc = EpisodeScript.model_validate(k788)
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.5} for g in sc.segments]
+    kural = next(g for g in sc.segments if g.beat == "kural")
+    cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
+    assert cues and not any(a < kural.end_s and b > kural.start_s for _, a, b in cues)
+    # the slim leaf sits in the subtitle zone instead
+    k = studio["signature"]["kural"]
+    sub_y = 1920 - studio["captions"]["margin"]
+    assert k["y"] < sub_y < k["y"] + k["height"] * 1920
+    studio.raw["signature"]["enabled"] = False             # no kural reveal: the verse is subtitled as before
+    cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
+    assert any(a < kural.end_s and b > kural.start_s for _, a, b in cues)

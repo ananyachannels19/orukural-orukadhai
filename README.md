@@ -79,7 +79,7 @@ python studio.py render 301 --dry-run  # whole pipeline with placeholder cards a
 - **New people every story.** `data/characters.yaml` holds the world, the casting rules and a voice table; each script brings its own `cast` (2–3 people, mostly adults 22–35, one child only when the story needs one). `data/cast_log.yaml` remembers names, looks and voices so they don't repeat soon. Thatha and Kavin stay as the `kumbakonam` cast for the monthly kids' special (`kids_special`, `special: kids` in the lineup), and Thatha may cameo on a video call (`thatha_cameo: true`).
 - **Order and schedule.** `lineup` in config.yaml sets which kural comes next and the relationship it is about. `schedule` is for planning only: no description, caption or card names a posting day or time, and script-check and publish-pack refuse one.
 - **Credits.** Aim for 7 clips (~69 credits); `clip_from`/`clip_offset_s` reuse one clip for two cuts. `budget.per_reel_credits` (75) is enforced by script-check.
-- **Signature** (`orukural/signature.py`, `studio.py signature`): ~1 s badge flick with a bansuri phrase over the hook, the kural on a palm leaf from ~25 s, a 2 s logo ending. Added by assemble; no Flow credits.
+- **Signature** (`orukural/signature.py`, `studio.py signature`): no intro (the logo badge already covers Flow's mark); the kural reveal while it is said, as a slim see-through palm leaf in the subtitle zone (`slim_leaf`) or dimmed story with the verse written in (`clean_text`), with subtitles off meanwhile; a 2 s logo ending. Added by assemble; no Flow credits.
 - **Posting** (`studio.py publish-pack N`): the YouTube/Instagram package with the checklist (AI label on before Share, cover as the YouTube thumbnail before Publish).
 
 ```bash
