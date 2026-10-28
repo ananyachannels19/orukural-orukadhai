@@ -268,7 +268,7 @@ def _sound(script: EpisodeScript, shot: Shot) -> str:
     if lipsync.spoken_lines(script, shot):
         return ("Sound: only the spoken line(s) above and the natural sounds of the scene; no music, "
                 "no other voices.")
-    return ("Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, "
+    return ("Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, "
             "and no voice or speech is heard.")
 
 
