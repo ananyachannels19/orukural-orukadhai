@@ -69,7 +69,7 @@ The headlight reaches Saro before he has finished the call. *Camera:* Same as sh
 **Shot 3** · 8–12 s · story · vignesh, saro · saro_gate · props: auto_key, bike  
 At the gate Vignesh holds out his hand for the auto key and tells Saro to stay with his father. *Camera:* Medium two-shot from the street side, eye level.  
 🖼 `At the green gate at night, Vignesh stands on the right beside his motorbike, its headlight still on behind him, holding out his open palm towards Saro; Saro on the left clutches the auto key, looking at him.`  
-🎞 `Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his hand.`
+🎞 `Saro lets go of the key; Vignesh closes his hand around it and speaks to Saro, calm and quick; Saro nods. Exactly one key in the whole shot, in Vignesh's hand once Saro lets go; nobody holds anything else.`
 
 **Shot 4** · 12–16 s · story · vignesh, saro, appa · saro_gate · props: auto  
 Inside the moving auto at night: Vignesh drives; in the back Saro holds his father, who leans on him, eyes half-closed, breathing hard, a hand on his chest. *Camera:* Medium shot from just in front of the auto, looking in at all three, eye level.  
@@ -89,7 +89,7 @@ On the bench Saro says he never even called him; Vignesh answers with a question
 **Shot 7** · 26–31.26 s · kural · saro, vignesh · hospital_corridor · props: tea_cups  
 Dawn at the corridor windows: Vignesh hands Saro a cup of tea; the worst is over. *Camera:* Medium wide shot from inside the corridor, the windows bright behind them.  
 🖼 `Saro and Vignesh standing at the tall corridor windows in pale-orange first light, Saro on the left, Vignesh on the right holding out a small paper cup of tea to him.`  
-🎞 `Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks.`
+🎞 `Saro and Vignesh stand at the corridor window at dawn, each already holding his own small steel tumbler from the first frame; they sip slowly and look out at the sunrise, shoulders relaxing; faint steam rises. Exactly two steel tumblers throughout: no cup is passed, added or removed. Nobody speaks; mouths stay closed except to sip.`
 
 **Shot 8** · 31.26–34.8 s · lesson · saro, vignesh · hospital_front  
 The two walk down the hospital steps in the sunrise, Vignesh's arm around Saro's shoulder. *Camera:* Wide shot from the bottom of the steps, low angle.  
@@ -120,7 +120,7 @@ Over it: narrator: சரோ இன்னும் பேசி முடிக�
 **Shot 3** · 8–12 s · 4 s clip · 7 credits
 
 ```
-Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his hand. Camera: Medium two-shot from the street side, eye level. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Vignesh says this line aloud in a calm, friendly, low and steady 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "சாவியக் குடு. நீ அப்பா கூட இரு." Meanwhile Saro keeps their mouth closed and listens. From 3 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+Saro lets go of the key; Vignesh closes his hand around it and speaks to Saro, calm and quick; Saro nods. Exactly one key in the whole shot, in Vignesh's hand once Saro lets go; nobody holds anything else. Camera: Medium two-shot from the street side, eye level. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Vignesh says this line aloud in a calm, friendly, low and steady 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "சாவியக் குடு. நீ அப்பா கூட இரு." Meanwhile Saro keeps their mouth closed and listens. From 3 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
 **Shot 4** · 12–16 s · 4 s clip · 7 credits
@@ -144,7 +144,7 @@ Saro speaks first, voice cracking; then Vignesh answers with a small smile and a
 **Shot 7** · 26–31.26 s · 8 s clip · 12 credits
 
 ```
-Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 5 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+Saro and Vignesh stand at the corridor window at dawn, each already holding his own small steel tumbler from the first frame; they sip slowly and look out at the sunrise, shoulders relaxing; faint steam rises. Exactly two steel tumblers throughout: no cup is passed, added or removed. Nobody speaks; mouths stay closed except to sip. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 5 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
 **Shot 8** · 31.26–34.8 s · 4 s clip · 7 credits

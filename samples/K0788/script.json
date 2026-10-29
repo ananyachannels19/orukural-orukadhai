@@ -268,7 +268,7 @@
     "action_en": "At the gate Vignesh holds out his hand for the auto key and tells Saro to stay with his father.",
     "camera_en": "Medium two-shot from the street side, eye level.",
     "image_prompt_en": "At the green gate at night, Vignesh stands on the right beside his motorbike, its headlight still on behind him, holding out his open palm towards Saro; Saro on the left clutches the auto key, looking at him.",
-    "motion_prompt_en": "Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his hand.",
+    "motion_prompt_en": "Saro lets go of the key; Vignesh closes his hand around it and speaks to Saro, calm and quick; Saro nods. Exactly one key in the whole shot, in Vignesh's hand once Saro lets go; nobody holds anything else.",
     "motion_priority": 2,
     "clip_from": null,
     "clip_offset_s": 0.0
@@ -348,7 +348,7 @@
     "action_en": "Dawn at the corridor windows: Vignesh hands Saro a cup of tea; the worst is over.",
     "camera_en": "Medium wide shot from inside the corridor, the windows bright behind them.",
     "image_prompt_en": "Saro and Vignesh standing at the tall corridor windows in pale-orange first light, Saro on the left, Vignesh on the right holding out a small paper cup of tea to him.",
-    "motion_prompt_en": "Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks.",
+    "motion_prompt_en": "Saro and Vignesh stand at the corridor window at dawn, each already holding his own small steel tumbler from the first frame; they sip slowly and look out at the sunrise, shoulders relaxing; faint steam rises. Exactly two steel tumblers throughout: no cup is passed, added or removed. Nobody speaks; mouths stay closed except to sip.",
     "motion_priority": 4,
     "clip_from": null,
     "clip_offset_s": 0.0
