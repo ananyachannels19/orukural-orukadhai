@@ -335,8 +335,31 @@ def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
     assert all(a < b <= nxt for (_, a, b), (_, nxt, _) in zip(cues, cues[1:]))
     from PIL import Image, ImageDraw
     d, font = ImageDraw.Draw(Image.new("RGBA", (1, 1))), captions._font(studio)
-    assert all(d.textlength(row, font=font) <= captions.WIDTH for row, _, _ in cues)
+    shrink = studio["captions"]["shrink_to_fit"]
+    assert all(d.textlength(row, font=font) <= captions.WIDTH * shrink for row, _, _ in cues)
     assert sum(l.startswith("Style:") for l in ass.splitlines()) == 1
+
+
+def test_captions_one_card_and_after_the_verse(studio, tmp_path):
+    """A short line a little too wide stays on one (smaller) card; once the verse leaves at the cut, the rest
+    of the narrator's kural line is subtitled."""
+    from orukural import captions
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.3, "beat": g.beat}
+            for g in sc.segments]
+    total = sc.segments[-1].end_s
+    hook = sc.segments[0].narration_ta
+    rows = [r for r, a, b in captions.cues(studio, sc, segs, total) if a < 3]
+    assert rows == [hook]
+    ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
+    assert any("{\\fs" in l and hook in l for l in ass.splitlines())
+    k = next(i for i, g in enumerate(sc.segments) if g.beat == "kural")
+    in_kural = lambda cs: [c for c in cs if segs[k]["start"] <= c[1] < segs[k]["end"]]
+    assert in_kural(captions.cues(studio, sc, segs, total)) == []      # verse on screen the whole line
+    segs[k]["kural_until"] = segs[k]["start"] + 6
+    after = in_kural(captions.cues(studio, sc, segs, total))
+    assert after and all(a >= segs[k]["kural_until"] for _, a, _ in after)
+    assert "நட்பு" in after[-1][0]
 
 
 def test_clip_prompts_say_who_talks(studio):

@@ -20,7 +20,7 @@ The channel is built to earn: viewers must stop scrolling in the first 3 seconds
 ## Language
 
 - Narration: simple, warm written Tamil a 12-year-old in Tamil Nadu, Sri Lanka or Singapore understands.
-- Dialogue: natural spoken Tamil, as these people actually talk to each other. English loanwords only where they would really use them (bank, office, phone, ICU).
+- Dialogue: natural spoken Tamil, as these people actually talk to each other. English loanwords only where they would really use them (bank, office, phone, ICU), and always written in Tamil script (பேங்க், ஆபீஸ், போன், பைக், பெர்மிஷன்), never in English letters: the subtitles show the words as written. The one English on screen is "Save this" on the last card.
 - Pace: about 11 Tamil letters per second of speech. Do not cram; silence and reaction shots are allowed. Each segment's text must fit its time.
 - The meaning you give (`meaning_ta`, `meaning_en`) must be your own plain explanation of the verse. Do not reproduce or paraphrase closely any published commentary (Parimelazhagar, Mu. Varadarasanar, Solomon Pappaiah, Kalaignar, Pope, etc.).
 

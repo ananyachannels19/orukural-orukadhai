@@ -31,6 +31,28 @@ def duration(path: Path) -> float:
     return float(json.loads(out)["format"]["duration"])
 
 
+def loudness(path: Path) -> dict:
+    """Integrated loudness (LUFS), true peak (dBTP), loudness range and threshold, from ffmpeg's loudnorm."""
+    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-vn", "-af",
+                          "loudnorm=print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
+    j = json.loads(err[err.rindex("{"):err.rindex("}") + 1])
+    return {"lufs": float(j["input_i"]), "true_peak": float(j["input_tp"]), "lra": float(j["input_lra"]),
+            "thresh": float(j["input_thresh"])}
+
+
+def normalize_loudness(path: Path, lufs: float = -14.0, true_peak: float = -1.0, kbps: int = 192) -> dict:
+    """Two-pass loudnorm of a finished video's sound, in place (the picture is copied). Returns the result."""
+    m = loudness(path)
+    tmp = path.with_name(path.stem + ".loud" + path.suffix)
+    run(["-i", str(path), "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af",
+         f"loudnorm=I={lufs}:TP={true_peak}:LRA=11:measured_I={m['lufs']}:measured_TP={m['true_peak']}"
+         f":measured_LRA={m['lra']}:measured_thresh={m['thresh']}:linear=true,aresample=48000,"
+         f"alimiter=limit={10 ** ((true_peak - 0.3) / 20):.4f}:level=disabled",
+         "-c:a", "aac", "-b:a", f"{kbps}k", "-ar", "48000", "-movflags", "+faststart", str(tmp)])
+    tmp.replace(path)
+    return loudness(path)
+
+
 def has_audio(path: Path) -> bool:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)],

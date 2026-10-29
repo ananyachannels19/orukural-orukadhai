@@ -165,6 +165,19 @@ def schedule_mentions(script: EpisodeScript) -> list[str]:
     return [f"{where}: {m.group(0)!r}" for where, text in texts.items() if (m := SCHEDULE_WORDS.search(text or ""))]
 
 
+LATIN = re.compile(r"[A-Za-z]+(?:[ '-][A-Za-z]+)*")
+
+
+def latin_words(script: EpisodeScript) -> list[str]:
+    """Spoken lines and cards with English letters (the subtitles show what is written); "Save this" may stay."""
+    out = []
+    for g in script.segments:
+        for kind, text in (("narration", g.narration_ta), ("on-screen text", g.on_screen_ta.replace("Save this", ""))):
+            text = re.sub(r"\[DRY RUN[^\]]*\]", "", text)  # the dry-run stub's placeholders
+            out += [f"{kind} at {g.start_s:g} s: {m.group(0)!r}" for m in LATIN.finditer(text)]
+    return out
+
+
 NEXT_KURAL = re.compile(r"அடுத்த\s*குறள்|next\s+kural", re.IGNORECASE)
 
 
@@ -268,6 +281,8 @@ def check(script: EpisodeScript, kural: dict, cfg: dict) -> tuple[list[str], lis
 
     for where in schedule_mentions(script):
         errors.append(f"names a posting day or time ({where}); never promise a schedule")
+    for where in latin_words(script):
+        errors.append(f"English letters in {where}; write loanwords in Tamil script (bike → பைக்)")
     for where in next_kural_mentions(script):
         errors.append(f"teases the next kural ({where}); episodes end on their own lesson")
     if script.cast:  # the per-episode cast format (3 a week plan)

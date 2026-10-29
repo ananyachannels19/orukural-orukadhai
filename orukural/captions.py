@@ -8,7 +8,11 @@ The text sits in the middle band: the bottom ~25% and the right edge are under Y
 Instagram's buttons and caption.
 
 While the kural is on screen (the signature's kural reveal) there are no subtitles: the verse shown is
-the subtitle for the narrator's line, and the slim leaf sits in the subtitle zone, so they never overlap."""
+the subtitle for the narrator's line, and the slim leaf sits in the subtitle zone, so they never overlap.
+When the verse leaves at a cut before the narrator finishes (`kural_until`), the rest of the line is subtitled.
+
+A line a little too wide for one row (up to `captions.shrink_to_fit`, e.g. 1.25x) stays on one card, a
+little smaller, rather than splitting a short shout like the hook in two."""
 from __future__ import annotations
 
 import re
@@ -106,14 +110,23 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
     from PIL import Image, ImageDraw
     font, probe, out = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1))), []
     kural_on_screen = bool((s.raw.get("signature") or {}).get("enabled"))
+    shrink = s["captions"].get("shrink_to_fit", 1.0)
     for i, (seg, t) in enumerate(zip(script.segments, segs)):
-        if not seg.narration_ta.strip() or (kural_on_screen and seg.beat == "kural"):
+        under_verse = kural_on_screen and seg.beat == "kural"
+        if not seg.narration_ta.strip() or (under_verse and not t.get("kural_until")):
             continue
         end = total if i == len(segs) - 1 else t["end"]
-        rows = _wrap(probe, seg.narration_ta.strip(), font, WIDTH)
+        text = seg.narration_ta.strip()
+        rows = _wrap(probe, text, font, WIDTH)
+        if len(rows) == 2 and probe.textlength(text, font=font) <= WIDTH * shrink:
+            rows = [text]
         times = _row_times(rows, t["voice_seconds"], Path(t["path"]) if t.get("path") else None)
         for k, row in enumerate(rows):
             a, b = t["start"] + times[k], t["start"] + times[k + 1]
+            if under_verse:  # only the rows still being said once the verse has left
+                if b < t["kural_until"] + 0.5:
+                    continue
+                a = max(a, t["kural_until"])
             # the last row stays up for a short tail after the words, never into the next line
             out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b))
     return out
@@ -122,8 +135,12 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
 def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path) -> Path:
     c = s["captions"]
     lines = [HEADER.format(font=c["font"], size=c["size"], margin=c["margin"])]
+    from PIL import Image, ImageDraw
+    font, probe = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     for row, a, b in cues(s, script, segs, total):
-        lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},Sub,,0,0,0,,{_text(row)}")
+        w = probe.textlength(row, font=font)
+        fs = f"{{\\fs{int(c['size'] * WIDTH / w)}}}" if w > WIDTH else ""  # a one-card line a little too wide
+        lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},Sub,,0,0,0,,{fs}{_text(row)}")
     out.write_text("\n".join(lines) + "\n", "utf-8")
     return out
 
@@ -188,9 +205,12 @@ def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
     c, font = s["captions"], _font(s)
     out_dir.mkdir(parents=True, exist_ok=True)
     line_h, stroke, out = int(c["size"] * 1.1), 5, []
+    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     for n, (row, a, b) in enumerate(cues(s, script, segs, total), 1):
         im = Image.new("RGBA", (1080, line_h + 2 * stroke), (0, 0, 0, 0))
-        ImageDraw.Draw(im).text((540, stroke), row, font=font, anchor="ma", fill=(255, 255, 255, 255),
+        w = probe.textlength(row, font=font)
+        f = font.font_variant(size=int(font.size * WIDTH / w)) if w > WIDTH else font  # one-card line, shrunk
+        ImageDraw.Draw(im).text((540, stroke), row, font=f, anchor="ma", fill=(255, 255, 255, 255),
                                 stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
         png = out_dir / f"sub{n:02d}.png"
         im.save(png)

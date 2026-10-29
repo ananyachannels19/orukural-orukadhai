@@ -112,7 +112,7 @@
   "hooks": [
    {
     "style": "tense_moment",
-    "on_screen_ta": "ராத்திரி 3 மணி. ஒரு call.",
+    "on_screen_ta": "ராத்திரி 3 மணி. ஒரு கால்.",
     "narration_ta": "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!"
    },
    {
@@ -135,14 +135,14 @@
     "speaker": "saro",
     "narration_ta": "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!",
     "delivery": "panicked, breathless, close to tears",
-    "on_screen_ta": "ராத்திரி 3 மணி. ஒரு call."
+    "on_screen_ta": "ராத்திரி 3 மணி. ஒரு கால்."
    },
    {
     "beat": "story",
     "start_s": 3.0,
     "end_s": 8.0,
     "speaker": "narrator",
-    "narration_ta": "சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு bike வெளிச்சம்.",
+    "narration_ta": "சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு பைக் வெளிச்சம்.",
     "delivery": "hushed, tense",
     "on_screen_ta": ""
    },
@@ -187,7 +187,7 @@
     "start_s": 22.0,
     "end_s": 26.0,
     "speaker": "vignesh",
-    "narration_ta": "லுங்கி நழுவுனா, கை permission கேட்டுட்டா பிடிக்குது?",
+    "narration_ta": "லுங்கி நழுவுனா, கை பெர்மிஷன் கேட்டுட்டா பிடிக்குது?",
     "delivery": "gently teasing, warm",
     "on_screen_ta": ""
    },
@@ -203,7 +203,7 @@
    {
     "beat": "lesson",
     "start_s": 35.0,
-    "end_s": 43.0,
+    "end_s": 38.5,
     "speaker": "narrator",
     "narration_ta": "உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.",
     "delivery": "warm, certain",
@@ -336,7 +336,7 @@
     "n": 7,
     "beat": "kural",
     "start_s": 26.0,
-    "end_s": 34.0,
+    "end_s": 31.26,
     "characters": [
      "saro",
      "vignesh"
@@ -356,8 +356,8 @@
    {
     "n": 8,
     "beat": "lesson",
-    "start_s": 34.0,
-    "end_s": 38.0,
+    "start_s": 31.26,
+    "end_s": 34.8,
     "characters": [
      "saro",
      "vignesh"
@@ -375,8 +375,8 @@
    {
     "n": 9,
     "beat": "lesson",
-    "start_s": 38.0,
-    "end_s": 43.0,
+    "start_s": 34.8,
+    "end_s": 38.5,
     "characters": [
      "saro"
     ],

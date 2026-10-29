@@ -150,11 +150,11 @@ def test_clip_reuse_and_credit_cap(studio, k788):
                     "episodes/K0788/refs/characters/vignesh.png"]
     readme = (ep / "flow" / "README.md").read_text("utf-8")   # every shot has its entry, reused ones too
     assert "## Shot 2 (3–8 s): no new generation" in readme and "Uses seconds 3–8 of shot 1's clip" in readme
-    assert "## Shot 9 (38–43 s): no new generation" in readme
+    assert "## Shot 9 (34.8–38.5 s): no new generation" in readme
     studio.raw["budget"]["per_reel_credits"] = 60
     assert visuals.credit_check(studio, sc) and "64 Flow credits" in visuals.credit_check(studio, sc)[0]
     raw = copy.deepcopy(k788)
-    raw["shots"][8]["clip_offset_s"] = 4.0                           # 4 + 5 s runs past the 8 s clip
+    raw["shots"][8]["clip_offset_s"] = 4.5                           # 4.5 + 3.7 s runs past the 8 s clip
     assert any("past its 8 s end" in e for e in _checks(studio, raw)[0])
 
 
@@ -261,7 +261,7 @@ def test_signature_parts_and_previews(studio):
     plan = signature.plan(studio, store.get(788), segs, 43.0, studio.root / "r")
     assert plan["kural"]["style"] == "clean_text" and plan["kural"]["start"] == 25.4   # the chosen style
     assert "badge" not in plan and "flute_hook" not in plan
-    assert len(plan["kural"]["layers"]) == 2 and plan["kural"]["dim"] == 0.45
+    assert len(plan["kural"]["layers"]) == 2 and plan["kural"]["dim"] == 0.75
     assert any("colorchannelmixer" in c for c in signature.video_graph(plan, "w", 3)[1])
     # the verse block is centred on screen
     boxes = [Image.open(p).getbbox() for p in plan["kural"]["layers"]]

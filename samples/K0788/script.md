@@ -1,5 +1,5 @@
 # குறள் #788 · 3 மணிக்கு வந்த நண்பன்
-*The friend at the gate at 3 am* · அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால் · runtime 43 s
+*The friend at the gate at 3 am* · அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால் · runtime 38 s
 
 > உடுக்கை இழந்தவன் கைபோல ஆங்கே  
 > இடுக்கண் களைவதாம் நட்பு.
@@ -18,7 +18,7 @@
 
 ## Hooks
 
-1. **ராத்திரி 3 மணி. ஒரு call.** (tense_moment) ← used  
+1. **ராத்திரி 3 மணி. ஒரு கால்.** (tense_moment) ← used  
    🎙 விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!
 2. **உங்களுக்கு யார் வருவாங்க?** (question)  
    🎙 ராத்திரி மூணு மணிக்கு கூப்பிட்டா, யார் வருவாங்க?
@@ -29,15 +29,15 @@
 
 | Time | Beat | Who | Narration | On screen |
 |---|---|---|---|---|
-| 0–3 s | hook | saro (panicked, breathless, close to tears) | விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா! | ராத்திரி 3 மணி. ஒரு call. |
-| 3–8 s | story | narrator (hushed, tense) | சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு bike வெளிச்சம். |  |
+| 0–3 s | hook | saro (panicked, breathless, close to tears) | விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா! | ராத்திரி 3 மணி. ஒரு கால். |
+| 3–8 s | story | narrator (hushed, tense) | சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு பைக் வெளிச்சம். |  |
 | 8–11 s | story | vignesh (calm, firm and quick) | சாவியக் குடு. நீ அப்பா கூட இரு. |  |
 | 11–16 s | story | narrator (urgent, low) | விக்னேஷ் ஆட்டோ ஓட்டினான். பின்னால, அப்பாவ தாங்கிக்கிட்டு சரோ. | கூப்பிடும் முன்னே வருபவன் யார்? |
 | 16–19 s | story | narrator (quiet, warm) | சரோ கேக்கும் முன்னே, பணமும் கட்டிட்டான். |  |
 | 19–22 s | story | saro (tired, tearful, grateful) | நான் உன்னக் கூப்பிடவே இல்லையேடா... |  |
-| 22–26 s | story | vignesh (gently teasing, warm) | லுங்கி நழுவுனா, கை permission கேட்டுட்டா பிடிக்குது? |  |
+| 22–26 s | story | vignesh (gently teasing, warm) | லுங்கி நழுவுனா, கை பெர்மிஷன் கேட்டுட்டா பிடிக்குது? |  |
 | 26–35 s | kural | narrator (slow, warm, reverent) | உடுக்கை இழந்தவன் கைபோல ஆங்கே இடுக்கண் களைவதாம் நட்பு. ஆடை நழுவினா, கை கேக்காமலே பிடிக்கும். அதுதான் நட்பு. |  |
-| 35–43 s | lesson | narrator (warm, certain) | உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். | கூப்பிடாமலே வருபவன் தான் நண்பன்<br>Save this |
+| 35–38.5 s | lesson | narrator (warm, certain) | உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். | கூப்பிடாமலே வருபவன் தான் நண்பன்<br>Save this |
 
 **Lesson:** கூப்பிடாமலே வருபவன் தான் நண்பன்  
 **Tag question:** உங்க 3 AM நண்பனை tag பண்ணுங்க  
@@ -86,17 +86,17 @@ On the bench Saro says he never even called him; Vignesh answers with a question
 🖼 `Saro and Vignesh side by side on the steel bench at night, Saro on the left, elbows on knees, tired, turning to Vignesh; Vignesh on the right, sitting back, looking at him.`  
 🎞 `Saro speaks first, voice cracking; then Vignesh answers with a small smile and a light shrug, miming a hand catching something; Saro laughs once through tired eyes.`
 
-**Shot 7** · 26–34 s · kural · saro, vignesh · hospital_corridor · props: tea_cups  
+**Shot 7** · 26–31.26 s · kural · saro, vignesh · hospital_corridor · props: tea_cups  
 Dawn at the corridor windows: Vignesh hands Saro a cup of tea; the worst is over. *Camera:* Medium wide shot from inside the corridor, the windows bright behind them.  
 🖼 `Saro and Vignesh standing at the tall corridor windows in pale-orange first light, Saro on the left, Vignesh on the right holding out a small paper cup of tea to him.`  
 🎞 `Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks.`
 
-**Shot 8** · 34–38 s · lesson · saro, vignesh · hospital_front  
+**Shot 8** · 31.26–34.8 s · lesson · saro, vignesh · hospital_front  
 The two walk down the hospital steps in the sunrise, Vignesh's arm around Saro's shoulder. *Camera:* Wide shot from the bottom of the steps, low angle.  
 🖼 `Saro and Vignesh walking down the wide stone steps towards the camera at sunrise, Vignesh's arm around Saro's shoulder, Saro tired but smiling.`  
 🎞 `They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them.`
 
-**Shot 9** · 38–43 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 3 s  
+**Shot 9** · 34.8–38.5 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 3 s  
 Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call. *Camera:* Same as shot 1.  
 🖼 `Second cut from shot 1's clip (see shot 1).`  
 🎞 `Second cut from shot 1's clip (see shot 1).`
@@ -115,7 +115,7 @@ Saro speaks urgently into the phone. After he finishes, a bright white motorbike
 
 **Shot 2** · 3–8 s · no new generation · 0 credits  
 Uses seconds 3–8 of shot 1's clip. On screen: The headlight reaches Saro before he has finished the call.  
-Over it: narrator: சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு bike வெளிச்சம்.
+Over it: narrator: சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு பைக் வெளிச்சம்.
 
 **Shot 3** · 8–12 s · 4 s clip · 7 credits
 
@@ -138,23 +138,23 @@ Vignesh slides the card under the grille, nods, and takes back a printed slip. C
 **Shot 6** · 19–26 s · 8 s clip · 12 credits
 
 ```
-Saro speaks first, voice cracking; then Vignesh answers with a small smile and a light shrug, miming a hand catching something; Saro laughs once through tired eyes. Camera: Static medium two-shot, eye level, both faces in view. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Saro says this line aloud in a husky, breathless 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "நான் உன்னக் கூப்பிடவே இல்லையேடா..." Meanwhile Vignesh keeps their mouth closed and listens. From about 3.0 s, Vignesh says this line aloud in a calm, friendly, low and steady 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "லுங்கி நழுவுனா, கை permission கேட்டுட்டா பிடிக்குது?" Meanwhile Saro keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+Saro speaks first, voice cracking; then Vignesh answers with a small smile and a light shrug, miming a hand catching something; Saro laughs once through tired eyes. Camera: Static medium two-shot, eye level, both faces in view. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Saro says this line aloud in a husky, breathless 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "நான் உன்னக் கூப்பிடவே இல்லையேடா..." Meanwhile Vignesh keeps their mouth closed and listens. From about 3.0 s, Vignesh says this line aloud in a calm, friendly, low and steady 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "லுங்கி நழுவுனா, கை பெர்மிஷன் கேட்டுட்டா பிடிக்குது?" Meanwhile Saro keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 7** · 26–34 s · 8 s clip · 12 credits
+**Shot 7** · 26–31.26 s · 8 s clip · 12 credits
 
 ```
-Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 5 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
-**Shot 8** · 34–38 s · 4 s clip · 7 credits
+**Shot 8** · 31.26–34.8 s · 4 s clip · 7 credits
 
 ```
-They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 1 s nobody on screen talks: every mouth stays closed. From 1 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
-**Shot 9** · 38–43 s · no new generation · 0 credits  
-Uses seconds 3–8 of shot 1's clip. On screen: Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call.  
+**Shot 9** · 34.8–38.5 s · no new generation · 0 credits  
+Uses seconds 3–6.7 of shot 1's clip. On screen: Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call.  
 Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.
 
 ## YouTube

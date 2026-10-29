@@ -4,7 +4,7 @@ There is no intro: the hook opens the film, and the logo badge already sits in i
   kural reveal  while the narrator says the kural (~25 s), in one of two styles (signature.kural.style):
                 slim_leaf  a thin, slightly see-through palm-leaf strip in the lower third (at most ~18% of
                            the frame's height, ~88% of its width), the verse in two lines; the story keeps playing
-                clean_text the story dims to ~45% and the verse writes in line by line, white with a thin
+                clean_text the story dims (to `dim`, 0.75: faces still read) and the verse writes in line by line, white with a thin
                            gold underline, centred, a small குறள் N label above
   logo ending   ~2 s after the last line: the channel logo on the badge's brown, with a closing flute note.
 
@@ -270,7 +270,9 @@ def plan(s: Settings, kural: dict | None, segs: list[dict], total: float, work: 
            "ending_seconds": (c.get("ending") or {}).get("seconds", 2.0),
            "flute_db": (c.get("flute") or {}).get("volume_db", -14), "total": total}
     if kural and kural_segs:
-        out["kural"] = kural_layers(s, kural, kural_segs[0]["start"], kural_segs[-1]["end"], work)
+        # the verse leaves with the picture: at the cut out of the last kural shot, when assemble gives it
+        end = kural_segs[-1].get("kural_until") or kural_segs[-1]["end"]
+        out["kural"] = kural_layers(s, kural, kural_segs[0]["start"], end, work)
     return out
 
 
@@ -282,7 +284,7 @@ def _kural_graph(o: dict, last: str, k: int) -> tuple[list[str], list[str], str,
         # dim the story while the verse is on screen, then write the lines in one after the other
         d = o["dim"]
         chain.append(f"[{last}]split[kb0][kb1];[kb1]colorchannelmixer=rr={d}:gg={d}:bb={d}[kdim];"
-                     f"[kb0][kdim]overlay=0:0:enable='between(t,{a + 0.25:.3f},{o['end'] - 0.25:.3f})'[kd]")
+                     f"[kb0][kdim]overlay=0:0:enable='between(t,{a + 0.25:.3f},{o['end']:.3f})'[kd]")
         last = "kd"
         for j, layer in enumerate(o["layers"]):
             ins += ["-loop", "1", "-t", f"{n + 0.1:.3f}", "-i", str(layer)]

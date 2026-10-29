@@ -212,6 +212,8 @@ assembly:
   crf: 18
   preset: medium
   audio_kbps: 192
+  # The finished film's sound (YouTube and Instagram play at about -14 LUFS): two-pass loudnorm at the end.
+  loudness: {lufs: -14, true_peak: -1}
   # `studio.py assemble 301 --final`: the upload master, slower and nearer lossless -> render/<id>_final.mp4
   final: {crf: 16, preset: slow, audio_kbps: 256}
   # Flow's sparkle watermark sits about here on every 1080x1920 frame; the badge covers it.
@@ -229,7 +231,7 @@ signature:
   # The kural while the narrator says it. style: clean_text (chosen 28 Oct: the story dims to `dim`, the verse
   # writes in line by line, white, centred on screen) or slim_leaf (a thin see-through palm-leaf strip in the
   # subtitle zone, y ~1230-1540, the story keeps playing). Subtitles are off while the kural is on screen.
-  kural: {style: clean_text, dim: 0.45, text_y: center, width: 0.88, height: 0.16, opacity: 0.88, y: 1230}
+  kural: {style: clean_text, dim: 0.75, text_y: center, width: 0.88, height: 0.16, opacity: 0.88, y: 1230}
   flute: {volume_db: -14, sa: 293.66}      # the closing bansuri phrase under the logo ending
   ending: {image: assets/brand/logo_badge.png, seconds: 2.0}
 
@@ -239,6 +241,7 @@ captions:
   font: Noto Sans Tamil ExtraBold
   size: 52
   margin: 400               # px above the bottom edge: clear of the Shorts/Reels buttons and caption
+  shrink_to_fit: 1.25       # a line up to this much too wide stays on one card, a little smaller
 
 budget:
   currency: USD

@@ -126,7 +126,9 @@ def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music:
             filters.append("[narr][bed]amix=inputs=2:normalize=0[mix]")
     else:
         filters.append("[narr]anull[mix]")
-    filters.append(f"[mix]loudnorm=I=-14:TP=-1.5:LRA=11,atrim=0:{total:.3f}[out]")
+    loud = s["assembly"].get("loudness") or {}
+    filters.append(f"[mix]loudnorm=I={loud.get('lufs', -14)}:TP={loud.get('true_peak', -1) - 0.5}:LRA=11,"
+                   f"atrim=0:{total:.3f}[out]")
     media.run([*args, "-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "aac", "-b:a", f"{s['assembly'].get('audio_kbps', 192)}k",
                "-ar", "48000", str(out)])
 
@@ -237,6 +239,12 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     audio = rdir / "audio.m4a"
     _mix_audio(s, ep_dir, segs, total, music, audio, fx)
 
+    # the verse is on screen until the cut out of the last kural shot; the rest of the line gets subtitles
+    cut = next((r["end"] for r in reversed(shot_rows) if r["beat"] == "kural"), None)
+    for g in segs:
+        if g["beat"] == "kural" and cut is not None and g["start"] < cut < g["end"] - 0.3:
+            g["kural_until"] = cut
+
     final = rdir / f"{episode_id}_{s['assembly'].get('output_name', 'draft')}.mp4"
     inputs = ["-i", str(video_only)]
     count = 1  # ffmpeg inputs so far
@@ -284,12 +292,16 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
                "-c:v", "libx264", "-preset", s["assembly"].get("preset", "medium"), "-crf", str(s["assembly"]["crf"]),
                "-pix_fmt", "yuv420p", *acodec,
                "-t", f"{length:.3f}", "-movflags", "+faststart", str(final)])
+    # the flute ending is mixed in after the first loudnorm: measure the finished film and correct it
+    loud = s["assembly"].get("loudness") or {}
+    measured = media.normalize_loudness(final, loud.get("lufs", -14), loud.get("true_peak", -1),
+                                        s["assembly"].get("audio_kbps", 192))
 
     lo, hi = s["episode"]["target_seconds"]
     timeline = {
         "episode_id": episode_id, "dry_run": voice.get("dry_run") or visuals.get("dry_run"),
         "total_seconds": round(length, 3), "story_seconds": round(total, 3), "within_target": lo <= total <= hi + 1,
-        "signature": bool(sig),
+        "signature": bool(sig), "loudness": measured,
         "music": music.name if music else None, "segments": segs, "shots": shot_rows,
         "output": final.name,
     }
