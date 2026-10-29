@@ -45,12 +45,6 @@ class KuralStore:
         """Next `count` planned kurals in production order."""
         return [k for k in self.sequence(lineup) if k["status"] == "planned"][:count]
 
-    def after(self, kural: dict, lineup: list[dict]) -> dict | None:
-        """The kural that follows this one in production order (for the 'next kural' tease)."""
-        seq = self.sequence(lineup)
-        idx = next(i for i, k in enumerate(seq) if k["number"] == kural["number"])
-        return seq[idx + 1] if idx + 1 < len(seq) else None
-
 
 def relationship(lineup: list[dict], themes: dict, kural: dict) -> str:
     """What the story is about between its people: the lineup's tag, else the adhikaram's default."""

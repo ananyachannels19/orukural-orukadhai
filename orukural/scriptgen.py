@@ -63,7 +63,7 @@ def recent_casts(s: Settings, exclude: str) -> list[dict]:
                                                for c in e.get("characters") or []]} for e in log]
 
 
-def user_prompt(s: Settings, kural: dict, nxt: dict | None, recent: list[dict],
+def user_prompt(s: Settings, kural: dict, recent: list[dict],
                 casts: list[dict] | None = None) -> str:
     adh = kural["adhikaram"]
     themes = yaml.safe_load((s.root / "data" / "themes.yaml").read_text("utf-8"))
@@ -88,9 +88,6 @@ def user_prompt(s: Settings, kural: dict, nxt: dict | None, recent: list[dict],
     lines += [
         f"Fixed hashtags: {' '.join(s['script']['fixed_hashtags'])}",
     ]
-    if nxt:
-        lines += ["", f"Next episode (for the tease, do not explain it): kural #{nxt['number']}, "
-                      f"theme {nxt['theme']}:", verse_text(nxt)]
     if recent:
         lines += ["", "Recent episodes (do not repeat their premise, hook or lesson wording):",
                   yaml.safe_dump(recent, allow_unicode=True, sort_keys=False)]
@@ -150,12 +147,12 @@ def dry_run_script(kural: dict) -> dict:
     v = kural["verse"]
     n = kural["number"]
     beats = [("hook", 0, 3, "a"), ("story", 3, 12, "narrator"), ("story", 12, 25, "b"), ("kural", 25, 35, "narrator"),
-             ("lesson", 35, 41, "narrator"), ("tease", 41, 43, "narrator")]
+             ("lesson", 35, 43, "narrator")]
     say = {"hook": "[DRY RUN] கேள்வி?", "story": "[DRY RUN] கதை.", "kural": f"{v['line1']} {v['line2']}",
-           "lesson": "[DRY RUN] பாடம்.", "tease": "[DRY RUN] அடுத்த குறள்."}
-    screen = {12: "[DRY RUN] பாடம் வருது", 41: "[DRY RUN] பாடம்\nSave this"}
+           "lesson": "[DRY RUN] பாடம்."}
+    screen = {12: "[DRY RUN] பாடம் வருது", 35: "[DRY RUN] பாடம்\nSave this"}
     shots = [(1, "hook", 0, 3), (2, "story", 3, 11), (3, "story", 11, 19), (4, "story", 19, 25),
-             (5, "kural", 25, 33), (6, "lesson", 33, 41), (7, "tease", 41, 43)]
+             (5, "kural", 25, 33), (6, "lesson", 33, 41), (7, "lesson", 41, 43)]
     member = lambda cid, gender, voice: {"id": cid, "name_ta": f"[DRY RUN {cid}]", "age": 28,  # noqa: E731
                                          "job": "clerk", "gender": gender, "look_en": "placeholder",
                                          "outfit_en": "placeholder", "voice": voice}
@@ -174,8 +171,8 @@ def dry_run_script(kural: dict) -> dict:
         shots=[{"n": i, "beat": b, "start_s": a, "end_s": e, "characters": ["a", "b"],
                 "location": "street", "action_en": "placeholder", "camera_en": "medium shot",
                 "image_prompt_en": "placeholder", "motion_prompt_en": "placeholder",
-                **({"clip_from": 1} if b == "tease" else {})} for i, b, a, e in shots],
-        lesson_ta="[DRY RUN]", tease_ta="[DRY RUN]", tag_question_ta="[DRY RUN] tag பண்ணுங்க",
+                **({"clip_from": 1} if i == len(shots) else {})} for i, b, a, e in shots],
+        lesson_ta="[DRY RUN]", tag_question_ta="[DRY RUN] tag பண்ணுங்க",
         loop_note_en="dry run",
         youtube={"title": f"குறள் {n} | [DRY RUN]", "description_intro_ta": "[DRY RUN]",
                  "tags": ["thirukkural"], "pinned_comment_ta": "[DRY RUN]"},
@@ -201,9 +198,8 @@ def write_outputs(s: Settings, kural: dict, script: dict, meta: dict) -> tuple[l
 
 def generate(s: Settings, store: KuralStore, ref: int | str, force: bool = False) -> dict:
     kural = store.get(ref)
-    nxt = store.after(kural, s["lineup"])
     system = system_prompt(s)
-    user = user_prompt(s, kural, nxt, recent_episodes(s, kural["id"]), recent_casts(s, kural["id"]))
+    user = user_prompt(s, kural, recent_episodes(s, kural["id"]), recent_casts(s, kural["id"]))
     d = episode_dir(s, kural)
     d.mkdir(parents=True, exist_ok=True)
     (d / "script_prompt.md").write_text(f"# System\n\n{system}\n\n# User\n\n{user}\n", "utf-8")
@@ -327,7 +323,7 @@ def render_markdown(s: Settings, kural: dict, sc: EpisodeScript, errors: list[st
     for seg in sc.segments:
         out.append(f"| {seg.start_s:g}–{seg.end_s:g} s | {seg.beat} | {seg.speaker}{f' ({seg.delivery})' if seg.delivery else ''} | "
                    f"{seg.narration_ta} | {(seg.on_screen_ta or '').replace(chr(10), '<br>')} |")
-    out += ["", f"**Lesson:** {sc.lesson_ta}  ", f"**Tease:** {sc.tease_ta}  "]
+    out += ["", f"**Lesson:** {sc.lesson_ta}  "]
     if sc.tag_question_ta:
         out.append(f"**Tag question:** {sc.tag_question_ta}  ")
     out += [f"**Loop:** {sc.loop_note_en}",

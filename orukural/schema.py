@@ -6,9 +6,15 @@ import re
 import unicodedata
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
-Beat = Literal["hook", "story", "kural", "lesson", "tease"]
+# No "next kural" tease: the lesson beat ends the episode with its card and loops to the hook.
+Beat = Literal["hook", "story", "kural", "lesson"]
+
+
+def _old_beat(v):
+    """Scripts written before the tease was dropped: their last beat was "tease"; it is now part of the lesson."""
+    return "lesson" if v == "tease" else v
 
 
 class Hook(BaseModel):
@@ -19,6 +25,7 @@ class Hook(BaseModel):
 
 class Segment(BaseModel):
     beat: Beat
+    _beat = field_validator("beat", mode="before")(_old_beat)
     start_s: float
     end_s: float
     speaker: str = Field(description="'narrator', or the id of a character in the episode's cast")
@@ -76,6 +83,7 @@ class Continuity(BaseModel):
 class Shot(BaseModel):
     n: int
     beat: Beat
+    _beat = field_validator("beat", mode="before")(_old_beat)
     start_s: float
     end_s: float
     characters: list[str] = Field(description="Character ids from the episode's cast")
@@ -122,7 +130,6 @@ class EpisodeScript(BaseModel):
     segments: list[Segment]
     shots: list[Shot]
     lesson_ta: str = Field(description="One shareable lesson line, at most 12 words")
-    tease_ta: str = Field(description="One line teasing the next kural without naming its answer")
     tag_question_ta: str = Field(default="", description="One question asking viewers to tag a friend, partner or "
                                  "sibling, used in the caption, pinned comment and last card")
     loop_note_en: str = Field(description="How the last frame and line flow back into the first")
@@ -153,9 +160,19 @@ def schedule_mentions(script: EpisodeScript) -> list[str]:
     """Text viewers read that names a posting day or time; we never promise one."""
     texts = {"youtube title": script.youtube.title, "description": script.youtube.description_intro_ta,
              "pinned comment": script.youtube.pinned_comment_ta, "instagram caption": script.instagram.caption_ta,
-             "tease": script.tease_ta, "tag question": script.tag_question_ta}
+             "tag question": script.tag_question_ta}
     texts.update({f"on-screen text at {g.start_s:g} s": g.on_screen_ta for g in script.segments})
     return [f"{where}: {m.group(0)!r}" for where, text in texts.items() if (m := SCHEDULE_WORDS.search(text or ""))]
+
+
+NEXT_KURAL = re.compile(r"அடுத்த\s*குறள்|next\s+kural", re.IGNORECASE)
+
+
+def next_kural_mentions(script: EpisodeScript) -> list[str]:
+    """Lines or cards that point to the next kural; we dropped that tease for good."""
+    texts = {f"{g.beat} at {g.start_s:g} s": g.narration_ta + "\n" + g.on_screen_ta for g in script.segments}
+    texts.update({"lesson": script.lesson_ta, "loop note": script.loop_note_en})
+    return [f"{where}: {m.group(0)!r}" for where, text in texts.items() if (m := NEXT_KURAL.search(text or ""))]
 
 
 def _norm(s: str) -> str:
@@ -192,7 +209,7 @@ def check(script: EpisodeScript, kural: dict, cfg: dict) -> tuple[list[str], lis
     total = segs[-1].end_s
     if not lo <= total <= hi:
         errors.append(f"runtime {total:.1f}s is outside {lo}–{hi}s")
-    order = ["hook", "story", "kural", "lesson", "tease"]
+    order = ["hook", "story", "kural", "lesson"]
     seen = [s.beat for s in segs]
     if seen != sorted(seen, key=order.index):
         errors.append(f"beats out of order: {seen}")
@@ -251,6 +268,8 @@ def check(script: EpisodeScript, kural: dict, cfg: dict) -> tuple[list[str], lis
 
     for where in schedule_mentions(script):
         errors.append(f"names a posting day or time ({where}); never promise a schedule")
+    for where in next_kural_mentions(script):
+        errors.append(f"teases the next kural ({where}); episodes end on their own lesson")
     if script.cast:  # the per-episode cast format (3 a week plan)
         if any(g.speaker != "narrator" for g in segs if g.beat == "kural"):
             errors.append("the narrator says the kural, over the lesson card")

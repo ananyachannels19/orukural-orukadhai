@@ -46,7 +46,7 @@ episode:
     hook: [0, 3]
     story: [3, 25]
     kural: [25, 35]
-    lesson_and_tease: [35, 45]
+    lesson: [35, 45]
   shots_per_episode: [6, 10]
   # Aim: 7 clips (four 8 s, three 4 s = 69 credits); a shot may reuse a clip for a second cut (clip_from).
   target_clips: 7

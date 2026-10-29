@@ -1,5 +1,5 @@
 """On-screen Tamil text, burned in at render: one subtitle per spoken line, every line in the same
-font, size, colour and position (hook, story, dialogue, kural and tease alike). A long line is shown one
+font, size, colour and position (hook, story, dialogue, kural and lesson alike). A long line is shown one
 row at a time, each row timed across the voice in proportion to its length, so the text never grows
 upwards into the picture and only one row is ever on screen. The words are what is heard, so reading and listening never disagree. Most Shorts are
 watched muted, so this is not optional.

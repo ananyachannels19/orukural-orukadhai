@@ -94,7 +94,7 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     t = assemble.assemble(studio, ep, sc, "K0301")
 
     # references: 2 characters + 4 places + 4 props, then 10 shot images
-    assert calls == {"image": 2 + 4 + 4 + 10, "video": 4, "tts": 9}
+    assert calls == {"image": 2 + 4 + 4 + 10, "video": 4, "tts": 8}
     assert (ep / "render" / "K0301_draft.mp4").exists() and t["story_seconds"] >= 35
     # the signature: the kural written in, centred, while it is said, and a 2 s logo ending after the story
     assert t["signature"] and abs(t["total_seconds"] - t["story_seconds"] - 2.0) < 0.01
@@ -104,7 +104,7 @@ def test_paid_render_path_with_fakes(studio, tmp_path, monkeypatch):
     # second run: everything comes from the cache, nothing is paid for again
     voice.generate(studio, ep, sc, "K0301")
     visuals.generate(studio, ep, sc, "K0301")
-    assert calls == {"image": 20, "video": 4, "tts": 9}
+    assert calls == {"image": 20, "video": 4, "tts": 8}
     # an ffmpeg without libass (Homebrew's) still gets the same subtitles, as overlaid images
     from orukural import captions
     monkeypatch.setattr(captions, "ffmpeg_has_ass", lambda: False)
@@ -248,7 +248,7 @@ def test_gemini_tts_free_voice(studio, tmp_path, monkeypatch):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     ep = studio.path("episodes") / "K0301"
     m = voice.generate(studio, ep, sc, "K0301")
-    assert len(sent) == 9 and m["cost_usd"] == 0
+    assert len(sent) == 8 and m["cost_usd"] == 0
     assert sent[0]["model"] == "gemini-3.8-flash-tts" and sent[0]["response_format"]["type"] == "audio"
     # seg 1 is Kavin, seg 2 the narrator, seg 4 Thatha
     # what the SDK really sends: a bare dict here lost the voice, so every line came out in one default voice

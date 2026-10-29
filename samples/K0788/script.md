@@ -37,11 +37,9 @@
 | 19–22 s | story | saro (tired, tearful, grateful) | நான் உன்னக் கூப்பிடவே இல்லையேடா... |  |
 | 22–26 s | story | vignesh (gently teasing, warm) | லுங்கி நழுவுனா, கை permission கேட்டுட்டா பிடிக்குது? |  |
 | 26–35 s | kural | narrator (slow, warm, reverent) | உடுக்கை இழந்தவன் கைபோல ஆங்கே இடுக்கண் களைவதாம் நட்பு. ஆடை நழுவினா, கை கேக்காமலே பிடிக்கும். அதுதான் நட்பு. |  |
-| 35–40 s | lesson | narrator (warm, certain) | உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். | கூப்பிடாமலே வருபவன் தான் நண்பன் |
-| 40–43 s | tease | narrator (playful) | அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா? | கூப்பிடாமலே வருபவன் தான் நண்பன்<br>Save this |
+| 35–43 s | lesson | narrator (warm, certain) | உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். | கூப்பிடாமலே வருபவன் தான் நண்பன்<br>Save this |
 
 **Lesson:** கூப்பிடாமலே வருபவன் தான் நண்பன்  
-**Tease:** அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?  
 **Tag question:** உங்க 3 AM நண்பனை tag பண்ணுங்க  
 **Loop:** The last shot is the same doorway moment as the opening (the headlight reaching Saro), so the replay's first line, Saro's call to Vignesh, follows straight on from it.
 
@@ -98,7 +96,7 @@ The two walk down the hospital steps in the sunrise, Vignesh's arm around Saro's
 🖼 `Saro and Vignesh walking down the wide stone steps towards the camera at sunrise, Vignesh's arm around Saro's shoulder, Saro tired but smiling.`  
 🎞 `They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them.`
 
-**Shot 9** · 38–43 s · tease · saro · saro_gate · props: phone · reuses shot 1's clip from 3 s  
+**Shot 9** · 38–43 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 3 s  
 Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call. *Camera:* Same as shot 1.  
 🖼 `Second cut from shot 1's clip (see shot 1).`  
 🎞 `Second cut from shot 1's clip (see shot 1).`
@@ -128,13 +126,13 @@ Vignesh speaks to Saro, calm and quick, palm out; Saro presses the key into his 
 **Shot 4** · 12–16 s · 4 s clip · 7 credits
 
 ```
-The auto moves down the empty night street; passing streetlights slide over their faces. The father breathes slowly and heavily, chest rising; Saro tightens his arm around him and rubs his shoulder; Vignesh glances back once, then forward. Nobody speaks. Camera: Medium shot from just in front of the auto, looking in at all three, eye level. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+The auto moves down the empty night street; passing streetlights slide over their faces. The father breathes slowly and heavily, chest rising; Saro tightens his arm around him and rubs his shoulder; Vignesh glances back once, then forward. Nobody speaks. Camera: Medium shot from just in front of the auto, looking in at all three, eye level. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
 **Shot 5** · 16–19 s · 4 s clip · 7 credits
 
 ```
-Vignesh slides the card under the grille, nods, and takes back a printed slip. Camera: Medium shot from beside the counter window. About 4 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+Vignesh slides the card under the grille, nods, and takes back a printed slip. Camera: Medium shot from beside the counter window. About 4 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
 **Shot 6** · 19–26 s · 8 s clip · 12 credits
@@ -146,18 +144,18 @@ Saro speaks first, voice cracking; then Vignesh answers with a small smile and a
 **Shot 7** · 26–34 s · 8 s clip · 12 credits
 
 ```
-Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+Saro takes the tea, they both lean on the window sill and look out at the sunrise, shoulders relaxing; steam rises from the cups. Nobody speaks. Camera: Medium wide shot from inside the corridor, the windows bright behind them. About 8 seconds, one continuous shot, no cuts. From 0 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
 **Shot 8** · 34–38 s · 4 s clip · 7 credits
 
 ```
-They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 1 s nobody on screen talks: every mouth stays closed. From 1 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, the puppy, birds, wind); no music, and no voice or speech is heard.
+They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 1 s nobody on screen talks: every mouth stays closed. From 1 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
 **Shot 9** · 38–43 s · no new generation · 0 credits  
 Uses seconds 3–8 of shot 1's clip. On screen: Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call.  
-Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். / narrator: அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?
+Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.
 
 ## YouTube
 

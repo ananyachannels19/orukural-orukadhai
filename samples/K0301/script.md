@@ -10,10 +10,6 @@
 **Logline:** Scolded by his PT sir in front of the class, Kavin says nothing, then comes home and takes it all out on the street puppy at Thatha's gate, until Thatha asks one quiet question.  
 **Why it's original:** A school scolding redirected onto a street puppy at Thatha's gate turns 'anger shown only where it can land' into a moment every child and parent recognises.
 
-## Checks
-
-- ⚠️ 4 locations; keep to two or three
-
 ## Hooks
 
 1. **உன் கோபம் யார் மேல பாயுது?** (question)  
@@ -34,12 +30,10 @@
 | 19–22 s | story | kavin | அவர் பி.டி. சார், தாத்தா! அவர் கிட்ட எப்படி? |  |
 | 22–25 s | story | thatha | இந்தக் குட்டி கிட்ட மட்டும் முடிஞ்சுதா? | இந்தக் குட்டி கிட்ட மட்டும்? |
 | 25–33 s | kural | thatha | வள்ளுவர் என்ன சொல்றார் தெரியுமா? செல்லிடத்துக் காப்பான் சினங்காப்பான், அல்லிடத்துக் காக்கின்என் காவாக்கா லென்? | செல்லிடத்துக் காப்பான் சினங்காப்பான் அல்லிடத்துக்<br>காக்கின்என் காவாக்கா லென்? |
-| 33–40 s | lesson | thatha | கோபம் பலிக்கிற இடத்துல அடக்குறது தான் வீரம். பதில் பேச முடியாதவங்க மேல காட்டுறது இல்ல. | பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல |
-| 40–43 s | tease | narrator | பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்! | குறள் #302 ➜ |
+| 33–43 s | lesson | thatha | கோபம் பலிக்கிற இடத்துல அடக்குறது தான் வீரம். பதில் பேச முடியாதவங்க மேல காட்டுறது இல்ல. | பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல<br>Save this |
 
 **Lesson:** பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல  
-**Tease:** பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்!  
-**Loop:** The final shot repeats the opening composition (puppy running at the gate, low angle), so on replay the same puppy-run cuts straight into Kavin's shout. The tease asks about anger at elders, and the hook answers with anger at the weakest, which pulls a second viewing.
+**Loop:** The final shot repeats the opening composition (puppy running at the gate, low angle), so on replay the same puppy-run cuts straight into Kavin's shout.
 
 ## Continuity
 
@@ -101,10 +95,76 @@ Kavin kneels by the verandah and holds out a biscuit; the puppy creeps out and l
 🖼 `Kavin kneels at the edge of the thinnai holding out the biscuit; the puppy creeps out from the shadow toward his hand. Behind, softly out of focus, Thatha smiles. Clean empty space in the upper third of the frame.`  
 🎞 `The puppy inches out, sniffs, then licks Kavin's fingers and wags its tail; Kavin breaks into a small gap-toothed smile.`
 
-**Shot 10** · 40–43 s · tease · kavin · thatha_gate · props: puppy  
+**Shot 10** · 40–43 s · lesson · kavin · thatha_gate · props: puppy  
 The puppy bounds happily toward the gate with Kavin laughing behind it, mirroring the opening shot's framing. *Camera:* Wide, low angle from ground level at the gate, same framing as shot 1.  
 🖼 `Same composition as shot 1: low angle from ground level in the yard, looking out at the gate. The puppy runs toward the camera, tail wagging; behind it Kavin, without his backpack, runs after it laughing.`  
 🎞 `The puppy bounds toward the camera and Kavin chases it laughing; the clip ends with the puppy mid-stride at the gate, matching the first frame.`
+
+**Flow clips:** 10 (4 s, 8 s, 4 s, 4 s, 8 s, 8 s, 4 s, 4 s, 8 s, 4 s) · 90 credits
+
+## Shot prompts (what Flow gets)
+
+The full start-image prompts, with reference images, are in `episodes/K0301/flow/README.md` (`python studio.py flow-sheet 301`). Each clip prompt below goes to Flow with the shot's approved image as its start frame.
+
+**Shot 1** · 0–3 s · 4 s clip · 7 credits
+
+```
+The puppy bounds two steps forward, then stops dead and flattens its ears as Kavin stamps his foot and shouts; slight camera shake on the stamp. Camera: Wide, low angle from the puppy's height, Kavin framed in the gateway. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Kavin says this line aloud in the clear, high voice of an 8-year-old Tamil boy, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "போ! போ இங்கிருந்து!" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+```
+
+**Shot 2** · 3–8 s · 8 s clip · 12 credits
+
+```
+The pointing hand jabs twice; classmates glance sideways at Kavin; slow push-in toward Kavin's lowered face. Camera: Over-the-shoulder from the unseen PT teacher; only his hand and whistle cord visible, slow push-in on Kavin. About 8 seconds, one continuous shot, no cuts. From 0 s to 5 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 3** · 8–11 s · 4 s clip · 7 credits
+
+```
+Kavin strides forward and kicks the pebble, which skitters past the camera; camera tracks backward with him. Camera: Tracking shot at knee height, pebble skittering toward the lens. About 4 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 4** · 11–15 s · 4 s clip · 7 credits
+
+```
+The backpack hits the ground with a puff of dust; the puppy scrambles under the verandah; camera whip-pans to follow it. Camera: Medium shot, quick whip-pan following the puppy under the verandah. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 5** · 15–19 s · 8 s clip · 12 credits
+
+```
+Thatha slowly lowers the newspaper onto his lap and tilts his head, eyebrows raised kindly; neem leaves sway behind him. Camera: Medium close-up, static, Thatha centred. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Thatha says this line aloud in the deep, slightly gravelly, warm voice of a 70-year-old Tamil grandfather, slow and kind, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "என்ன, ஸ்கூல்ல யாராவது திட்டினாங்களா? அவங்க கிட்ட ஏன் கத்தல?" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+```
+
+**Shot 6** · 19–25 s · 8 s clip · 12 credits
+
+```
+Kavin uncrosses his arms as his eyes drift down; camera slowly tilts down to the puppy's trembling face in the shadow. Camera: Two-shot, then tilt down to the puppy's frightened eyes in the dark gap under the verandah. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Kavin says this line aloud in the clear, high voice of an 8-year-old Tamil boy, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "அவர் பி.டி. சார், தாத்தா! அவர் கிட்ட எப்படி?" Meanwhile Thatha keeps their mouth closed and listens. From about 3.0 s, Thatha says this line aloud in the deep, slightly gravelly, warm voice of a 70-year-old Tamil grandfather, slow and kind, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "இந்தக் குட்டி கிட்ட மட்டும் முடிஞ்சுதா?" Meanwhile Kavin keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+```
+
+**Shot 7** · 25–29 s · 4 s clip · 7 credits
+
+```
+Very slow push-in; Thatha's hand moves gently as he speaks; the lamp flame flickers. Camera: Wide, warm, slow push-in; lamp glow on Thatha's face. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s Thatha is talking: lips and jaw move clearly as if speaking, with small natural gestures. Kavin keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 8** · 29–33 s · 4 s clip · 7 credits
+
+```
+Kavin blinks slowly and swallows; his eyebrows relax; subtle lamp flicker on his cheek. Camera: Close-up, static, lamp light on one side of his face. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 9** · 33–40 s · 8 s clip · 12 credits
+
+```
+The puppy inches out, sniffs, then licks Kavin's fingers and wags its tail; Kavin breaks into a small gap-toothed smile. Camera: Low medium shot at the puppy's height, Thatha soft in the background. About 8 seconds, one continuous shot, no cuts. From 0 s to 7 s Thatha is talking: lips and jaw move clearly as if speaking, with small natural gestures. Kavin keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
+
+**Shot 10** · 40–43 s · 4 s clip · 7 credits
+
+```
+The puppy bounds toward the camera and Kavin chases it laughing; the clip ends with the puppy mid-stride at the gate, matching the first frame. Camera: Wide, low angle from ground level at the gate, same framing as shot 1. About 4 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+```
 
 ## YouTube
 
@@ -125,8 +185,6 @@ Meaning: Holding back anger only counts where your anger would actually land, on
 
 📖 அதிகாரம் 31: வெகுளாமை (Restraining Anger) · அறத்துப்பால்
 
-🔔 ஒவ்வொரு திங்கள், புதன், சனி இரவு 7:30 மணிக்கு ஒரு புதிய குறள், ஒரு புதிய கதை.
-New kural every Mon, Wed & Sat, 7:30 pm IST.
 
 #திருக்குறள் #thirukkural #ஒருகுறள்ஒருகதை #கோபம்
 

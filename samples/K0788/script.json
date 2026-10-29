@@ -203,19 +203,10 @@
    {
     "beat": "lesson",
     "start_s": 35.0,
-    "end_s": 40.0,
+    "end_s": 43.0,
     "speaker": "narrator",
     "narration_ta": "உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.",
     "delivery": "warm, certain",
-    "on_screen_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்"
-   },
-   {
-    "beat": "tease",
-    "start_s": 40.0,
-    "end_s": 43.0,
-    "speaker": "narrator",
-    "narration_ta": "அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?",
-    "delivery": "playful",
     "on_screen_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்\nSave this"
    }
   ],
@@ -383,7 +374,7 @@
    },
    {
     "n": 9,
-    "beat": "tease",
+    "beat": "lesson",
     "start_s": 38.0,
     "end_s": 43.0,
     "characters": [
@@ -403,7 +394,6 @@
    }
   ],
   "lesson_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்",
-  "tease_ta": "அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?",
   "tag_question_ta": "உங்க 3 AM நண்பனை tag பண்ணுங்க",
   "loop_note_en": "The last shot is the same doorway moment as the opening (the headlight reaching Saro), so the replay's first line, Saro's call to Vignesh, follows straight on from it.",
   "youtube": {

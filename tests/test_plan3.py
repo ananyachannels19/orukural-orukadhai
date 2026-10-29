@@ -186,9 +186,9 @@ def test_kids_special_and_prompt(studio):
     assert studio["kids_special"] == {"cast": "kumbakonam", "per_month": 1}
     studio.raw["lineup"].insert(3, {"kural": 302, "relationship": "family", "special": "kids"})
     assert kids_specials_per_month(studio["lineup"], 3)[0] == 1
-    special = scriptgen.user_prompt(studio, store.get(302), None, [])
+    special = scriptgen.user_prompt(studio, store.get(302), [])
     assert "monthly kids' special" in special and "leave `cast` empty" in special
-    normal = scriptgen.user_prompt(studio, store.get(788), None, [], [{"episode": "K0301", "cast": []}])
+    normal = scriptgen.user_prompt(studio, store.get(788), [], [{"episode": "K0301", "cast": []}])
     assert "Relationship: friends" in normal and "thatha_cameo" in normal and "Recent casts" in normal
     system = scriptgen.system_prompt(studio)
     for must in ("Invent this story's own 2–3 characters", "aim for 7 clips", "Never name a posting day or time",
@@ -367,3 +367,21 @@ def test_voice_lines_too_long_block_the_render(studio, k788):
     bad = {"segments": [{"n": 1, "seconds": need * 1.5 + 2.0}]}          # e.g. an English note read aloud first
     assert voice.too_long(studio, sc, ok) == []
     assert "line 1 (saro)" in voice.too_long(studio, sc, bad)[0]
+
+
+def test_no_next_kural_tease(studio, k788):
+    """The "அடுத்த குறள்" tease is gone for good: not asked for, not in the format, refused by the check."""
+    system = scriptgen.system_prompt(studio)
+    user = scriptgen.user_prompt(studio, KuralStore(studio.path("kurals")).get(788), [])
+    assert "Next episode" not in user and "One line about the next kural" not in system
+    schema = json.dumps(EpisodeScript.model_json_schema(), ensure_ascii=False)
+    assert "tease" not in schema
+    old = copy.deepcopy(k788)                       # a script from before: tease beat and tease_ta still load
+    old["segments"][-1]["beat"] = old["shots"][-1]["beat"] = "tease"
+    old["tease_ta"] = "x"
+    sc = EpisodeScript.model_validate(old)
+    assert sc.segments[-1].beat == "lesson" and not hasattr(sc, "tease_ta")
+    raw = copy.deepcopy(k788)
+    raw["segments"][-1]["narration_ta"] = "அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?"
+    errors, _ = _checks(studio, raw)
+    assert any("teases the next kural" in e for e in errors)

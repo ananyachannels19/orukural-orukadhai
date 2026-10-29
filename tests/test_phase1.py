@@ -44,7 +44,6 @@ def test_plan_follows_the_lineup(settings, store):
     nxt = store.next_planned(settings["lineup"], 12)
     planned = [n for n in lineup if store.get(n)["status"] == "planned"]
     assert [k["number"] for k in nxt][:len(planned)] == planned
-    assert store.after(store.get(788), settings["lineup"])["number"] == 1330
     # after the lineup, the rest in book order
     rest = [k["number"] for k in nxt[len(planned):]]
     assert rest == sorted(rest)

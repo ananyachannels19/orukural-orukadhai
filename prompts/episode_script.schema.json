@@ -44,10 +44,11 @@
     },
     "age_group": {
      "default": "adult",
-     "description": "child (4-15) or adult (22-35)",
+     "description": "child (4-15), adult (22-35) or elder (50-80, a parent or grandparent)",
      "enum": [
       "child",
-      "adult"
+      "adult",
+      "elder"
      ],
      "title": "Age Group",
      "type": "string"
@@ -265,8 +266,7 @@
       "hook",
       "story",
       "kural",
-      "lesson",
-      "tease"
+      "lesson"
      ],
      "title": "Beat",
      "type": "string"
@@ -323,8 +323,7 @@
       "hook",
       "story",
       "kural",
-      "lesson",
-      "tease"
+      "lesson"
      ],
      "title": "Beat",
      "type": "string"
@@ -533,11 +532,6 @@
    "title": "Lesson Ta",
    "type": "string"
   },
-  "tease_ta": {
-   "description": "One line teasing the next kural without naming its answer",
-   "title": "Tease Ta",
-   "type": "string"
-  },
   "tag_question_ta": {
    "default": "",
    "description": "One question asking viewers to tag a friend, partner or sibling, used in the caption, pinned comment and last card",
@@ -570,7 +564,6 @@
   "segments",
   "shots",
   "lesson_ta",
-  "tease_ta",
   "loop_note_en",
   "youtube",
   "instagram"

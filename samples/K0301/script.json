@@ -152,18 +152,10 @@
    {
     "beat": "lesson",
     "start_s": 33,
-    "end_s": 40,
+    "end_s": 43,
     "speaker": "thatha",
     "narration_ta": "கோபம் பலிக்கிற இடத்துல அடக்குறது தான் வீரம். பதில் பேச முடியாதவங்க மேல காட்டுறது இல்ல.",
-    "on_screen_ta": "பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல"
-   },
-   {
-    "beat": "tease",
-    "start_s": 40,
-    "end_s": 43,
-    "speaker": "narrator",
-    "narration_ta": "பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்!",
-    "on_screen_ta": "குறள் #302 ➜"
+    "on_screen_ta": "பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல\nSave this"
    }
   ],
   "shots": [
@@ -333,7 +325,7 @@
    },
    {
     "n": 10,
-    "beat": "tease",
+    "beat": "lesson",
     "start_s": 40,
     "end_s": 43,
     "characters": [
@@ -351,8 +343,7 @@
    }
   ],
   "lesson_ta": "பலவீனமானவர் மேல் கோபம் காட்டுவது வீரம் அல்ல",
-  "tease_ta": "பெரியவங்க மேல கோபப்படலாமா? அடுத்த குறள்!",
-  "loop_note_en": "The final shot repeats the opening composition (puppy running at the gate, low angle), so on replay the same puppy-run cuts straight into Kavin's shout. The tease asks about anger at elders, and the hook answers with anger at the weakest, which pulls a second viewing.",
+  "loop_note_en": "The final shot repeats the opening composition (puppy running at the gate, low angle), so on replay the same puppy-run cuts straight into Kavin's shout.",
   "youtube": {
    "title": "குறள் 301 | கோபம் யார் மேல பாயுது? | Thirukkural Story on Anger #Shorts",
    "description_intro_ta": "பள்ளியில் திட்டு வாங்கிய கவின், வீட்டில் ஒரு குட்டி நாய் மேல் கோபத்தைக் கொட்டுகிறான். தாத்தா கேட்ட ஒரே கேள்வி அவனை யோசிக்க வைக்கிறது.\nநம் கோபம் எப்போதும் யார் மேல் விழுகிறது?",
