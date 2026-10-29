@@ -11,6 +11,11 @@ While the kural is on screen (the signature's kural reveal) there are no subtitl
 the subtitle for the narrator's line, and the slim leaf sits in the subtitle zone, so they never overlap.
 When the verse leaves at a cut before the narrator finishes (`kural_until`), the rest of the line is subtitled.
 
+Each segment's `on_screen_ta` (the hook card, the 10–12 s teaser, the last card) is drawn too, as a card
+in the same font, centred in the lower third just above the subtitle row so the two never overlap, and
+clear of the logo badge in the bottom-right corner. It stays up for its whole segment (the last card to
+the end). Not while the verse is on screen.
+
 A line a little too wide for one row (up to `captions.shrink_to_fit`, e.g. 1.25x) stays on one card, a
 little smaller, rather than splitting a short shout like the hook in two."""
 from __future__ import annotations
@@ -34,6 +39,7 @@ ScaledBorderAndShadow: yes
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Sub,{font},{size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,0,0,0,0,100,100,0,0,1,5,2,2,90,90,{margin},1
+Style: Card,{font},{card_size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,0,0,0,0,100,100,0,0,1,5,2,2,90,90,{card_margin},1
 
 [Events]
 Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
@@ -132,15 +138,46 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
     return out
 
 
+def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> list[tuple[list[str], float, float]]:
+    """(rows, start, end) for every on-screen card: a segment's `on_screen_ta`, one row per line of it."""
+    kural_on_screen = bool((s.raw.get("signature") or {}).get("enabled"))
+    out = []
+    for i, (seg, t) in enumerate(zip(script.segments, segs)):
+        rows = [r.strip() for r in (seg.on_screen_ta or "").splitlines() if r.strip()]
+        if not rows:
+            continue
+        a, end = t["start"], total if i == len(segs) - 1 else t["end"]
+        if kural_on_screen and seg.beat == "kural":
+            if not t.get("kural_until"):
+                continue
+            a = t["kural_until"]
+        out.append((rows, a, end))
+    return out
+
+
+def card_layout(s: Settings) -> tuple[int, int]:
+    """(font size, bottom margin) of the cards: a little bigger than subtitles, one subtitle row plus a gap
+    above them."""
+    c = s["captions"]
+    size = c.get("card_size", c["size"] + 6)
+    return size, c["margin"] + round(c["size"] * 1.25) + 24
+
+
 def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path) -> Path:
     c = s["captions"]
-    lines = [HEADER.format(font=c["font"], size=c["size"], margin=c["margin"])]
+    card_size, card_margin = card_layout(s)
+    lines = [HEADER.format(font=c["font"], size=c["size"], margin=c["margin"], card_size=card_size,
+                           card_margin=card_margin)]
     from PIL import Image, ImageDraw
     font, probe = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     for row, a, b in cues(s, script, segs, total):
         w = probe.textlength(row, font=font)
         fs = f"{{\\fs{int(c['size'] * WIDTH / w)}}}" if w > WIDTH else ""  # a one-card line a little too wide
         lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},Sub,,0,0,0,,{fs}{_text(row)}")
+    for rows, a, b in card_cues(s, script, segs, total):
+        w = max(probe.textlength(r, font=font) for r in rows) * card_size / c["size"]
+        fs = f"{{\\fs{int(card_size * WIDTH / w)}}}" if w > WIDTH else ""
+        lines.append(f"Dialogue: 1,{_ts(a)},{_ts(b)},Card,,0,0,0,,{fs}{_text(chr(10).join(rows))}")
     out.write_text("\n".join(lines) + "\n", "utf-8")
     return out
 
@@ -215,4 +252,18 @@ def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
         png = out_dir / f"sub{n:02d}.png"
         im.save(png)
         out.append((png, a, b, 1920 - c["margin"] - im.height))
+    card_size, card_margin = card_layout(s)
+    big = font.font_variant(size=round(card_size * 0.81))
+    for n, (rows, a, b) in enumerate(card_cues(s, script, segs, total), 1):
+        row_h = int(card_size * 1.2)
+        im = Image.new("RGBA", (1080, row_h * len(rows) + 2 * stroke), (0, 0, 0, 0))
+        d = ImageDraw.Draw(im)
+        for k, row in enumerate(rows):
+            w = probe.textlength(row, font=big)
+            f = big.font_variant(size=int(big.size * WIDTH / w)) if w > WIDTH else big
+            d.text((540, stroke + k * row_h), row, font=f, anchor="ma", fill=(255, 255, 255, 255),
+                   stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+        png = out_dir / f"card{n:02d}.png"
+        im.save(png)
+        out.append((png, a, b, 1920 - card_margin - im.height))
     return out

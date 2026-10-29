@@ -192,7 +192,7 @@ def test_kids_special_and_prompt(studio):
     assert "Relationship: friends" in normal and "thatha_cameo" in normal and "Recent casts" in normal
     system = scriptgen.system_prompt(studio)
     for must in ("Invent this story's own 2–3 characters", "aim for 7 clips", "Never name a posting day or time",
-                 "towering over a child", "Save this", "tag"):
+                 "towering over a child", "சேவ் பண்ணுங்க", "tag"):
         assert must in system
 
 

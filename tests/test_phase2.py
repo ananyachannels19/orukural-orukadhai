@@ -328,7 +328,7 @@ def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.5} for g in sc.segments]
     ass = captions.write_ass(studio, sc, segs, sc.segments[-1].end_s, tmp_path / "c.ass").read_text("utf-8")
-    events = [l for l in ass.splitlines() if l.startswith("Dialogue:")]
+    events = [l for l in ass.splitlines() if l.startswith("Dialogue:") and ",Card," not in l]
     assert len(events) > len(sc.segments) and all(",Sub," in l and "\\N" not in l for l in events)
     # rows follow one another and never overlap
     cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
@@ -337,7 +337,28 @@ def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
     d, font = ImageDraw.Draw(Image.new("RGBA", (1, 1))), captions._font(studio)
     shrink = studio["captions"]["shrink_to_fit"]
     assert all(d.textlength(row, font=font) <= captions.WIDTH * shrink for row, _, _ in cues)
-    assert sum(l.startswith("Style:") for l in ass.splitlines()) == 1
+    assert [l.split(",")[0] for l in ass.splitlines() if l.startswith("Style:")] == ["Style: Sub", "Style: Card"]
+
+
+def test_on_screen_cards(studio, tmp_path):
+    """Each on_screen_ta is drawn as a card above the subtitle row, for its whole segment; the last to the end."""
+    from orukural import captions
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.3, "beat": g.beat}
+            for g in sc.segments]
+    total = sc.segments[-1].end_s + 0.5
+    cards = captions.card_cues(studio, sc, segs, total)
+    assert cards[0][1] == 0 and cards[-1][2] == total
+    assert cards[-1][0] == ["கூப்பிடாமலே வருபவன் தான் நண்பன்", "சேவ் பண்ணுங்க"]
+    _, card_margin = captions.card_layout(studio)
+    assert card_margin > studio["captions"]["margin"] + studio["captions"]["size"]   # above the subtitle row
+    ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
+    assert sum(",Card," in l for l in ass.splitlines()) == len(cards)
+    assert "கூப்பிடாமலே வருபவன் தான் நண்பன்\\Nசேவ் பண்ணுங்க" in ass
+    pngs = captions.render_pngs(studio, sc, segs, total, tmp_path / "subs")
+    card_ys = [y for png, _, _, y in pngs if png.name.startswith("card")]
+    sub_y = next(y for png, _, _, y in pngs if png.name.startswith("sub"))
+    assert len(card_ys) == len(cards) and all(y < sub_y for y in card_ys)
 
 
 def test_captions_one_card_and_after_the_verse(studio, tmp_path):

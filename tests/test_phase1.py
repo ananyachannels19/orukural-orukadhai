@@ -117,11 +117,11 @@ def test_check_refuses_a_promised_schedule(settings, store):
 def test_new_format_checks(settings, store):
     raw = scriptgen.dry_run_script(store.get(302))
     raw["segments"][3]["speaker"] = "a"           # a character says the kural
-    raw["segments"][-1]["on_screen_ta"] = "பாடம்"  # no "Save this" on the last card
+    raw["segments"][-1]["on_screen_ta"] = "பாடம்"  # no save prompt on the last card
     raw["segments"][2]["on_screen_ta"] = ""       # no lesson teaser at 10-12 s
     raw["tag_question_ta"] = ""
     raw["shots"][4]["clip_from"] = 6              # a later shot
     errors, warns = check(EpisodeScript.model_validate(raw), store.get(302), settings.raw)
     text = " | ".join(errors + warns)
-    assert "narrator says the kural" in text and "Save this" in text and "teaser" in text
+    assert "narrator says the kural" in text and "சேவ் பண்ணுங்க" in text and "teaser" in text
     assert "tag question" in text and "shot 5: clip_from" in text

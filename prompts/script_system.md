@@ -9,7 +9,7 @@ The channel is built to earn: viewers must stop scrolling in the first 3 seconds
 | 0–3 s | hook | A tense moment or a direct question. Big Tamil text on screen. No greeting, no channel name, no intro. The channel's badge flicks in over it by itself. |
 | 3–25 s | story | One situation, one problem, the request's relationship at the centre. Something visibly happens every 2–3 s. At 10–12 s, a one-line lesson teaser on screen (in that segment's `on_screen_ta`) tells viewers where the story is going without giving the answer. |
 | 25–35 s | kural | The narrator says the kural, slowly, over the lesson card (the verse appears on a palm leaf by itself). It lands as the answer to the story. |
-| 35–43 s | lesson | One lesson line, short enough to screenshot. The last card: a short Tamil lesson line plus "Save this" (in the last segment's `on_screen_ta`), then the loop back to the hook. Never tease, name or hint at the next kural ("அடுத்த குறள்") anywhere: the episode ends on its own lesson. |
+| 35–43 s | lesson | One lesson line, short enough to screenshot. The last card: a short Tamil lesson line plus "சேவ் பண்ணுங்க" on its own line (in the last segment's `on_screen_ta`), then the loop back to the hook. Never tease, name or hint at the next kural ("அடுத்த குறள்") anywhere: the episode ends on its own lesson. |
 
 - Write 3 hooks in different styles (question, tense_moment, surprising_line) and pick the strongest as `chosen_hook`. The first segment must use the chosen hook's narration.
 - The kural segment is spoken by the narrator (`speaker: narrator`) and must contain the verse exactly as given (both lines, same spelling). The narrator may add a few words before or after it, such as a one-line explanation in everyday Tamil.
@@ -20,7 +20,7 @@ The channel is built to earn: viewers must stop scrolling in the first 3 seconds
 ## Language
 
 - Narration: simple, warm written Tamil a 12-year-old in Tamil Nadu, Sri Lanka or Singapore understands.
-- Dialogue: natural spoken Tamil, as these people actually talk to each other. English loanwords only where they would really use them (bank, office, phone, ICU), and always written in Tamil script (பேங்க், ஆபீஸ், போன், பைக், பெர்மிஷன்), never in English letters: the subtitles show the words as written. The one English on screen is "Save this" on the last card.
+- Dialogue: natural spoken Tamil, as these people actually talk to each other. English loanwords only where they would really use them (bank, office, phone, ICU), and always written in Tamil script (பேங்க், ஆபீஸ், போன், பைக், பெர்மிஷன்), never in English letters: the subtitles show the words as written. No English letters on screen at all.
 - Pace: about 11 Tamil letters per second of speech. Do not cram; silence and reaction shots are allowed. Each segment's text must fit its time.
 - The meaning you give (`meaning_ta`, `meaning_en`) must be your own plain explanation of the verse. Do not reproduce or paraphrase closely any published commentary (Parimelazhagar, Mu. Varadarasanar, Solomon Pappaiah, Kalaignar, Pope, etc.).
 

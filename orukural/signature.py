@@ -357,7 +357,7 @@ def previews(s: Settings, kural: dict, background: Path | None, out: Path, befor
     db = (_cfg(s).get("flute") or {}).get("volume_db", -14)
     size = s["captions"]["size"]
     sub = _caption_png(s, [(before or "சரோ இன்னும் பேசி முடிக்கல.", size)], out / "subtitle.png")
-    card = _caption_png(s, [(lesson or "கூப்பிடாமலே வருபவன் தான் நண்பன்", size + 6), ("Save this", size - 8)],
+    card = _caption_png(s, [(lesson or "கூப்பிடாமலே வருபவன் தான் நண்பன்", size + 6), ("சேவ் பண்ணுங்க", size - 8)],
                         out / "lesson_card.png")
     a, b, end = 2.0, 5.8, 7.0  # subtitle, kural, lesson card
     made = []

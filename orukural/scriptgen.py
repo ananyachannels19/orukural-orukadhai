@@ -150,7 +150,7 @@ def dry_run_script(kural: dict) -> dict:
              ("lesson", 35, 43, "narrator")]
     say = {"hook": "[DRY RUN] கேள்வி?", "story": "[DRY RUN] கதை.", "kural": f"{v['line1']} {v['line2']}",
            "lesson": "[DRY RUN] பாடம்."}
-    screen = {12: "[DRY RUN] பாடம் வருது", 35: "[DRY RUN] பாடம்\nSave this"}
+    screen = {12: "[DRY RUN] பாடம் வருது", 35: "[DRY RUN] பாடம்\nசேவ் பண்ணுங்க"}
     shots = [(1, "hook", 0, 3), (2, "story", 3, 11), (3, "story", 11, 19), (4, "story", 19, 25),
              (5, "kural", 25, 33), (6, "lesson", 33, 41), (7, "lesson", 41, 43)]
     member = lambda cid, gender, voice: {"id": cid, "name_ta": f"[DRY RUN {cid}]", "age": 28,  # noqa: E731
