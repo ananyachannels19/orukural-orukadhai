@@ -33,7 +33,16 @@ from .schema import EpisodeScript
 
 def load(ep_dir: Path) -> dict[int, dict]:
     f = ep_dir / "edit.json"
-    return {int(k): v for k, v in json.loads(f.read_text("utf-8")).items()} if f.exists() else {}
+    raw = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    return {int(k): v for k, v in raw.items() if k.isdigit()}
+
+
+def episode_overrides(ep_dir: Path) -> dict:
+    """edit.json's non-shot keys: this episode's own settings, e.g. {"kural": {"text_y": 430}} to place the
+    verse where this episode's kural shot has no faces (the channel default stays in config.yaml)."""
+    f = ep_dir / "edit.json"
+    raw = json.loads(f.read_text("utf-8")) if f.exists() else {}
+    return {k: v for k, v in raw.items() if not k.isdigit()}
 
 
 def kept(cuts: list[list[float]], dur: float) -> list[tuple[float, float]]:
@@ -97,6 +106,7 @@ def _still(s: Settings, clip: Path, spec: dict, out: Path) -> list[tuple[float, 
     """The clip's frame at spec["at"] held for the clip's whole length, pushing in slowly from `at` on (silent)."""
     from .assemble import _encode
     dur, at = media.duration(clip), spec.get("at", 0.0)
+    frame = spec.get("frame", at)  # which frame to hold, when it is not where the push starts (e.g. the clip's last)
     push, span = spec.get("push", 1.04), spec.get("seconds", 4.0)
     prog = f"min(max(t-{at:.3f},0)/{span:.3f},1)"
     # "out": start pushed in and ease back to the full frame, so the last frame is the clip's own frame at
@@ -104,7 +114,7 @@ def _still(s: Settings, clip: Path, spec: dict, out: Path) -> list[tuple[float, 
     z = f"({push:.4f}-{push - 1:.4f}*{prog})" if spec.get("direction") == "out" else f"(1+{push - 1:.4f}*{prog})"
     vf = (f"{media.fill_frame()},scale=w='ceil(1080*{z}/2)*2':h='ceil(1920*{z}/2)*2':eval=frame,"
           f"crop=1080:1920:(iw-1080)/2:(ih-1920)/2,setsar=1,fps={s['assembly']['fps']}")
-    media.run(["-ss", f"{at:.3f}", "-i", str(clip), "-frames:v", "1", str(out.with_suffix(".png"))])
+    media.run(["-ss", f"{frame:.3f}", "-i", str(clip), "-frames:v", "1", str(out.with_suffix(".png"))])
     # the clip's own colour tags: a piece that differs mid-film makes ffmpeg rebuild the final filter graph,
     # and that stalled the signature overlay (K0788 v5.1 hung at the loop shot)
     tags = media.color_tags(clip)

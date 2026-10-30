@@ -152,10 +152,10 @@ def slim_leaf(s: Settings, line1: str, line2: str, label: str, out: Path) -> Pat
     return out
 
 
-def clean_text(s: Settings, line1: str, line2: str, label: str, out_dir: Path) -> list[Path]:
+def clean_text(s: Settings, line1: str, line2: str, label: str, out_dir: Path, over: dict | None = None) -> list[Path]:
     """Style B: two full-frame layers (label + line 1, then line 2): white ExtraBold, a thin gold underline each."""
     from PIL import Image, ImageChops, ImageDraw
-    c = (_cfg(s).get("kural") or {})
+    c = {**(_cfg(s).get("kural") or {}), **(over or {})}
     out_dir.mkdir(parents=True, exist_ok=True)
     probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     font = _fit(s, probe, [line1, line2], media.W * 0.86, 66, 40)
@@ -247,13 +247,14 @@ def build(s: Settings, force: bool = False) -> dict[str, Path]:
 
 # ---- into the film -------------------------------------------------------------------
 
-def kural_layers(s: Settings, kural: dict, start: float, end: float, work: Path) -> dict:
-    """The kural reveal for one episode, in the configured style, between `start` and `end` (film seconds)."""
-    c = _cfg(s).get("kural") or {}
+def kural_layers(s: Settings, kural: dict, start: float, end: float, work: Path, over: dict | None = None) -> dict:
+    """The kural reveal for one episode, in the configured style, between `start` and `end` (film seconds).
+    `over`: this episode's own kural settings (edit.json "kural"), on top of the channel's."""
+    c = {**(_cfg(s).get("kural") or {}), **(over or {})}
     style = c.get("style", "slim_leaf")
     line1, line2, label = kural["verse"]["line1"], kural["verse"]["line2"], f"குறள் {kural['number']}"
     if style == "clean_text":
-        return {"style": style, "layers": clean_text(s, line1, line2, label, work), "start": start, "end": end,
+        return {"style": style, "layers": clean_text(s, line1, line2, label, work, over), "start": start, "end": end,
                 "dim": c.get("dim", 0.45)}
     return {"style": "slim_leaf", "image": slim_leaf(s, line1, line2, label, work / "kural_leaf.png"),
             "start": start, "end": end, "y": c.get("y", 1150)}
@@ -272,7 +273,9 @@ def plan(s: Settings, kural: dict | None, segs: list[dict], total: float, work: 
     if kural and kural_segs:
         # the verse leaves with the picture: at the cut out of the last kural shot, when assemble gives it
         end = kural_segs[-1].get("kural_until") or kural_segs[-1]["end"]
-        out["kural"] = kural_layers(s, kural, kural_segs[0]["start"], end, work)
+        from . import edit
+        over = edit.episode_overrides(work.parent).get("kural")
+        out["kural"] = kural_layers(s, kural, kural_segs[0]["start"], end, work, over)
     return out
 
 
