@@ -19,7 +19,7 @@ The repo is `orukural-studio` on Ananya's Mac (`/Users/ananya-24962/Documents/or
 4. **Flow account:** use only the new Flow account, the one that owns project dbd31b05-2737-4682-a9ab-b83a04d7ffdf (opened as /u/2 on 30 Oct; the /u/N number can change with sign-in order), about 1,000 credits. Don't use the old account, and don't automate across several Gmail accounts.
 5. **Posting is irreversible.** Post only after Ananya's clear go-ahead. A message ending in "?" is a question, not a go-ahead. Post once per platform, and check first that the episode isn't already up.
 6. **Monitor proactively.** Long jobs must send a progress note every 2–3 minutes, and renders run in the background. Don't make her ask "update?".
-7. **Download every clip at 1080p the first time.** Flow's 1080p upscale and download are free (0 credits). As soon as a clip passes review, upscale it to 1080p in Flow and download that file. Never download the 720p version first and fetch the 1080p one again at the final stage. The final is always cut from the 1080p clips.
+7. **Flow 1080p upscale and download are free** (0 credits). Download every approved clip as the 1080p upscale the first time, straight from Flow, so nothing needs re-downloading at the final stage. Never download the 720p version first.
 
 ## 1. Script
 
@@ -40,7 +40,8 @@ The repo is `orukural-studio` on Ananya's Mac (`/Users/ananya-24962/Documents/or
   - props such as cups changing between shots
   - wrong hand or prop colour
 - Retrying a clip costs about 12 credits. Ask before retrying.
-- Download every clip straight at 1080p (upscale in Flow first, rule 7) into `episodes/<K>/clips/`, and move old takes to `clips/v1_before_<date>/`.
+- As soon as a clip is approved, pick Flow's 1080p upscale in the download menu and save that straight into `episodes/<K>/clips/`. Move old takes to `clips/v1_before_<date>/`.
+  - flow-mcp downloads the 720p original unless told otherwise (`download_quality` defaults to `"original"`, in `~/flow-mcp/src/core.ts` lines 40 and 111). Pass `download_quality: "upscaled"` on every flow_generate / flow_download call for clips. To make it the default, change those two lines, but ask Ananya before editing flow-mcp.
 
 ## 3. Review checklist (run on every cut, before showing her)
 
