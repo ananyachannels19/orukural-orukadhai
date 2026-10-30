@@ -385,3 +385,13 @@ def test_no_next_kural_tease(studio, k788):
     raw["segments"][-1]["narration_ta"] = "அடுத்த குறள்: சண்டை போட்டா காதல் கூடுமா?"
     errors, _ = _checks(studio, raw)
     assert any("teases the next kural" in e for e in errors)
+
+
+def test_bare_kaal_is_flagged(studio, k788):
+    raw = copy.deepcopy(k788)
+    raw["segments"][0]["on_screen_ta"] = "3:04 AM\nஒரு கால்."
+    _, warns = _checks(studio, raw)
+    assert any("கால்" in w and "leg" in w for w in warns)
+    raw["segments"][0]["on_screen_ta"] = "3:04 AM\nஒரு ஃபோன் கால்."
+    _, warns = _checks(studio, raw)
+    assert not any("leg" in w for w in warns)

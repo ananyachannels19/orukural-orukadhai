@@ -301,6 +301,11 @@ def check(script: EpisodeScript, kural: dict, cfg: dict) -> tuple[list[str], lis
                          "(\"…டேக் பண்ணுங்க\")")
         if not any(g.on_screen_ta.strip() for g in segs if g.beat == "lesson"):
             warns.append("no lesson card (the short lesson line on screen at the end)")
+        for g in segs:  # கால் alone reads as "leg": a phone call is அழைப்பு, or ஃபோன் கால் in speech
+            for kind, text in (("narration", g.narration_ta), ("on-screen text", g.on_screen_ta)):
+                if re.search(r"(?<!ஃபோன் )(?<!போன் )கால்(?![\u0B80-\u0BFF])", text):
+                    warns.append(f"{kind} at {g.start_s:g} s: \"கால்\" alone reads as \"leg\"; for a phone call "
+                                 f"write அழைப்பு (or ஃபோன் கால் where that is what is said)")
         if not script.tag_question_ta.strip():
             warns.append("no tag question (tag a friend, partner or sibling)")
 
