@@ -161,7 +161,9 @@ def schedule_mentions(script: EpisodeScript) -> list[str]:
     texts = {"youtube title": script.youtube.title, "description": script.youtube.description_intro_ta,
              "pinned comment": script.youtube.pinned_comment_ta, "instagram caption": script.instagram.caption_ta,
              "tag question": script.tag_question_ta}
-    texts.update({f"on-screen text at {g.start_s:g} s": g.on_screen_ta for g in script.segments})
+    # the hook card may show the story's clock time ("3:04 AM", as a phone would); that is not a schedule
+    texts.update({f"on-screen text at {g.start_s:g} s": re.sub(r"\d{1,2}:\d{2}\s*(AM|PM)", "", g.on_screen_ta)
+                  if g.beat == "hook" else g.on_screen_ta for g in script.segments})
     return [f"{where}: {m.group(0)!r}" for where, text in texts.items() if (m := SCHEDULE_WORDS.search(text or ""))]
 
 
@@ -175,6 +177,7 @@ def latin_words(script: EpisodeScript) -> list[str]:
     for g in script.segments:
         for kind, text in (("narration", g.narration_ta), ("on-screen text", g.on_screen_ta.replace("Save this", ""))):
             text = re.sub(r"\[DRY RUN[^\]]*\]", "", text)  # the dry-run stub's placeholders
+            text = re.sub(r"\d{1,2}:\d{2}\s*(AM|PM)\b", "", text)  # a clock time on a card, like a phone shows it
             out += [f"{kind} at {g.start_s:g} s: {m.group(0)!r}" for m in LATIN.finditer(text)]
     return out
 

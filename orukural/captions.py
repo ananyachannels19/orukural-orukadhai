@@ -132,8 +132,16 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
 
 def styled_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
                 ) -> list[tuple[str, float, float, bool]]:
-    """(row, start, end, narrator) for every subtitle row. segs: the real timeline from assemble.real_timeline
-    (start/end/voice_seconds per line, and the voice file's path when it is known)."""
+    """(row, start, end, narrator) for every subtitle row."""
+    return [c[:4] for c in word_cues(s, script, segs, total)]
+
+
+def word_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
+              ) -> list[tuple[str, float, float, bool, list[float]]]:
+    """(row, start, end, narrator, word starts) for every subtitle row: the karaoke highlight moves to each
+    word at its start. segs: the real timeline from assemble.real_timeline (start/end/voice_seconds per line,
+    and the voice file's path when it is known). Words are timed like rows: across the speech actually heard,
+    by length, a word that ends a phrase taking the pause after it."""
     from PIL import Image, ImageDraw
     font, probe, out = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1))), []
     kural_on_screen = bool((s.raw.get("signature") or {}).get("enabled"))
@@ -147,25 +155,33 @@ def styled_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
         rows = _wrap(probe, text, font, WIDTH)
         if len(rows) == 2 and probe.textlength(text, font=font) <= WIDTH * shrink:
             rows = [text]
-        times = _row_times(rows, t["voice_seconds"], Path(t["path"]) if t.get("path") else None)
+        audio = Path(t["path"]) if t.get("path") else None
+        times = _row_times(rows, t["voice_seconds"], audio)
+        words = text.split()
+        wt = _row_times(words, t["voice_seconds"], audio) if len(words) > 1 else [0.0, t["voice_seconds"]]
+        first = 0
         for k, row in enumerate(rows):
+            n = len(row.split())
+            starts = [t["start"] + x for x in wt[first:first + n]]
+            first += n
             a, b = t["start"] + times[k], t["start"] + times[k + 1]
             if under_verse:  # only the rows still being said once the verse has left
                 if b < t["kural_until"] + 0.5:
                     continue
                 a = max(a, t["kural_until"])
             # the last row stays up for a short tail after the words, never into the next line
-            out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b, seg.speaker == "narrator"))
+            starts = [max(a, x) for x in starts] or [a]
+            out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b, seg.speaker == "narrator", starts))
     # one subtitle at a time: a row ends where the next begins (lip sync can pull a line forward)
     out.sort(key=lambda c: c[1])
     for k in range(len(out) - 1):
-        row, a, b, narr = out[k]
+        row, a, b, narr, ws = out[k]
         nxt = out[k + 1]
         if b > nxt[1]:
             b = max(nxt[1], a + 0.3)
-            out[k] = (row, a, b, narr)
+            out[k] = (row, a, b, narr, ws)
             if nxt[1] < b:
-                out[k + 1] = (nxt[0], b, max(nxt[2], b + 0.3), nxt[3])
+                out[k + 1] = (nxt[0], b, max(nxt[2], b + 0.3), nxt[3], [max(b, x) for x in nxt[4]])
     return out
 
 
@@ -214,11 +230,21 @@ def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float
                            narr_colour=_ass_colour(n["colour"]))]
     from PIL import Image, ImageDraw
     font, probe = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    for row, a, b, narr in styled_cues(s, script, segs, total):
+    kara = karaoke_style(s)
+    hexc = lambda rgba: _ass_colour("#%02X%02X%02X" % rgba[:3])
+    for row, a, b, narr, starts in word_cues(s, script, segs, total):
         size = n["size"] if narr else c["size"]
         w = probe.textlength(row, font=font) * size / c["size"]
         fs = f"{{\\fs{int(size * WIDTH / w)}}}" if w > WIDTH else ""  # a one-card line a little too wide
-        lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},{'Narr' if narr else 'Sub'},,0,0,0,,{fs}{_text(row)}")
+        words = row.split()
+        times = [a] + starts[1:len(words)] + [b] if kara["enabled"] else [a, b]
+        lit = hexc(kara["narrator_word"] if narr else kara["word"])
+        for j in range(len(times) - 1):
+            if times[j + 1] - times[j] <= 0.01:
+                continue
+            text = " ".join(f"{{\\c{lit}}}{_text(x)}{{\\r}}" if k == j and kara["enabled"] else _text(x)
+                            for k, x in enumerate(words))
+            lines.append(f"Dialogue: 0,{_ts(times[j])},{_ts(times[j + 1])},{'Narr' if narr else 'Sub'},,0,0,0,,{fs}{text}")
     for rows, a, b in card_cues(s, script, segs, total, cuts):
         w = max(probe.textlength(r, font=font) for r in rows) * card_size / c["size"]
         fs = f"{{\\fs{int(card_size * WIDTH / w)}}}" if w > WIDTH else ""
@@ -292,32 +318,109 @@ def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
     ns = narrator_style(s)
     small = font.font_variant(size=round(ns["size"] * 0.81))
     colour = tuple(int(ns["colour"].lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)) + (255,)
-    for n, (row, a, b, narr) in enumerate(styled_cues(s, script, segs, total), 1):
+    kara = karaoke_style(s)
+    pad = 24  # room for the shadow
+    for n, (row, a, b, narr, starts) in enumerate(word_cues(s, script, segs, total), 1):
         base = small if narr else font
-        im = Image.new("RGBA", (1080, line_h + 2 * stroke), (0, 0, 0, 0))
         w = probe.textlength(row, font=base)
         f = base.font_variant(size=int(base.size * WIDTH / w)) if w > WIDTH else base  # one-card line, shrunk
-        ImageDraw.Draw(im).text((540, stroke), row, font=f, anchor="ma",
-                                fill=colour if narr else (255, 255, 255, 255),
-                                stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
-        if narr and ns["italic"]:  # the font has no italic: slant it about the middle of the row
-            k = 0.2
-            im = im.transform(im.size, Image.AFFINE, (1, k, -k * im.height / 2, 0, 1, 0), Image.BICUBIC)
-        png = out_dir / f"sub{n:02d}.png"
-        im.save(png)
-        out.append((png, a, b, 1920 - (ns["margin"] if narr else c["margin"]) - im.height))
+        words = row.split()
+        plain, hi = (colour, kara["narrator_word"]) if narr else ((255, 255, 255, 255), kara["word"])
+        # one picture per word: the row with that word lit (karaoke), shown from that word's start
+        times = [a] + starts[1:len(words)] + [b] if kara["enabled"] else [a, b]
+        for j in range(len(times) - 1):
+            im = Image.new("RGBA", (1080, line_h + 2 * stroke + 2 * pad), (0, 0, 0, 0))
+            lit = j if kara["enabled"] else -1
+            _draw_words(im, words, f, (540, pad + stroke), plain, hi, lit, stroke)
+            if narr and ns["italic"]:  # the font has no italic: slant it about the middle of the row
+                k = 0.2
+                im = im.transform(im.size, Image.AFFINE, (1, k, -k * im.height / 2, 0, 1, 0), Image.BICUBIC)
+            png = out_dir / f"sub{n:02d}_{j:02d}.png"
+            im.save(png)
+            if times[j + 1] - times[j] > 0.01:
+                out.append((png, times[j], times[j + 1],
+                            1920 - (ns["margin"] if narr else c["margin"]) - im.height + pad))
     card_size, card_margin = card_layout(s)
     big = font.font_variant(size=round(card_size * 0.81))
+    hook = script.segments[0].on_screen_ta.strip() if script.segments else ""
     for n, (rows, a, b) in enumerate(card_cues(s, script, segs, total, cuts), 1):
+        if n == 1 and a < 0.05 and hook and c.get("hook_style") == "timestamp":
+            out += _timestamp_card(s, rows, a, b, out_dir)
+            continue
         row_h = int(card_size * 1.2)
-        im = Image.new("RGBA", (1080, row_h * len(rows) + 2 * stroke), (0, 0, 0, 0))
-        d = ImageDraw.Draw(im)
+        im = Image.new("RGBA", (1080, row_h * len(rows) + 2 * stroke + 2 * pad), (0, 0, 0, 0))
         for k, row in enumerate(rows):
             w = probe.textlength(row, font=big)
             f = big.font_variant(size=int(big.size * WIDTH / w)) if w > WIDTH else big
-            d.text((540, stroke + k * row_h), row, font=f, anchor="ma", fill=(255, 255, 255, 255),
-                   stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+            _draw_words(im, [row], f, (540, pad + stroke + k * row_h), (255, 255, 255, 255), None, -1, stroke)
         png = out_dir / f"card{n:02d}.png"
         im.save(png)
-        out.append((png, a, b, 1920 - card_margin - im.height))
+        out.append((png, a, b, 1920 - card_margin - im.height + pad))
+    return out
+
+
+def karaoke_style(s: Settings) -> dict:
+    """The word-by-word highlight (`captions.karaoke`): on/off, the dialogue's lit word, the narrator's."""
+    k = {"enabled": True, "word": "#FFD54A", "narrator_word": "#FFFFFF", **(s["captions"].get("karaoke") or {})}
+    rgba = lambda h: tuple(int(h.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)) + (255,)
+    return {**k, "word": rgba(k["word"]), "narrator_word": rgba(k["narrator_word"])}
+
+
+def _draw_words(im, words: list[str], font, top_centre: tuple[float, float], fill, lit_fill, lit: int,
+                stroke: int, shadow: bool = True) -> None:
+    """Words centred on one row, no background: a thin black outline and a soft drop shadow keep them
+    readable on bright and dark frames alike; word `lit` (if any) in `lit_fill`."""
+    from PIL import Image, ImageDraw, ImageFilter
+    d = ImageDraw.Draw(im)
+    space = d.textlength(" ", font=font)
+    widths = [d.textlength(w, font=font) for w in words]
+    x = top_centre[0] - (sum(widths) + space * (len(words) - 1)) / 2
+    y = top_centre[1]
+    if shadow:
+        sh = Image.new("RGBA", im.size, (0, 0, 0, 0))
+        sd = ImageDraw.Draw(sh)
+        xs = x
+        for w, ww in zip(words, widths):
+            sd.text((xs + 3, y + 5), w, font=font, anchor="la", fill=(0, 0, 0, 170),
+                    stroke_width=stroke + 2, stroke_fill=(0, 0, 0, 170))
+            xs += ww + space
+        im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(6)))
+    for k, (w, ww) in enumerate(zip(words, widths)):
+        d.text((x, y), w, font=font, anchor="la", fill=lit_fill if k == lit else fill,
+               stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+        x += ww + space
+
+
+def _timestamp_card(s: Settings, rows: list[str], a: float, b: float, out_dir: Path) -> list[tuple]:
+    """The hook card as a film-title time stamp at the top left: the first line types on with a blinking
+    cursor, the second fades in under it. Drawn as a few pictures, each shown for its moment."""
+    from PIL import Image
+    big, small = _font(s).font_variant(size=105), _font(s).font_variant(size=52)
+    first, rest = rows[0], rows[1:]
+    step, blink = 0.12, 0.2
+    typed_at = a + 0.1 + step * len(first)
+    out, t, k = [], a, 0
+    while t < b - 0.01:
+        n = min(len(first), int((t - a - 0.1) / step) + 1) if t >= a + 0.1 else 0
+        cursor = int((t - a) / blink) % 2 == 0
+        fade = 0.0 if t < typed_at + 0.2 else min(1.0, (t - typed_at - 0.2) / 0.4)
+        im = Image.new("RGBA", (1080, 420), (0, 0, 0, 0))
+        from PIL import ImageDraw
+        d = ImageDraw.Draw(im)
+        _draw_words(im, [first[:n] or " "], big, (70 + d.textlength(first[:n] or " ", font=big) / 2, 140), (255, 255, 255, 255),
+                    None, -1, 5)
+        if cursor:
+            x = 70 + d.textlength(first[:n], font=big) + 14
+            d.rectangle((x, 160, x + 12, 270), fill=(255, 255, 255, 235))
+        if rest and fade > 0:
+            layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
+            _draw_words(layer, rest, small, (76 + ImageDraw.Draw(layer).textlength(" ".join(rest), font=small) / 2, 290),
+                        (255, 224, 138, 255), None, -1, 4)
+            layer.putalpha(layer.getchannel("A").point(lambda v: int(v * fade)))
+            im.alpha_composite(layer)
+        png = out_dir / f"hook{k:02d}.png"
+        im.save(png)
+        nxt = min(b, t + (step if n < len(first) else 0.1 if fade < 1 else blink))
+        out.append((png, t, nxt, 40))
+        t, k = nxt, k + 1
     return out

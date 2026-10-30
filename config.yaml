@@ -246,6 +246,12 @@ captions:
   # The narrator's subtitles look different from the characters' (white, upright, on the subtitle row),
   # so viewers can tell who is speaking: italic, a softer yellow, a little smaller, `raise` px higher.
   narrator: {colour: "#FFE08A", italic: true, scale: 0.92, raise: 40}
+  # No background strip: a thin black outline and a soft drop shadow. The word being said lights up:
+  # yellow in a character's (white) line, white in the narrator's (soft yellow) line.
+  karaoke: {enabled: true, word: "#FFD54A", narrator_word: "#FFFFFF"}
+  # The hook segment's card: timestamp = a film-title time stamp at the top left, its first line typed on
+  # with a blinking cursor and the second faded in under it ("3:04 AM" / "ஒரு கால்."); card = like the others.
+  hook_style: timestamp
 
 budget:
   currency: USD

@@ -284,7 +284,7 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
         graph, last = "", "0:v"
         for k, (png, a, b, y) in enumerate(captions.render_pngs(s, script, segs, total, rdir / "subs", cuts)):
             inputs += ["-i", str(png)]
-            graph += f"[{last}][{count}:v]overlay=0:{y}:enable='between(t,{a:.2f},{b:.2f})'[s{k}];"
+            graph += f"[{last}][{count}:v]overlay=0:{y}:enable='gte(t,{a:.3f})*lt(t,{b:.3f})'[s{k}];"
             last, count = f"s{k}", count + 1
         graph += f"[{last}]null[t]"
     cover = s["assembly"].get("watermark_cover") or {}

@@ -360,7 +360,9 @@ def test_on_screen_cards(studio, tmp_path):
     pngs = captions.render_pngs(studio, sc, segs, total, tmp_path / "subs")
     card_ys = [y for png, _, _, y in pngs if png.name.startswith("card")]
     sub_y = next(y for png, _, _, y in pngs if png.name.startswith("sub"))
-    assert len(card_ys) == len(cards) and all(y < sub_y for y in card_ys)
+    hook = [(png, a, b, y) for png, a, b, y in pngs if png.name.startswith("hook")]
+    assert len(card_ys) == len(cards) - 1 and all(y < sub_y for y in card_ys)  # the hook card is the time stamp
+    assert hook and hook[0][1] == 0 and abs(hook[-1][2] - cards[0][2]) < 0.01 and all(y < 400 for *_, y in hook)
 
 
 def test_captions_one_card_and_after_the_verse(studio, tmp_path):
@@ -375,7 +377,7 @@ def test_captions_one_card_and_after_the_verse(studio, tmp_path):
     rows = [r for r, a, b in captions.cues(studio, sc, segs, total) if a < 3]
     assert rows == [hook]
     ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
-    assert any("{\\fs" in l and hook in l for l in ass.splitlines())
+    assert any("{\\fs" in l and hook.split()[-1] in l for l in ass.splitlines())
     k = next(i for i, g in enumerate(sc.segments) if g.beat == "kural")
     in_kural = lambda cs: [c for c in cs if segs[k]["start"] <= c[1] < segs[k]["end"]]
     assert in_kural(captions.cues(studio, sc, segs, total)) == []      # verse on screen the whole line
@@ -609,7 +611,7 @@ def test_narrator_subtitles_look_different_and_never_overlap(studio, tmp_path):
     ys = {png.name: y for png, _, _, y in pngs}
     narr_rows = [k for k, c in enumerate(styled, 1) if c[3]]
     line_rows = [k for k, c in enumerate(styled, 1) if not c[3]]
-    assert ys[f"sub{narr_rows[0]:02d}.png"] < ys[f"sub{line_rows[0]:02d}.png"]   # narrator sits higher
+    assert ys[f"sub{narr_rows[0]:02d}_00.png"] < ys[f"sub{line_rows[0]:02d}_00.png"]   # narrator sits higher
     _, card_margin = captions.card_layout(studio)
     assert card_margin > n["margin"] + studio["captions"]["size"]               # cards clear both rows
 
@@ -629,3 +631,27 @@ def test_card_waits_for_the_cut(studio):
     assert plain[1] == slot and snapped[1] == slot + 1.0
     far = [c for c in captions.card_cues(studio, sc, segs, total, [slot + 2.0]) if c[0][0].startswith("கூப்பிடும்")][0]
     assert far[1] == slot
+
+
+def test_karaoke_words_light_up_in_order(studio, tmp_path):
+    """No background strip; one picture per word of a row, each shown from that word's start, in order, inside
+    the row's time; the lit word differs from picture to picture."""
+    from PIL import Image
+    from orukural import captions
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.3, "beat": g.beat}
+            for g in sc.segments]
+    total = sc.segments[-1].end_s
+    rows = captions.word_cues(studio, sc, segs, total)
+    for row, a, b, narr, starts in rows:
+        assert len(starts) == len(row.split()) and a <= starts[0] and starts == sorted(starts) and starts[-1] < b
+    pngs = captions.render_pngs(studio, sc, segs, total, tmp_path / "subs")
+    first = [p for p in pngs if p[0].name.startswith("sub01_")]
+    assert len(first) == len(rows[0][0].split())
+    assert all(x[2] <= y[1] + 1e-6 for x, y in zip(first, first[1:]))
+    a, b = (Image.open(first[0][0]).convert("RGBA"), Image.open(first[-1][0]).convert("RGBA"))
+    assert a.tobytes() != b.tobytes()
+    corner = Image.open(first[0][0]).convert("RGBA").getpixel((5, 5))
+    assert corner[3] == 0                                          # transparent: no strip behind the words
+    ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
+    assert "\\c&H" in ass                                        # the lit word in the ASS path too

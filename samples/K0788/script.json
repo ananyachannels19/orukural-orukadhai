@@ -112,7 +112,7 @@
   "hooks": [
    {
     "style": "tense_moment",
-    "on_screen_ta": "ராத்திரி 3 மணி. ஒரு கால்.",
+    "on_screen_ta": "3:04 AM\nஒரு கால்.",
     "narration_ta": "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!"
    },
    {
@@ -135,7 +135,7 @@
     "speaker": "saro",
     "narration_ta": "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!",
     "delivery": "panicked, breathless, close to tears",
-    "on_screen_ta": "ராத்திரி 3 மணி. ஒரு கால்."
+    "on_screen_ta": "3:04 AM\nஒரு கால்."
    },
    {
     "beat": "story",
