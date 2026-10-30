@@ -611,3 +611,20 @@ def test_narrator_subtitles_look_different_and_never_overlap(studio, tmp_path):
     assert ys[f"sub{narr_rows[0]:02d}.png"] < ys[f"sub{line_rows[0]:02d}.png"]   # narrator sits higher
     _, card_margin = captions.card_layout(studio)
     assert card_margin > n["margin"] + studio["captions"]["size"]               # cards clear both rows
+
+
+def test_card_waits_for_the_cut(studio):
+    """A card whose slot starts just before a shot cut comes up on the cut, with its own shot."""
+    from orukural import captions
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.3, "beat": g.beat}
+            for g in sc.segments]
+    total = sc.segments[-1].end_s
+    teaser = next(i for i, g in enumerate(sc.segments) if g.on_screen_ta.startswith("கூப்பிடும்"))
+    slot = segs[teaser - 1]["end"]
+    plain = [c for c in captions.card_cues(studio, sc, segs, total) if c[0][0].startswith("கூப்பிடும்")][0]
+    snapped = [c for c in captions.card_cues(studio, sc, segs, total, [slot + 1.0])
+               if c[0][0].startswith("கூப்பிடும்")][0]
+    assert plain[1] == slot and snapped[1] == slot + 1.0
+    far = [c for c in captions.card_cues(studio, sc, segs, total, [slot + 2.0]) if c[0][0].startswith("கூப்பிடும்")][0]
+    assert far[1] == slot

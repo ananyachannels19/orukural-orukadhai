@@ -248,8 +248,9 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     # no held frames: a clip that runs out under its shot freezes on its last frame
     limit = s["assembly"].get("max_frozen_seconds", 0.3)
     # (a shot that is still from start to end is a held image on purpose, not a clip running out)
-    whole = lambda a, b: any(r["start"] >= a - 0.1 and r["end"] <= b + 0.1 for r in shot_rows
-                             if r["start"] < b and a < r["end"])
+    meant = {n for n, spec in edit.load(ep_dir).items() if spec.get("still")}  # a deliberate held frame
+    whole = lambda a, b: any((r["start"] >= a - 0.1 and r["end"] <= b + 0.1) or r["n"] in meant
+                             for r in shot_rows if r["start"] < b and a < r["end"])
     if held := [(a, b) for a, b in media.frozen(video_only, limit) if not whole(a, b)]:
         where = ", ".join(f"{a:.2f}-{b:.2f} s (shot {_shot_at(shot_rows, a)})" for a, b in held)
         raise SystemExit(f"{episode_id}: the picture freezes at {where}: a clip is shorter than its shot. "
@@ -274,13 +275,14 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     final = rdir / f"{episode_id}_{s['assembly'].get('output_name', 'draft')}.mp4"
     inputs = ["-i", str(video_only)]
     count = 1  # ffmpeg inputs so far
+    cuts = [r["start"] for r in shot_rows[1:]]
     segs = [{**g, "path": str(ep_dir / "voice" / g["file"])} for g in segs]  # subtitles follow the voice's pauses
     if captions.ffmpeg_has_ass():
-        ass = captions.write_ass(s, script, segs, total, rdir / "captions.ass")
+        ass = captions.write_ass(s, script, segs, total, rdir / "captions.ass", cuts)
         graph = f"[0:v]{captions.filter_arg(s, ass)}[t]"
     else:  # e.g. Homebrew's ffmpeg has no libass: overlay pre-drawn subtitle images instead
         graph, last = "", "0:v"
-        for k, (png, a, b, y) in enumerate(captions.render_pngs(s, script, segs, total, rdir / "subs")):
+        for k, (png, a, b, y) in enumerate(captions.render_pngs(s, script, segs, total, rdir / "subs", cuts)):
             inputs += ["-i", str(png)]
             graph += f"[{last}][{count}:v]overlay=0:{y}:enable='between(t,{a:.2f},{b:.2f})'[s{k}];"
             last, count = f"s{k}", count + 1

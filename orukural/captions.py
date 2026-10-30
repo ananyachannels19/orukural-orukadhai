@@ -169,8 +169,14 @@ def styled_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
     return out
 
 
-def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> list[tuple[list[str], float, float]]:
-    """(rows, start, end) for every on-screen card: a segment's `on_screen_ta`, one row per line of it."""
+CARD_SNAP = 1.2  # a card whose slot starts this close before a shot cut waits for the cut
+
+
+def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float, cuts: list[float] = ()
+              ) -> list[tuple[list[str], float, float]]:
+    """(rows, start, end) for every on-screen card: a segment's `on_screen_ta`, one row per line of it.
+    cuts: the film's shot cuts; a card that would come up just before one waits for it, so it lands on the
+    shot it belongs to (K0788's teaser came up over the last second of the key handover)."""
     kural_on_screen = bool((s.raw.get("signature") or {}).get("enabled"))
     out = []
     for i, (seg, t) in enumerate(zip(script.segments, segs)):
@@ -183,6 +189,7 @@ def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
             if not t.get("kural_until"):
                 continue
             a = t["kural_until"]
+        a = next((c for c in sorted(cuts) if a < c <= a + CARD_SNAP and c < end - 1.0), a)
         out.append((rows, a, end))
     return out
 
@@ -195,7 +202,8 @@ def card_layout(s: Settings) -> tuple[int, int]:
     return size, narrator_style(s)["margin"] + round(c["size"] * 1.25) + 24
 
 
-def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path) -> Path:
+def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path,
+              cuts: list[float] = ()) -> Path:
     c = s["captions"]
     card_size, card_margin = card_layout(s)
     n = narrator_style(s)
@@ -209,7 +217,7 @@ def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float
         w = probe.textlength(row, font=font) * size / c["size"]
         fs = f"{{\\fs{int(size * WIDTH / w)}}}" if w > WIDTH else ""  # a one-card line a little too wide
         lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},{'Narr' if narr else 'Sub'},,0,0,0,,{fs}{_text(row)}")
-    for rows, a, b in card_cues(s, script, segs, total):
+    for rows, a, b in card_cues(s, script, segs, total, cuts):
         w = max(probe.textlength(r, font=font) for r in rows) * card_size / c["size"]
         fs = f"{{\\fs{int(card_size * WIDTH / w)}}}" if w > WIDTH else ""
         lines.append(f"Dialogue: 1,{_ts(a)},{_ts(b)},Card,,0,0,0,,{fs}{_text(chr(10).join(rows))}")
@@ -270,7 +278,8 @@ def _wrap(draw, text: str, font, width: int) -> list[str]:
     return rows + ([cur] if cur else [])
 
 
-def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out_dir: Path) -> list[tuple]:
+def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out_dir: Path,
+                cuts: list[float] = ()) -> list[tuple]:
     """For an ffmpeg without libass: each row drawn once to a transparent 1080-wide PNG, in the same
     font, size, outline and position as the ASS style. Returns (png, start, end, y) per row."""
     from PIL import Image, ImageDraw
@@ -297,7 +306,7 @@ def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
         out.append((png, a, b, 1920 - (ns["margin"] if narr else c["margin"]) - im.height))
     card_size, card_margin = card_layout(s)
     big = font.font_variant(size=round(card_size * 0.81))
-    for n, (rows, a, b) in enumerate(card_cues(s, script, segs, total), 1):
+    for n, (rows, a, b) in enumerate(card_cues(s, script, segs, total, cuts), 1):
         row_h = int(card_size * 1.2)
         im = Image.new("RGBA", (1080, row_h * len(rows) + 2 * stroke), (0, 0, 0, 0))
         d = ImageDraw.Draw(im)

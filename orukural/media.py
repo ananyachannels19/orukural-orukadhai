@@ -63,6 +63,17 @@ def frozen(path: Path, seconds: float = 0.3, noise_db: int = -60) -> list[tuple[
     return [(a, ends[i] if i < len(ends) else duration(path)) for i, a in enumerate(starts)]
 
 
+def color_tags(path: Path) -> list[str]:
+    """ffmpeg output options that copy a video's colour tags (space, primaries, transfer, range)."""
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
+                          "stream=color_space,color_primaries,color_transfer,color_range", "-of", "json", str(path)],
+                         capture_output=True, text=True).stdout
+    st = (json.loads(out or "{}").get("streams") or [{}])[0]
+    pairs = [("-colorspace", "color_space"), ("-color_primaries", "color_primaries"),
+             ("-color_trc", "color_transfer"), ("-color_range", "color_range")]
+    return [x for opt, key in pairs if st.get(key) not in (None, "unknown") for x in (opt, st[key])]
+
+
 def has_audio(path: Path) -> bool:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)],

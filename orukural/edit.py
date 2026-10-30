@@ -12,6 +12,12 @@
 - card: blur and dim the picture and show the kural (or the given lines) over it, in the subtitle
   font. For a shot where a character's mouth does not move with the words they say.
 - sharpen: a gentle unsharp mask on one region, in 1080x1920 pixels, for a face Flow left soft.
+- blur: hide fake text Flow drew (a number plate, a sign): [[from, to, x, y, w, h], ...], each a box in
+  1080x1920 pixels blurred between those clip seconds; a moving object gets one box per short stretch.
+- still: {"at": 0.25, "push": 1.04, "seconds": 3.75} holds the frame at `at` (a character not talking, the
+  pose the film loops back to) with a slow push-in of `push` over `seconds`, instead of the moving clip;
+  "direction": "out" eases from `push` back to the full frame, ending on exactly the clip's frame. The
+  render's held-frame check allows it: the stillness is meant.
 
 The edited clip is rendered once at the film's size; `to_clip` maps the original clip's seconds onto it
 (for the speech spans pinned in lipsync.json)."""
@@ -87,8 +93,30 @@ def _punch(s: Settings, p: float) -> str:
             f"scale=1080:1920:flags=lanczos,setsar=1")
 
 
+def _still(s: Settings, clip: Path, spec: dict, out: Path) -> list[tuple[float, float]]:
+    """The clip's frame at spec["at"] held for the clip's whole length, pushing in slowly from `at` on (silent)."""
+    from .assemble import _encode
+    dur, at = media.duration(clip), spec.get("at", 0.0)
+    push, span = spec.get("push", 1.04), spec.get("seconds", 4.0)
+    prog = f"min(max(t-{at:.3f},0)/{span:.3f},1)"
+    # "out": start pushed in and ease back to the full frame, so the last frame is the clip's own frame at
+    # `at` (the loop back into the opening then matches exactly)
+    z = f"({push:.4f}-{push - 1:.4f}*{prog})" if spec.get("direction") == "out" else f"(1+{push - 1:.4f}*{prog})"
+    vf = (f"{media.fill_frame()},scale=w='ceil(1080*{z}/2)*2':h='ceil(1920*{z}/2)*2':eval=frame,"
+          f"crop=1080:1920:(iw-1080)/2:(ih-1920)/2,setsar=1,fps={s['assembly']['fps']}")
+    media.run(["-ss", f"{at:.3f}", "-i", str(clip), "-frames:v", "1", str(out.with_suffix(".png"))])
+    # the clip's own colour tags: a piece that differs mid-film makes ffmpeg rebuild the final filter graph,
+    # and that stalled the signature overlay (K0788 v5.1 hung at the loop shot)
+    tags = media.color_tags(clip)
+    media.run(["-loop", "1", "-t", f"{dur:.3f}", "-i", str(out.with_suffix(".png")), "-vf", vf, *_encode(s),
+               *tags, str(out)])
+    return [(0.0, dur)]
+
+
 def _render(s: Settings, clip: Path, spec: dict, card: Path | None, out: Path) -> list[tuple[float, float]]:
     from .assemble import _encode
+    if spec.get("still"):
+        return _still(s, clip, spec["still"], out)
     dur = media.duration(clip)
     parts = kept(spec.get("cut", []), dur)
     punch = s["assembly"].get("cut_punch", 1.12)
@@ -110,6 +138,10 @@ def _render(s: Settings, clip: Path, spec: dict, card: Path | None, out: Path) -
         chain.append(f"[{last}]split[sa][sb];[sb]crop={w}:{h}:{x}:{y},unsharp={size}:{size}:{sh.get('amount', 1.5)}:5:5:0[sc];"
                      f"[sa][sc]overlay={x}:{y}[sh]")
         last = "sh"
+    for k, (t0, t1, x, y, w, h) in enumerate(spec.get("blur", [])):
+        chain.append(f"[{last}]split[ba{k}][bb{k}];[bb{k}]crop={w}:{h}:{x}:{y},boxblur=luma_radius=min(w\\,h)/3:luma_power=2:chroma_radius=min(cw\\,ch)/3:chroma_power=2[bc{k}];"
+                     f"[ba{k}][bc{k}]overlay={x}:{y}:enable='between(t,{t0:.3f},{t1:.3f})'[bl{k}]")
+        last = f"bl{k}"
     if card:
         args += ["-i", str(card)]
         chain.append(f"[{last}]gblur=sigma=22,eq=brightness=-0.10:saturation=0.8[bg];[bg][1:v]overlay=0:0[cd]")
