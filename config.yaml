@@ -216,7 +216,7 @@ assembly:
   # The finished film's sound (YouTube and Instagram play at about -14 LUFS): two-pass loudnorm at the end.
   loudness: {lufs: -14, true_peak: -1}
   # `studio.py assemble 301 --final`: the upload master, slower and nearer lossless -> render/<id>_final.mp4
-  final: {crf: 16, preset: slow, audio_kbps: 256}
+  final: {crf: 15, preset: slow, audio_kbps: 320}
   # Flow's sparkle watermark sits about here on every 1080x1920 frame; the badge covers it.
   watermark_cover:
     image: assets/brand/logo_badge.png   # the channel logo, small, over Flow's sparkle
@@ -252,6 +252,11 @@ captions:
   # The hook segment's card: timestamp = a film-title time stamp at the top left, its first line typed on
   # with a blinking cursor and the second faded in under it ("3:04 AM" / "ஒரு கால்."); card = like the others.
   hook_style: timestamp
+  # The other cards (the 10–12 s question, the last card): handwritten = written on word by word like a
+  # note, in the upper third, in `card_font`: Kavivanar, a Tamil handwriting face (Google Fonts, SIL OFL 1.1,
+  # licence in assets/fonts/Kavivanar-OFL.txt); the subtitle font if it is missing.
+  card_style: handwritten
+  card_font: assets/fonts/Kavivanar-Regular.ttf
 
 budget:
   currency: USD

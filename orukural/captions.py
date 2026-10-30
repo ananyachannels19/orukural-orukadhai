@@ -360,6 +360,9 @@ def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
         if n == 1 and a < 0.05 and hook and c.get("hook_style") == "timestamp":
             out += _timestamp_card(s, rows, a, b, out_dir)
             continue
+        if c.get("card_style") == "handwritten":
+            out += _handwritten_card(s, rows, a, b, out_dir, n)
+            continue
         row_h = int(card_size * 1.2)
         im = Image.new("RGBA", (1080, row_h * len(rows) + 2 * stroke + 2 * pad), (0, 0, 0, 0))
         for k, row in enumerate(rows):
@@ -402,6 +405,64 @@ def _draw_words(im, words: list[str], font, top_centre: tuple[float, float], fil
         d.text((x, y), w, font=font, anchor="la", fill=lit_fill if k == lit else fill,
                stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
         x += ww + space
+
+
+def _card_font(s: Settings, size: int):
+    """The cards' font (`captions.card_font`, e.g. a calligraphic Tamil face), else the subtitle font."""
+    from PIL import ImageFont, features
+    path = s["captions"].get("card_font")
+    if path and not Path(path).is_absolute():
+        path = next((str(d / path) for d in (s.root, ROOT) if (d / path).exists()), path)
+    if path and Path(path).exists():
+        return ImageFont.truetype(path, size, layout_engine=ImageFont.Layout.RAQM if features.check("raqm")
+                                  else ImageFont.Layout.BASIC)
+    return _font(s).font_variant(size=size)
+
+
+def _handwritten_card(s: Settings, rows: list[str], a: float, b: float, out_dir: Path, n: int) -> list[tuple]:
+    """A card written on like a note, in the upper third: each word revealed left to right as if by a pen,
+    one after another, then held. Warm off-white with a soft shadow, no background."""
+    from PIL import Image, ImageDraw
+    text = " ".join(rows)
+    probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    size = 80
+    f = _card_font(s, size)
+    while probe.textlength(text, font=f) > 940 and size > 34:
+        size -= 2
+        f = _card_font(s, size)
+    words = text.split()
+    space = probe.textlength(" ", font=f)
+    widths = [probe.textlength(w, font=f) for w in words]
+    x0 = 540 - (sum(widths) + space * (len(words) - 1)) / 2
+    lead, per, step = 0.15, 0.35, 1 / 15
+    done = lead + per * len(words)
+
+    def draw(t: float):
+        im = Image.new("RGBA", (1080, 300), (0, 0, 0, 0))
+        x = x0
+        for k, (w, ww) in enumerate(zip(words, widths)):
+            u = min(1.0, max(0.0, (t - lead - per * k) / per))
+            if u > 0:
+                layer = Image.new("RGBA", im.size, (0, 0, 0, 0))
+                _draw_words(layer, [w], f, (x + ww / 2, 120), (255, 246, 230, 255), None, -1, 3)
+                if u < 1:  # the pen has got this far
+                    cut = int(x + ww * u + 8)
+                    alpha = layer.getchannel("A")
+                    alpha.paste(0, (cut, 0, 1080, 300))
+                    layer.putalpha(alpha)
+                im.alpha_composite(layer)
+            x += ww + space
+        return im
+
+    out, t, k = [], a, 0
+    while t < b - 0.01:
+        held = t - a >= done
+        nxt = b if held else min(b, t + step)
+        png = out_dir / f"card{n:02d}_{k:02d}.png"
+        draw(t - a).save(png)
+        out.append((png, t, nxt, 380))
+        t, k = nxt, k + 1
+    return out
 
 
 def _timestamp_card(s: Settings, rows: list[str], a: float, b: float, out_dir: Path) -> list[tuple]:

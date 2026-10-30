@@ -358,10 +358,15 @@ def test_on_screen_cards(studio, tmp_path):
     assert sum(",Card," in l for l in ass.splitlines()) == len(cards)
     assert "சேவ்" not in ass
     pngs = captions.render_pngs(studio, sc, segs, total, tmp_path / "subs")
-    card_ys = [y for png, _, _, y in pngs if png.name.startswith("card")]
+    card_pngs = [(png, a, b, y) for png, a, b, y in pngs if png.name.startswith("card")]
     sub_y = next(y for png, _, _, y in pngs if png.name.startswith("sub"))
     hook = [(png, a, b, y) for png, a, b, y in pngs if png.name.startswith("hook")]
-    assert len(card_ys) == len(cards) - 1 and all(y < sub_y for y in card_ys)  # the hook card is the time stamp
+    assert len({p.name[:6] for p, *_ in card_pngs}) == len(cards) - 1     # the hook card is the time stamp
+    assert all(y < 600 for *_, y in card_pngs)                            # handwritten, in the upper third
+    for name in {p.name[:6] for p, *_ in card_pngs}:                      # written on, then held to the end
+        states = [c for c in card_pngs if c[0].name.startswith(name)]
+        card = cards[int(name[4:6]) - 1]
+        assert len(states) > 3 and states[0][1] == card[1] and abs(states[-1][2] - card[2]) < 0.01
     assert hook and hook[0][1] == 0 and abs(hook[-1][2] - cards[0][2]) < 0.01 and all(y < 400 for *_, y in hook)
 
 
@@ -669,3 +674,14 @@ def test_no_single_word_left_on_a_row(studio):
     for g in sc.segments:
         rows = captions._wrap(d, g.narration_ta, font, captions.WIDTH)
         assert len(rows) == 1 or len(rows[-1].split()) > 1 or len(rows[-2].split()) < 3
+
+
+def test_cards_use_the_handwriting_font(studio):
+    """The handwritten cards use Kavivanar (bundled with its OFL licence), and it shapes Tamil: a conjunct and
+    vowel signs come out as fewer glyph clusters than code points, like the subtitle font does."""
+    from orukural import captions
+    assert studio["captions"]["card_style"] == "handwritten"
+    f = captions._card_font(studio, 80)
+    assert "Kavivanar" in f.getname()[0] and (ROOT / "assets/fonts/Kavivanar-OFL.txt").exists()
+    text = "கூப்பிடாமலே நண்பன்"
+    assert 0 < f.getlength(text) < f.getlength("".join(ch + " " for ch in text))
