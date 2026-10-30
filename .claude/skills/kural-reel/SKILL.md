@@ -16,7 +16,7 @@ The repo is `orukural-studio` on Ananya's Mac (`/Users/ananya-24962/Documents/or
 1. **No "next kural" teaser** (அடுத்த குறள்) at the end of any video or caption. Never promise dates or a schedule to viewers.
 2. **Approve images before video.** Show Ananya the generated stills and get her OK before any Flow clip video is made.
 3. **Don't waste free voice requests.** Gemini TTS free tier = 10 requests a day, reset at 12:30 IST. No test takes "just to compare".
-4. **Flow account:** use only the new account (u/2, about 1,000 credits). Don't use the old account, and don't automate across several Gmail accounts.
+4. **Flow account:** use only the new Flow account, the one that owns project dbd31b05-2737-4682-a9ab-b83a04d7ffdf (opened as /u/2 on 30 Oct; the /u/N number can change with sign-in order), about 1,000 credits. Don't use the old account, and don't automate across several Gmail accounts.
 5. **Posting is irreversible.** Post only after Ananya's clear go-ahead. A message ending in "?" is a question, not a go-ahead. Post once per platform, and check first that the episode isn't already up.
 6. **Monitor proactively.** Long jobs must send a progress note every 2–3 minutes, and renders run in the background. Don't make her ask "update?".
 7. **Flow 1080p upscale and download are free** (0 credits). Always use the 1080p clips for the final.
@@ -25,7 +25,10 @@ The repo is `orukural-studio` on Ananya's Mac (`/Users/ananya-24962/Documents/or
 
 - Story in spoken Tamil, with the kural, the Tamil meaning and the English meaning checked against `data/kurals.json`.
 - **Avoid words that read wrong in English-ish Tamil**, e.g. a bare "கால்" (reads as "leg"). Say "அழைப்பு" instead. `schema.py` script-check warns on a bare கால் (`test_bare_kaal_is_flagged`).
-- The narrator voice is Charon (Gemini 3.8 flash TTS). The model doesn't take delivery notes or system instructions; it reads them aloud. Shape delivery only with punctuation (commas, ellipses, "!", "?").
+- The narrator voice is Charon (`gemini-3.8-flash-tts`). Send it the words only (`orukural/voice.py`, `_gemini`):
+  - Never put the delivery note before the words: as a text prefix it was read aloud in English at the start of every K0788 line (commit 7d56106).
+  - It also refuses a system instruction: `400 'Developer instruction is not enabled for this model'` (logs/events.jsonl, 28 Oct 18:45; fixed in commit d58749d).
+  - So the `delivery` field steers Flow's acting only. Shape this voice with punctuation (commas, ellipses, "!", "?").
 
 ## 2. Images and clips (Google Flow)
 
