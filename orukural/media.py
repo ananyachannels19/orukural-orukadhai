@@ -53,6 +53,16 @@ def normalize_loudness(path: Path, lufs: float = -14.0, true_peak: float = -1.0,
     return loudness(path)
 
 
+def frozen(path: Path, seconds: float = 0.3, noise_db: int = -60) -> list[tuple[float, float]]:
+    """(start, end) of every stretch where the picture does not change for `seconds` or more (a held frame)."""
+    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-map", "0:v", "-vf",
+                          f"freezedetect=n={noise_db}dB:d={seconds}", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    starts = [float(x.split("freeze_start:")[1].split()[0]) for x in err.splitlines() if "freeze_start:" in x]
+    ends = [float(x.split("freeze_end:")[1].split()[0]) for x in err.splitlines() if "freeze_end:" in x]
+    return [(a, ends[i] if i < len(ends) else duration(path)) for i, a in enumerate(starts)]
+
+
 def has_audio(path: Path) -> bool:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)],

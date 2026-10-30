@@ -212,6 +212,7 @@ assembly:
   crf: 18
   preset: medium
   audio_kbps: 192
+  max_frozen_seconds: 0.3     # the render fails if the picture holds still longer than this anywhere
   # The finished film's sound (YouTube and Instagram play at about -14 LUFS): two-pass loudnorm at the end.
   loudness: {lufs: -14, true_peak: -1}
   # `studio.py assemble 301 --final`: the upload master, slower and nearer lossless -> render/<id>_final.mp4
@@ -242,6 +243,9 @@ captions:
   size: 52
   margin: 400               # px above the bottom edge: clear of the Shorts/Reels buttons and caption
   shrink_to_fit: 1.25       # a line up to this much too wide stays on one card, a little smaller
+  # The narrator's subtitles look different from the characters' (white, upright, on the subtitle row),
+  # so viewers can tell who is speaking: italic, a softer yellow, a little smaller, `raise` px higher.
+  narrator: {colour: "#FFE08A", italic: true, scale: 0.92, raise: 40}
 
 budget:
   currency: USD

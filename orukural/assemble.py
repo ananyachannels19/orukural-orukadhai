@@ -72,6 +72,10 @@ def _pieces_for(s: Settings, shot: Shot, start: float, end: float) -> list[tuple
     return [(0.0, d, 1.0)]
 
 
+def _shot_at(rows: list[dict], t: float) -> int | str:
+    return next((r["n"] for r in rows if r["start"] <= t + 0.05 < r["end"]), "?")
+
+
 def pick_music(s: Settings, episode_id: str) -> Path | None:
     mdir = s.root / s["music"]["dir"]
     tracks = sorted(p for p in mdir.glob("*") if p.suffix.lower() in MUSIC_EXT) if mdir.exists() else []
@@ -81,12 +85,22 @@ def pick_music(s: Settings, episode_id: str) -> Path | None:
     return tracks[idx]
 
 
-def _fx_piece(clip: Path | None, offset: float, seconds: float, out: Path) -> None:
+def _speech(clip: Path) -> list[tuple[float, float]]:
+    """Where someone speaks in a clip's own sound (voice band), with a little room either side."""
+    return [(max(0.0, a - 0.1), b + 0.15) for a, b in lipsync._flow_parts(clip, 0.0, media.duration(clip))
+            if b - a >= 0.15]
+
+
+def _fx_piece(clip: Path | None, offset: float, seconds: float, out: Path,
+              mute: list[tuple[float, float]] = ()) -> None:
     """The clip's own sound for one cut (footsteps, the puppy, the street), or silence: always exactly as long
-    as the picture so the concatenated track stays in sync."""
+    as the picture so the concatenated track stays in sync. `mute`: clip seconds to silence (speech)."""
     if clip and media.has_audio(clip):
-        media.run(["-ss", f"{max(0.0, offset):.3f}", "-i", str(clip), "-vn", "-af",
-                   f"aresample=44100,aformat=channel_layouts=stereo,apad,atrim=0:{seconds:.3f}",
+        off = max(0.0, offset)
+        hush = "".join(f"volume=0:enable='between(t,{a - off:.3f},{b - off:.3f})'," for a, b in mute
+                       if b > off and a < off + seconds)
+        media.run(["-ss", f"{off:.3f}", "-i", str(clip), "-vn", "-af",
+                   f"{hush}aresample=44100,aformat=channel_layouts=stereo,apad,atrim=0:{seconds:.3f}",
                    "-c:a", "pcm_s16le", str(out)])
     else:
         media.run(["-f", "lavfi", "-i", "anullsrc=r=44100:cl=stereo", "-t", f"{seconds:.3f}", "-c:a", "pcm_s16le", str(out)])
@@ -220,7 +234,10 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
                 # Flow invents a voice when a character on screen talks: keep only the narration there
                 quiet = nat.get("mute_talking_shots", True) and continuity.someone_talks(s, script, sh)
                 fx_pieces.append(pdir / f"shot{sh.n:02d}_{j}.wav")
-                _fx_piece(None if quiet else clip, off, length, fx_pieces[-1])
+                # a second cut of a talking take keeps its street sound but not the line Flow said in it
+                mute = _speech(clip) if not quiet and clip and sh.clip_from and lipsync.spoken_lines(
+                    script, next(x for x in script.shots if x.n == sh.clip_from)) else []
+                _fx_piece(None if quiet else clip, off, length, fx_pieces[-1], mute)
         shot_rows.append({"n": sh.n, "beat": sh.beat, "start": round(start, 3), "end": round(end, 3),
                           "source": "clip" if v["clip"] else "still", "cuts": j + 1})
 
@@ -228,6 +245,15 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
     concat.write_text("".join(f"file '{p.name}'\n" for p in pieces), "utf-8")
     video_only = rdir / "video_only.mp4"
     media.run(["-f", "concat", "-safe", "0", "-i", str(concat), "-c", "copy", str(video_only)])
+    # no held frames: a clip that runs out under its shot freezes on its last frame
+    limit = s["assembly"].get("max_frozen_seconds", 0.3)
+    # (a shot that is still from start to end is a held image on purpose, not a clip running out)
+    whole = lambda a, b: any(r["start"] >= a - 0.1 and r["end"] <= b + 0.1 for r in shot_rows
+                             if r["start"] < b and a < r["end"])
+    if held := [(a, b) for a, b in media.frozen(video_only, limit) if not whole(a, b)]:
+        where = ", ".join(f"{a:.2f}-{b:.2f} s (shot {_shot_at(shot_rows, a)})" for a, b in held)
+        raise SystemExit(f"{episode_id}: the picture freezes at {where}: a clip is shorter than its shot. "
+                         f"Retime the shot, or slow the clip (no more than 0.85x), then render again.")
 
     fx = None
     if fx_pieces:

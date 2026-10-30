@@ -23,7 +23,7 @@ def _png(path: Path):
     return path.read_bytes()
 
 
-def _mp4(path: Path, secs=4):
+def _mp4(path: Path, secs=8):  # as long as the longest shot, so no clip runs out (a held frame fails the render)
     subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", f"testsrc=s=720x1280:d={secs}",
                     "-f", "lavfi", "-i", f"sine=d={secs}", "-shortest", "-pix_fmt", "yuv420p", str(path)], check=True)
     return path.read_bytes()
@@ -323,13 +323,13 @@ def test_reference_cap(studio):
     assert [lab for lab, _ in refs] == ["Kavin", "Thatha", "the place (thatha_thinnai)"]
 
 
-def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
+def test_captions_one_row_at_a_time(studio, tmp_path):
     from orukural import captions
     sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
     segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.5} for g in sc.segments]
     ass = captions.write_ass(studio, sc, segs, sc.segments[-1].end_s, tmp_path / "c.ass").read_text("utf-8")
     events = [l for l in ass.splitlines() if l.startswith("Dialogue:") and ",Card," not in l]
-    assert len(events) > len(sc.segments) and all(",Sub," in l and "\\N" not in l for l in events)
+    assert len(events) > len(sc.segments) and all((",Sub," in l or ",Narr," in l) and "\\N" not in l for l in events)
     # rows follow one another and never overlap
     cues = captions.cues(studio, sc, segs, sc.segments[-1].end_s)
     assert all(a < b <= nxt for (_, a, b), (_, nxt, _) in zip(cues, cues[1:]))
@@ -337,7 +337,8 @@ def test_captions_one_style_one_row_at_a_time(studio, tmp_path):
     d, font = ImageDraw.Draw(Image.new("RGBA", (1, 1))), captions._font(studio)
     shrink = studio["captions"]["shrink_to_fit"]
     assert all(d.textlength(row, font=font) <= captions.WIDTH * shrink for row, _, _ in cues)
-    assert [l.split(",")[0] for l in ass.splitlines() if l.startswith("Style:")] == ["Style: Sub", "Style: Card"]
+    assert [l.split(",")[0] for l in ass.splitlines() if l.startswith("Style:")] == ["Style: Sub", "Style: Narr",
+                                                                                  "Style: Card"]
 
 
 def test_on_screen_cards(studio, tmp_path):
@@ -581,3 +582,32 @@ def test_voice_pitch_tells_a_man_from_a_child(tmp_path):
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i",
                         f"sine=f={hz}:d=1.5,aformat=channel_layouts=mono", str(f)], check=True)
         assert abs(media.median_pitch(f) - hz) < 8
+
+
+def test_narrator_subtitles_look_different_and_never_overlap(studio, tmp_path):
+    """Characters' lines: white, upright, on the subtitle row. The narrator's: italic, softer yellow, smaller,
+    higher. One subtitle at a time even when lip sync makes two lines overlap."""
+    from orukural import captions
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0788/script.json").read_text("utf-8"))["script"])
+    segs = [{"start": g.start_s, "end": g.end_s, "voice_seconds": g.end_s - g.start_s - 0.3, "beat": g.beat}
+            for g in sc.segments]
+    segs[2]["start"] -= 1.0                                        # line 3 pulled forward over line 2
+    total = sc.segments[-1].end_s
+    styled = captions.styled_cues(studio, sc, segs, total)
+    assert all(b <= nxt[1] + 1e-6 for (_, _, b, _), nxt in zip(styled, styled[1:]))
+    by_speaker = {narr for _, _, _, narr in styled}
+    assert by_speaker == {True, False}
+    n = captions.narrator_style(studio)
+    assert n["italic"] and n["size"] < studio["captions"]["size"] and n["margin"] > studio["captions"]["margin"]
+    ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
+    narr_style = next(l for l in ass.splitlines() if l.startswith("Style: Narr")).split(",")
+    assert narr_style[8] == "1"                                    # italic
+    assert any(",Narr," in l and "சரோ இன்னும்" in l for l in ass.splitlines())
+    assert any(",Sub," in l and "சாவியக்" in l for l in ass.splitlines())
+    pngs = captions.render_pngs(studio, sc, segs, total, tmp_path / "subs")
+    ys = {png.name: y for png, _, _, y in pngs}
+    narr_rows = [k for k, c in enumerate(styled, 1) if c[3]]
+    line_rows = [k for k, c in enumerate(styled, 1) if not c[3]]
+    assert ys[f"sub{narr_rows[0]:02d}.png"] < ys[f"sub{line_rows[0]:02d}.png"]   # narrator sits higher
+    _, card_margin = captions.card_layout(studio)
+    assert card_margin > n["margin"] + studio["captions"]["size"]               # cards clear both rows

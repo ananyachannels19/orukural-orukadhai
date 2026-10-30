@@ -1,5 +1,7 @@
-"""On-screen Tamil text, burned in at render: one subtitle per spoken line, every line in the same
-font, size, colour and position (hook, story, dialogue, kural and lesson alike). A long line is shown one
+"""On-screen Tamil text, burned in at render: one subtitle per spoken line. Two styles, so viewers can
+tell who is talking: a character's line in plain white on the subtitle row; the narrator's line in
+italic, a softer yellow, a little smaller and a little higher (`captions.narrator`). Only one subtitle is
+ever on screen: when two lines overlap in time the earlier one is cut short where the next begins. A long line is shown one
 row at a time, each row timed across the voice in proportion to its length, so the text never grows
 upwards into the picture and only one row is ever on screen. The words are what is heard, so reading and listening never disagree. Most Shorts are
 watched muted, so this is not optional.
@@ -39,6 +41,7 @@ ScaledBorderAndShadow: yes
 [V4+ Styles]
 Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
 Style: Sub,{font},{size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,0,0,0,0,100,100,0,0,1,5,2,2,90,90,{margin},1
+Style: Narr,{font},{narr_size},{narr_colour},{narr_colour},&H00000000,&H78000000,0,1,0,0,100,100,0,0,1,5,2,2,90,90,{narr_margin},1
 Style: Card,{font},{card_size},&H00FFFFFF,&H00FFFFFF,&H00000000,&H78000000,0,0,0,0,100,100,0,0,1,5,2,2,90,90,{card_margin},1
 
 [Events]
@@ -110,8 +113,26 @@ def _row_times(rows: list[str], seconds: float, audio: Path | None) -> list[floa
     return times + [max(stop, times[-1] + 0.3)]
 
 
+def narrator_style(s: Settings) -> dict:
+    """How the narrator's subtitles differ from the characters': colour (RGB hex), italic, size, rise (px)."""
+    c = s["captions"]
+    n = {"colour": "#FFE08A", "italic": True, "scale": 0.92, "raise": 40, **(c.get("narrator") or {})}
+    return {**n, "size": round(c["size"] * n["scale"]), "margin": c["margin"] + n["raise"]}
+
+
+def _ass_colour(hexrgb: str) -> str:
+    r, g, b = hexrgb.lstrip("#")[0:2], hexrgb.lstrip("#")[2:4], hexrgb.lstrip("#")[4:6]
+    return f"&H00{b}{g}{r}".upper()
+
+
 def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> list[tuple[str, float, float]]:
-    """(row, start, end) for every subtitle row. segs: the real timeline from assemble.real_timeline
+    """(row, start, end) for every subtitle row, in time order, never two at once."""
+    return [c[:3] for c in styled_cues(s, script, segs, total)]
+
+
+def styled_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
+                ) -> list[tuple[str, float, float, bool]]:
+    """(row, start, end, narrator) for every subtitle row. segs: the real timeline from assemble.real_timeline
     (start/end/voice_seconds per line, and the voice file's path when it is known)."""
     from PIL import Image, ImageDraw
     font, probe, out = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1))), []
@@ -134,7 +155,17 @@ def cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float) -> 
                     continue
                 a = max(a, t["kural_until"])
             # the last row stays up for a short tail after the words, never into the next line
-            out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b))
+            out.append((row, a, min(end, b + 0.3) if k == len(rows) - 1 else b, seg.speaker == "narrator"))
+    # one subtitle at a time: a row ends where the next begins (lip sync can pull a line forward)
+    out.sort(key=lambda c: c[1])
+    for k in range(len(out) - 1):
+        row, a, b, narr = out[k]
+        nxt = out[k + 1]
+        if b > nxt[1]:
+            b = max(nxt[1], a + 0.3)
+            out[k] = (row, a, b, narr)
+            if nxt[1] < b:
+                out[k + 1] = (nxt[0], b, max(nxt[2], b + 0.3), nxt[3])
     return out
 
 
@@ -146,7 +177,8 @@ def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
         rows = [r.strip() for r in (seg.on_screen_ta or "").splitlines() if r.strip()]
         if not rows:
             continue
-        a, end = t["start"], total if i == len(segs) - 1 else t["end"]
+        # from the start of the segment's slot, not of its voice (lip sync can start a line later)
+        a, end = (segs[i - 1]["end"] if i else 0.0), total if i == len(segs) - 1 else t["end"]
         if kural_on_screen and seg.beat == "kural":
             if not t.get("kural_until"):
                 continue
@@ -156,24 +188,27 @@ def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
 
 
 def card_layout(s: Settings) -> tuple[int, int]:
-    """(font size, bottom margin) of the cards: a little bigger than subtitles, one subtitle row plus a gap
-    above them."""
+    """(font size, bottom margin) of the cards: a little bigger than subtitles, above the higher of the two
+    subtitle rows (the narrator's) plus a gap."""
     c = s["captions"]
     size = c.get("card_size", c["size"] + 6)
-    return size, c["margin"] + round(c["size"] * 1.25) + 24
+    return size, narrator_style(s)["margin"] + round(c["size"] * 1.25) + 24
 
 
 def write_ass(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out: Path) -> Path:
     c = s["captions"]
     card_size, card_margin = card_layout(s)
+    n = narrator_style(s)
     lines = [HEADER.format(font=c["font"], size=c["size"], margin=c["margin"], card_size=card_size,
-                           card_margin=card_margin)]
+                           card_margin=card_margin, narr_size=n["size"], narr_margin=n["margin"],
+                           narr_colour=_ass_colour(n["colour"]))]
     from PIL import Image, ImageDraw
     font, probe = _font(s, strict=False), ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    for row, a, b in cues(s, script, segs, total):
-        w = probe.textlength(row, font=font)
-        fs = f"{{\\fs{int(c['size'] * WIDTH / w)}}}" if w > WIDTH else ""  # a one-card line a little too wide
-        lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},Sub,,0,0,0,,{fs}{_text(row)}")
+    for row, a, b, narr in styled_cues(s, script, segs, total):
+        size = n["size"] if narr else c["size"]
+        w = probe.textlength(row, font=font) * size / c["size"]
+        fs = f"{{\\fs{int(size * WIDTH / w)}}}" if w > WIDTH else ""  # a one-card line a little too wide
+        lines.append(f"Dialogue: 0,{_ts(a)},{_ts(b)},{'Narr' if narr else 'Sub'},,0,0,0,,{fs}{_text(row)}")
     for rows, a, b in card_cues(s, script, segs, total):
         w = max(probe.textlength(r, font=font) for r in rows) * card_size / c["size"]
         fs = f"{{\\fs{int(card_size * WIDTH / w)}}}" if w > WIDTH else ""
@@ -243,15 +278,23 @@ def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: flo
     out_dir.mkdir(parents=True, exist_ok=True)
     line_h, stroke, out = int(c["size"] * 1.1), 5, []
     probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
-    for n, (row, a, b) in enumerate(cues(s, script, segs, total), 1):
+    ns = narrator_style(s)
+    small = font.font_variant(size=round(ns["size"] * 0.81))
+    colour = tuple(int(ns["colour"].lstrip("#")[i:i + 2], 16) for i in (0, 2, 4)) + (255,)
+    for n, (row, a, b, narr) in enumerate(styled_cues(s, script, segs, total), 1):
+        base = small if narr else font
         im = Image.new("RGBA", (1080, line_h + 2 * stroke), (0, 0, 0, 0))
-        w = probe.textlength(row, font=font)
-        f = font.font_variant(size=int(font.size * WIDTH / w)) if w > WIDTH else font  # one-card line, shrunk
-        ImageDraw.Draw(im).text((540, stroke), row, font=f, anchor="ma", fill=(255, 255, 255, 255),
+        w = probe.textlength(row, font=base)
+        f = base.font_variant(size=int(base.size * WIDTH / w)) if w > WIDTH else base  # one-card line, shrunk
+        ImageDraw.Draw(im).text((540, stroke), row, font=f, anchor="ma",
+                                fill=colour if narr else (255, 255, 255, 255),
                                 stroke_width=stroke, stroke_fill=(0, 0, 0, 255))
+        if narr and ns["italic"]:  # the font has no italic: slant it about the middle of the row
+            k = 0.2
+            im = im.transform(im.size, Image.AFFINE, (1, k, -k * im.height / 2, 0, 1, 0), Image.BICUBIC)
         png = out_dir / f"sub{n:02d}.png"
         im.save(png)
-        out.append((png, a, b, 1920 - c["margin"] - im.height))
+        out.append((png, a, b, 1920 - (ns["margin"] if narr else c["margin"]) - im.height))
     card_size, card_margin = card_layout(s)
     big = font.font_variant(size=round(card_size * 0.81))
     for n, (rows, a, b) in enumerate(card_cues(s, script, segs, total), 1):

@@ -96,8 +96,8 @@ The two walk down the hospital steps in the sunrise, Vignesh's arm around Saro's
 🖼 `Saro and Vignesh walking down the wide stone steps towards the camera at sunrise, Vignesh's arm around Saro's shoulder, Saro tired but smiling.`  
 🎞 `They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them.`
 
-**Shot 9** · 34.8–38.5 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 3 s  
-Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call. *Camera:* Same as shot 1.  
+**Shot 9** · 34.8–38.5 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 0.25 s  
+Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call. *Camera:* Same as shot 1.  
 🖼 `Second cut from shot 1's clip (see shot 1).`  
 🎞 `Second cut from shot 1's clip (see shot 1).`
 
@@ -154,7 +154,7 @@ They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun fla
 ```
 
 **Shot 9** · 34.8–38.5 s · no new generation · 0 credits  
-Uses seconds 3–6.7 of shot 1's clip. On screen: Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call.  
+Uses seconds 0.25–3.95 of shot 1's clip. On screen: Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call.  
 Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.
 
 ## YouTube

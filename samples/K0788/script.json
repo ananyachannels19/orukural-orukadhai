@@ -384,13 +384,13 @@
     "props": [
      "phone"
     ],
-    "action_en": "Back to the night: the headlight sweeps over Saro in the doorway again, leading into the opening call.",
+    "action_en": "Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call.",
     "camera_en": "Same as shot 1.",
     "image_prompt_en": "Second cut from shot 1's clip (see shot 1).",
     "motion_prompt_en": "Second cut from shot 1's clip (see shot 1).",
     "motion_priority": 5,
     "clip_from": 1,
-    "clip_offset_s": 3.0
+    "clip_offset_s": 0.25
    }
   ],
   "lesson_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்",

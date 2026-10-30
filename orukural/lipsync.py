@@ -19,6 +19,11 @@ speech spans of shot 6 in clip seconds, one per spoken line in order; a line giv
 phrases, {"5": [[[1.47, 1.94], [3.53, 5.06]]]}, pins its phrases too. Pinned seconds are those of
 the clip as Flow made it, before any cut from edit.py.
 
+{"until": {"1": 4.0}} says the shot's picture must end by that clip second (the take changes after it, say
+the phone comes down from the ear); the picture offset is held so the cut lands before it, and the voice is
+moved to follow the mouth instead. The offset is also held so the clip always covers the whole shot: a
+clip that runs out would freeze on its last frame.
+
 Flow's own voice can be kept instead where it says the right words in a voice that suits the
 character: {"flow_voice": [5, 9]} in the same file. Its lines then play straight from the clip's
 sound (perfect sync by construction); the narrator and lines it gets wrong stay on our voice.
@@ -106,9 +111,19 @@ def merge_parts(parts: list[tuple[float, float]], count: int) -> list[tuple[floa
     return parts
 
 
+BLIP = 0.25  # a sound this short at the very start or end of a line is a breath or a click, not a phrase
+
+
 def _phrases(path: Path, v0: float, v1: float) -> list[tuple[float, float]]:
-    """Our voice split at its own pauses (a comma or a full stop in the line)."""
-    return _parts(media.pauses(path, min_seconds=0.12, noise_db=-40), v0, v1) or [(v0, v1)]
+    """Our voice split at its own pauses (a comma or a full stop in the line). A breath before the first word
+    or after the last is dropped: matched to Flow's first phrase it squeezed the real words onto the rest
+    (K0788 line 7 came in a second late)."""
+    parts = _parts(media.pauses(path, min_seconds=0.12, noise_db=-40), v0, v1) or [(v0, v1)]
+    while len(parts) > 1 and parts[0][1] - parts[0][0] < BLIP:
+        parts = parts[1:]
+    while len(parts) > 1 and parts[-1][1] - parts[-1][0] < BLIP:
+        parts = parts[:-1]
+    return parts
 
 
 def _flow_parts(clip: Path, a: float, b: float) -> list[tuple[float, float]]:
@@ -160,6 +175,7 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
     Returns the updated segments, a picture offset (clip seconds) per shot, and notes for the log."""
     raw = load_pins(ep_dir)
     flow_voice = {int(n) for n in raw.pop("flow_voice", [])}
+    until = {int(k): float(v) for k, v in raw.pop("until", {}).items()}
     sources = voice_sources(script, raw)
     raw.pop("voice_source", None)
     pinned = {int(k): [_span(x) for x in v] for k, v in raw.items()}
@@ -179,8 +195,15 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
             continue
         out_dir.mkdir(parents=True, exist_ok=True)
         first = segs[lines[0]]
-        # show the clip from the point where its speech lands on our line's slot
+        # show the clip from the point where its speech lands on our line's slot, as far as the clip allows:
+        # the shot must not run past the clip's end (a frozen frame) or past its `until` second
         offset = max(0.0, spans[0][0] - (first["start"] - start))
+        last = min(media.duration(clip), move(until[shot.n]) if shot.n in until else float("inf"))
+        room = max(0.0, last - (end - start))
+        if offset > room:
+            notes.append(f"shot {shot.n}: picture offset held at {room:.2f} s (wanted {offset:.2f} s) so the clip "
+                         f"covers the shot; the voice follows the mouth {offset - room:.2f} s later")
+            offset = room
         offsets[shot.n] = offset
         for j, (i, (a, b)) in enumerate(zip(lines, spans)):
             g = segs[i]
@@ -217,8 +240,14 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
                          + ", ".join(f"{q0:.2f}-{q1:.2f}" for q0, q1 in flows) + " s, voice at "
                          + ", ".join(f"{t:.2f}x" for t in tempos))
     for prev, nxt in zip(segs, segs[1:]):
-        if prev["start"] + prev["voice_seconds"] > nxt["start"] + 0.05:
-            notes.append(f"line {nxt['n']} starts before line {prev['n']} ends ({nxt['start']:.2f} s): check that cut")
+        busy = prev["start"] + prev["voice_seconds"]
+        if busy > nxt["start"] + 0.05:
+            # a line not tied to a mouth (the narrator, an off-screen voice) waits for the one before it
+            if "lipsync" not in nxt and busy + 0.12 + nxt["voice_seconds"] <= nxt["end"] + 0.05:
+                notes.append(f"line {nxt['n']} moved {busy + 0.12 - nxt['start']:.2f} s later, after line {prev['n']}")
+                nxt["start"] = round(busy + 0.12, 3)
+            else:
+                notes.append(f"line {nxt['n']} starts before line {prev['n']} ends ({nxt['start']:.2f} s): check that cut")
     return segs, offsets, notes
 
 
