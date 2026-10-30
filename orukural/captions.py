@@ -281,6 +281,19 @@ def _font(s: Settings, strict: bool = True):
                               layout_engine=ImageFont.Layout.RAQM if raqm else ImageFont.Layout.BASIC)
 
 
+def _no_orphan(draw, rows: list[str], font, width: int) -> list[str]:
+    """Never leave one word alone on the last row: move words down from the row above (as few as it takes,
+    while that row keeps two or more and the last row still fits)."""
+    rows = list(rows)
+    while len(rows) > 1 and len(rows[-1].split()) == 1:
+        above = rows[-2].split()
+        moved = f"{above[-1]} {rows[-1]}"
+        if len(above) < 3 or draw.textlength(moved, font=font) > width:
+            break
+        rows[-2], rows[-1] = " ".join(above[:-1]), moved
+    return rows
+
+
 def _wrap(draw, text: str, font, width: int) -> list[str]:
     """Rows that fit the width, breaking at the end of a phrase (after ! ? , or a full stop) where it
     can, so each row reads on its own, and between words only inside a phrase too long for one row."""
@@ -303,7 +316,7 @@ def _wrap(draw, text: str, font, width: int) -> list[str]:
                 cur = word
             else:
                 cur = trial
-    return rows + ([cur] if cur else [])
+    return _no_orphan(draw, rows + ([cur] if cur else []), font, width)
 
 
 def render_pngs(s: Settings, script: EpisodeScript, segs: list[dict], total: float, out_dir: Path,

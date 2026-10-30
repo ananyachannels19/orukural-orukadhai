@@ -655,3 +655,17 @@ def test_karaoke_words_light_up_in_order(studio, tmp_path):
     assert corner[3] == 0                                          # transparent: no strip behind the words
     ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
     assert "\\c&H" in ass                                        # the lit word in the ASS path too
+
+
+def test_no_single_word_left_on_a_row(studio):
+    """Two-row subtitles never leave one word alone: K0788's closing call to action breaks before டேக்."""
+    from PIL import Image, ImageDraw
+    from orukural import captions
+    d, font = ImageDraw.Draw(Image.new("RGBA", (1, 1))), captions._font(studio)
+    small = font.font_variant(size=round(captions.narrator_style(studio)["size"] * 0.81))
+    rows = captions._wrap(d, "அப்படிப்பட்ட உங்க ஃப்ரெண்ட்-அ டேக் பண்ணுங்க!", small, captions.WIDTH)
+    assert rows == ["அப்படிப்பட்ட உங்க ஃப்ரெண்ட்-அ", "டேக் பண்ணுங்க!"] or len(rows) == 1
+    sc = EpisodeScript.model_validate(json.loads((ROOT / "samples/K0301/script.json").read_text("utf-8"))["script"])
+    for g in sc.segments:
+        rows = captions._wrap(d, g.narration_ta, font, captions.WIDTH)
+        assert len(rows) == 1 or len(rows[-1].split()) > 1 or len(rows[-2].split()) < 3
