@@ -56,9 +56,14 @@ def _still_piece(s: Settings, image: Path, seconds: float, punch: float, out: Pa
 
 
 def _clip_piece(s: Settings, clip: Path, offset: float, seconds: float, punch: float, out: Path) -> None:
-    have = media.duration(clip) - offset
-    pad = max(0.0, seconds - have) + 0.1
-    vf = f"{media.fill_frame(punch)},tpad=stop_mode=clone:stop_duration={pad:.3f},fps={s['assembly']['fps']}"
+    have = media.video_duration(clip) - offset
+    # a clip a little short of its shot (Flow's 1080p upscale drops the last frame or two) is slowed to fit,
+    # by no more than 0.85x, rather than freezing on its last frame; the tpad only covers rounding
+    slow = seconds / have if have < seconds and have >= 0.85 * seconds else 1.0
+    pad = max(0.0, seconds - have * slow) + 0.1
+    stretch = f"setpts={slow:.5f}*PTS," if slow > 1.0 else ""
+    vf = (f"{stretch}{media.fill_frame(punch)},tpad=stop_mode=clone:stop_duration={pad:.3f},"
+          f"fps={s['assembly']['fps']}")
     media.run(["-ss", f"{max(0.0, offset):.3f}", "-i", str(clip), "-t", f"{seconds:.3f}", "-vf", vf, *_encode(s), str(out)])
 
 

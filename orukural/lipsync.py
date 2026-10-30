@@ -198,7 +198,7 @@ def fit(s: Settings, ep_dir: Path, script: EpisodeScript, segs: list[dict], shot
         # show the clip from the point where its speech lands on our line's slot, as far as the clip allows:
         # the shot must not run past the clip's end (a frozen frame) or past its `until` second
         offset = max(0.0, spans[0][0] - (first["start"] - start))
-        last = min(media.duration(clip), move(until[shot.n]) if shot.n in until else float("inf"))
+        last = min(media.video_duration(clip), move(until[shot.n]) if shot.n in until else float("inf"))
         room = max(0.0, last - (end - start))
         if offset > room:
             notes.append(f"shot {shot.n}: picture offset held at {room:.2f} s (wanted {offset:.2f} s) so the clip "

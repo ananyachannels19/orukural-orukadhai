@@ -74,6 +74,16 @@ def color_tags(path: Path) -> list[str]:
     return [x for opt, key in pairs if st.get(key) not in (None, "unknown") for x in (opt, st[key])]
 
 
+def video_duration(path: Path) -> float:
+    """How long the picture lasts (a clip's sound can run a few frames longer than its video)."""
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries", "stream=duration",
+                          "-of", "csv=p=0", str(path)], capture_output=True, text=True).stdout.strip()
+    try:
+        return float(out.splitlines()[0])
+    except (ValueError, IndexError):
+        return duration(path)
+
+
 def has_audio(path: Path) -> bool:
     out = subprocess.run(
         ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)],
