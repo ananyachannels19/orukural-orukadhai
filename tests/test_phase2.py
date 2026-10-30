@@ -350,12 +350,13 @@ def test_on_screen_cards(studio, tmp_path):
     total = sc.segments[-1].end_s + 0.5
     cards = captions.card_cues(studio, sc, segs, total)
     assert cards[0][1] == 0 and cards[-1][2] == total
-    assert cards[-1][0] == ["கூப்பிடாமலே வருபவன் தான் நண்பன்", "சேவ் பண்ணுங்க"]
+    assert cards[-1][0] == ["கூப்பிடாமலே வருபவன் தான் நண்பன்"]         # no save prompt
+    assert "டேக்" in sc.segments[-1].narration_ta and not sc.segments[-1].on_screen_ta  # the call to action
     _, card_margin = captions.card_layout(studio)
     assert card_margin > studio["captions"]["margin"] + studio["captions"]["size"]   # above the subtitle row
     ass = captions.write_ass(studio, sc, segs, total, tmp_path / "c.ass").read_text("utf-8")
     assert sum(",Card," in l for l in ass.splitlines()) == len(cards)
-    assert "கூப்பிடாமலே வருபவன் தான் நண்பன்\\Nசேவ் பண்ணுங்க" in ass
+    assert "சேவ்" not in ass
     pngs = captions.render_pngs(studio, sc, segs, total, tmp_path / "subs")
     card_ys = [y for png, _, _, y in pngs if png.name.startswith("card")]
     sub_y = next(y for png, _, _, y in pngs if png.name.startswith("sub"))

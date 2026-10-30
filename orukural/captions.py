@@ -183,8 +183,10 @@ def card_cues(s: Settings, script: EpisodeScript, segs: list[dict], total: float
         rows = [r.strip() for r in (seg.on_screen_ta or "").splitlines() if r.strip()]
         if not rows:
             continue
-        # from the start of the segment's slot, not of its voice (lip sync can start a line later)
-        a, end = (segs[i - 1]["end"] if i else 0.0), total if i == len(segs) - 1 else t["end"]
+        # from the start of the segment's slot, not of its voice (lip sync can start a line later); the last
+        # card stays up to the end, under the closing call to action that follows it
+        last = all(not (g.on_screen_ta or "").strip() for g in script.segments[i + 1:])
+        a, end = (segs[i - 1]["end"] if i else 0.0), total if last else t["end"]
         if kural_on_screen and seg.beat == "kural":
             if not t.get("kural_until"):
                 continue

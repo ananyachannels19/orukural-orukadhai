@@ -170,7 +170,7 @@ LATIN = re.compile(r"[A-Za-z]+(?:[ '-][A-Za-z]+)*")
 
 def latin_words(script: EpisodeScript) -> list[str]:
     """Spoken lines and cards with English letters (the subtitles show what is written). Older scripts' "Save this"
-    passes; new ones say சேவ் பண்ணுங்க."""
+    passes."""
     out = []
     for g in script.segments:
         for kind, text in (("narration", g.narration_ta), ("on-screen text", g.on_screen_ta.replace("Save this", ""))):
@@ -292,8 +292,12 @@ def check(script: EpisodeScript, kural: dict, cfg: dict) -> tuple[list[str], lis
         teaser = [g for g in segs if g.on_screen_ta.strip() and g.start_s <= 12 and g.end_s >= 10 and g.beat == "story"]
         if not teaser:
             warns.append("no one-line lesson teaser on screen at 10–12 s")
-        if not any(w in segs[-1].on_screen_ta.lower() for w in ("சேவ் பண்ணுங்க", "save this")):
-            warns.append("the last card should be the short lesson line plus \"சேவ் பண்ணுங்க\"")
+        cta = segs[-1]
+        if cta.speaker != "narrator" or "டேக்" not in cta.narration_ta:
+            warns.append("the last line should be the narrator's call to action: tag that kind of friend "
+                         "(\"…டேக் பண்ணுங்க\")")
+        if not any(g.on_screen_ta.strip() for g in segs if g.beat == "lesson"):
+            warns.append("no lesson card (the short lesson line on screen at the end)")
         if not script.tag_question_ta.strip():
             warns.append("no tag question (tag a friend, partner or sibling)")
 

@@ -150,7 +150,7 @@ def test_clip_reuse_and_credit_cap(studio, k788):
                     "episodes/K0788/refs/characters/vignesh.png"]
     readme = (ep / "flow" / "README.md").read_text("utf-8")   # every shot has its entry, reused ones too
     assert "## Shot 2 (3–8 s): no new generation" in readme and "Uses seconds 3–8 of shot 1's clip" in readme
-    assert "## Shot 9 (34.8–38.5 s): no new generation" in readme
+    assert "## Shot 9 (34.8–41 s): no new generation" in readme
     studio.raw["budget"]["per_reel_credits"] = 60
     assert visuals.credit_check(studio, sc) and "64 Flow credits" in visuals.credit_check(studio, sc)[0]
     raw = copy.deepcopy(k788)
@@ -192,7 +192,7 @@ def test_kids_special_and_prompt(studio):
     assert "Relationship: friends" in normal and "thatha_cameo" in normal and "Recent casts" in normal
     system = scriptgen.system_prompt(studio)
     for must in ("Invent this story's own 2–3 characters", "aim for 7 clips", "Never name a posting day or time",
-                 "towering over a child", "சேவ் பண்ணுங்க", "tag"):
+                 "towering over a child", "டேக் பண்ணுங்க", "tag"):
         assert must in system
 
 

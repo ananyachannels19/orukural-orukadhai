@@ -147,10 +147,10 @@ def dry_run_script(kural: dict) -> dict:
     v = kural["verse"]
     n = kural["number"]
     beats = [("hook", 0, 3, "a"), ("story", 3, 12, "narrator"), ("story", 12, 25, "b"), ("kural", 25, 35, "narrator"),
-             ("lesson", 35, 43, "narrator")]
+             ("lesson", 35, 40.5, "narrator"), ("cta", 40.5, 43, "narrator")]
     say = {"hook": "[DRY RUN] கேள்வி?", "story": "[DRY RUN] கதை.", "kural": f"{v['line1']} {v['line2']}",
-           "lesson": "[DRY RUN] பாடம்."}
-    screen = {12: "[DRY RUN] பாடம் வருது", 35: "[DRY RUN] பாடம்\nசேவ் பண்ணுங்க"}
+           "lesson": "[DRY RUN] பாடம்.", "cta": "[DRY RUN] உங்க ஃப்ரெண்ட்-அ டேக் பண்ணுங்க!"}
+    screen = {12: "[DRY RUN] பாடம் வருது", 35: "[DRY RUN] பாடம்"}
     shots = [(1, "hook", 0, 3), (2, "story", 3, 11), (3, "story", 11, 19), (4, "story", 19, 25),
              (5, "kural", 25, 33), (6, "lesson", 33, 41), (7, "lesson", 41, 43)]
     member = lambda cid, gender, voice: {"id": cid, "name_ta": f"[DRY RUN {cid}]", "age": 28,  # noqa: E731
@@ -166,7 +166,7 @@ def dry_run_script(kural: dict) -> dict:
         continuity={"locations": [{"id": "street", "description_en": "a quiet street", "light_en": "golden hour",
                                    "blocking_en": "a on the left, b on the right"}],
                     "props": [], "outfits": []},
-        segments=[{"beat": b, "start_s": a, "end_s": e, "speaker": who, "narration_ta": say[b],
+        segments=[{"beat": "lesson" if b == "cta" else b, "start_s": a, "end_s": e, "speaker": who, "narration_ta": say[b],
                    "on_screen_ta": screen.get(a, "")} for b, a, e, who in beats],
         shots=[{"n": i, "beat": b, "start_s": a, "end_s": e, "characters": ["a", "b"],
                 "location": "street", "action_en": "placeholder", "camera_en": "medium shot",

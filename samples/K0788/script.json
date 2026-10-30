@@ -207,7 +207,16 @@
     "speaker": "narrator",
     "narration_ta": "உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.",
     "delivery": "warm, certain",
-    "on_screen_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்\nசேவ் பண்ணுங்க"
+    "on_screen_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்"
+   },
+   {
+    "beat": "lesson",
+    "start_s": 38.5,
+    "end_s": 41.0,
+    "speaker": "narrator",
+    "narration_ta": "அப்படிப்பட்ட உங்க ஃப்ரெண்ட்-அ டேக் பண்ணுங்க!",
+    "delivery": "warm, smiling, inviting",
+    "on_screen_ta": ""
    }
   ],
   "shots": [
@@ -376,7 +385,7 @@
     "n": 9,
     "beat": "lesson",
     "start_s": 34.8,
-    "end_s": 38.5,
+    "end_s": 41.0,
     "characters": [
      "saro"
     ],

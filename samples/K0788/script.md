@@ -1,5 +1,5 @@
 # குறள் #788 · 3 மணிக்கு வந்த நண்பன்
-*The friend at the gate at 3 am* · அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால் · runtime 38 s
+*The friend at the gate at 3 am* · அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால் · runtime 41 s
 
 > உடுக்கை இழந்தவன் கைபோல ஆங்கே  
 > இடுக்கண் களைவதாம் நட்பு.
@@ -37,7 +37,8 @@
 | 19–22 s | story | saro (tired, tearful, grateful) | நான் உன்னக் கூப்பிடவே இல்லையேடா... |  |
 | 22–26 s | story | vignesh (gently teasing, warm) | லுங்கி நழுவுனா, கை பெர்மிஷன் கேட்டுட்டா பிடிக்குது? |  |
 | 26–35 s | kural | narrator (slow, warm, reverent) | உடுக்கை இழந்தவன் கைபோல ஆங்கே இடுக்கண் களைவதாம் நட்பு. ஆடை நழுவினா, கை கேக்காமலே பிடிக்கும். அதுதான் நட்பு. |  |
-| 35–38.5 s | lesson | narrator (warm, certain) | உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். | கூப்பிடாமலே வருபவன் தான் நண்பன்<br>சேவ் பண்ணுங்க |
+| 35–38.5 s | lesson | narrator (warm, certain) | உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். | கூப்பிடாமலே வருபவன் தான் நண்பன் |
+| 38.5–41 s | lesson | narrator (warm, smiling, inviting) | அப்படிப்பட்ட உங்க ஃப்ரெண்ட்-அ டேக் பண்ணுங்க! |  |
 
 **Lesson:** கூப்பிடாமலே வருபவன் தான் நண்பன்  
 **Tag question:** உங்க 3 AM நண்பனை tag பண்ணுங்க  
@@ -96,7 +97,7 @@ The two walk down the hospital steps in the sunrise, Vignesh's arm around Saro's
 🖼 `Saro and Vignesh walking down the wide stone steps towards the camera at sunrise, Vignesh's arm around Saro's shoulder, Saro tired but smiling.`  
 🎞 `They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them.`
 
-**Shot 9** · 34.8–38.5 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 0.25 s  
+**Shot 9** · 34.8–41 s · lesson · saro · saro_gate · props: phone · reuses shot 1's clip from 0.25 s  
 Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call. *Camera:* Same as shot 1.  
 🖼 `Second cut from shot 1's clip (see shot 1).`  
 🎞 `Second cut from shot 1's clip (see shot 1).`
@@ -153,9 +154,9 @@ Saro and Vignesh stand at the corridor window at dawn, each already holding his 
 They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them. Camera: Wide shot from the bottom of the steps, low angle. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
-**Shot 9** · 34.8–38.5 s · no new generation · 0 credits  
-Uses seconds 0.25–3.95 of shot 1's clip. On screen: Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call.  
-Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.
+**Shot 9** · 34.8–41 s · no new generation · 0 credits  
+Uses seconds 0.25–6.45 of shot 1's clip. On screen: Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call.  
+Over it: narrator: உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம். / narrator: அப்படிப்பட்ட உங்க ஃப்ரெண்ட்-அ டேக் பண்ணுங்க!
 
 ## YouTube
 
