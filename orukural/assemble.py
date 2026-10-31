@@ -112,9 +112,13 @@ def _fx_piece(clip: Path | None, offset: float, seconds: float, out: Path,
 
 
 def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music: Path | None, out: Path,
-               fx: Path | None = None) -> None:
+               fx: Path | None = None, extra: list[tuple[Path, float, float]] | None = None) -> None:
+    """`extra`: sound effects and ambience (file, film second, gain dB), mixed into the scene-sound layer so
+    they dip under the voices."""
     vdir = ep_dir / "voice"
     args, labels, filters = [], [], []
+    if extra:  # one scene-sound track: the clips' own sound (if any) plus the effects
+        fx = _effects_track(s, ep_dir, total, fx, extra)
     for i, seg in enumerate(segs):
         args += ["-i", str(vdir / seg["file"])]
         ms = int(seg["start"] * 1000)
@@ -150,6 +154,45 @@ def _mix_audio(s: Settings, ep_dir: Path, segs: list[dict], total: float, music:
                    f"atrim=0:{total:.3f}[out]")
     media.run([*args, "-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "aac", "-b:a", f"{s['assembly'].get('audio_kbps', 192)}k",
                "-ar", "48000", str(out)])
+
+
+def _effects_track(s: Settings, ep_dir: Path, total: float, fx: Path | None,
+                   extra: list[tuple[Path, float, float]]) -> Path:
+    """The scene-sound layer with the effects laid in at their film seconds (at the natural-sound level, the
+    effects' own gain on top)."""
+    nat_db = (s["assembly"].get("natural_sound") or {}).get("volume_db", -6)
+    args, filters, labels = [], [], []
+    k = 0
+    if fx:
+        args += ["-i", str(fx)]
+        filters.append(f"[0:a]aresample=44100,aformat=channel_layouts=stereo[e0]")
+        labels.append("[e0]")
+        k = 1
+    for j, (path, at, gain) in enumerate(extra):
+        args += ["-i", str(path)]
+        ms = max(0, int(at * 1000))
+        # natural_sound's volume is applied to this whole layer later; undo it here so `gain` is the effect's level
+        filters.append(f"[{k + j}:a]aresample=44100,aformat=channel_layouts=stereo,volume={gain - nat_db}dB,"
+                       f"adelay={ms}|{ms}[e{k + j}]")
+        labels.append(f"[e{k + j}]")
+    filters.append(f"{''.join(labels)}amix=inputs={len(labels)}:normalize=0,apad=whole_dur={total:.3f},"
+                   f"atrim=0:{total:.3f}[out]")
+    out = ep_dir / "render" / "effects.wav"
+    media.run([*args, "-filter_complex", ";".join(filters), "-map", "[out]", "-c:a", "pcm_s16le", str(out)])
+    return out
+
+
+def _effect_list(ep_dir: Path, over: dict, shot_rows: list[dict], total: float) -> list[tuple[Path, float, float]]:
+    """edit.json "sfx" and "ambience" as (file, film second, gain dB)."""
+    starts = {r["n"]: r["start"] for r in shot_rows}
+    out = []
+    if amb := over.get("ambience"):
+        out.append((ep_dir / amb["file"], 0.0, float(amb.get("gain_db", -26))))
+    for e in over.get("sfx") or []:
+        if e.get("shot") not in starts:
+            continue
+        out.append((ep_dir / e["file"], starts[e["shot"]] + float(e.get("at", 0.0)), float(e.get("gain_db", -12))))
+    return [(p, a, g) for p, a, g in out if p.exists() and a < total]
 
 
 def master(s: Settings) -> Settings:
@@ -269,7 +312,8 @@ def _assemble(s: Settings, ep_dir: Path, script: EpisodeScript, episode_id: str)
 
     music = pick_music(s, episode_id)
     audio = rdir / "audio.m4a"
-    _mix_audio(s, ep_dir, segs, total, music, audio, fx)
+    extra = _effect_list(ep_dir, edit.episode_overrides(ep_dir), shot_rows, total)
+    _mix_audio(s, ep_dir, segs, total, music, audio, fx, extra)
 
     # the verse is on screen until the cut out of the last kural shot; the rest of the line gets subtitles
     cut = next((r["end"] for r in reversed(shot_rows) if r["beat"] == "kural"), None)

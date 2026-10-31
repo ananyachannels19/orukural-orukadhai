@@ -19,6 +19,14 @@
   "direction": "out" eases from `push` back to the full frame, ending on exactly the clip's frame. The
   render's held-frame check allows it: the stillness is meant.
 
+- zoom: {"from": 1.0, "to": 1.08} a smooth push-in (to > from) or pull-out (to < from) across the whole
+  (edited) clip, eased; the frame stays full (it is a crop of the clip), so nothing looks held.
+
+Non-shot keys are the episode's own settings (episode_overrides): "kural" (the verse's placement),
+"sfx" [{"file": "sfx/whoosh.wav", "shot": 1, "at": 0.0, "gain_db": -12}, ...] (a sound at `at` seconds
+into that shot, in the film) and "ambience" {"file": "sfx/dawn.wav", "gain_db": -26} (a bed under the
+whole film). Both go into the scene-sound layer, so they dip under the voices like the clips' own sound.
+
 The edited clip is rendered once at the film's size; `to_clip` maps the original clip's seconds onto it
 (for the speech spans pinned in lipsync.json)."""
 from __future__ import annotations
@@ -142,6 +150,14 @@ def _render(s: Settings, clip: Path, spec: dict, card: Path | None, out: Path) -
             ins.append(f"[a{k}]")
     chain.append(f"{''.join(ins)}concat=n={len(parts)}:v=1:a={1 if has_audio else 0}[cv]" + ("[ca]" if has_audio else ""))
     last, args = "cv", ["-i", str(clip)]
+    if zm := spec.get("zoom"):
+        z0, z1 = float(zm.get("from", 1.0)), float(zm.get("to", 1.08))
+        span = max(0.1, sum(b - a for a, b in parts))
+        p = f"(0.5-0.5*cos(PI*min(t/{span:.3f},1)))"  # eased in and out
+        z = f"({z0:.4f}+{z1 - z0:.4f}*{p})"
+        chain.append(f"[{last}]scale=w='ceil(1080*{z}/2)*2':h='ceil(1920*{z}/2)*2':eval=frame,"
+                     f"crop=1080:1920:(iw-1080)/2:(ih-1920)/2,setsar=1[zm]")
+        last = "zm"
     if sh := spec.get("sharpen"):
         x, y, w, h = sh["box"]
         size = sh.get("size", 7)
