@@ -42,8 +42,28 @@ episodes:
     age: 62
     job: retired lorry driver
     look: Thin, elderly, short grey hair, grey stubble, deep lines on a kind face, dark skin, bony shoulders.
-    voice: ''
+    voice: Sadaltager
   places:
   - saro_gate
   - hospital_corridor
   - hospital_front
+- episode: K1330
+  characters:
+  - id: kathir
+    name_ta: கதிர்
+    age: 30
+    job: pharmacist at a neighbourhood medical shop
+    look: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard,
+      no glasses, a dimple when he smiles.
+    voice: Iapetus
+  - id: mithra
+    name_ta: மித்ரா
+    age: 27
+    job: runs a blouse-stitching tailoring business from home
+    look: Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a
+      small black bindi, expressive eyebrows.
+    voice: Kore
+  places:
+  - flat_hall
+  - street_shop
+  - balcony
