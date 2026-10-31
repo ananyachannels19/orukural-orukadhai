@@ -34,6 +34,8 @@ The repo is `orukural-studio` on Ananya's Mac (`/Users/ananya-24962/Documents/or
 
 - Flow is driven through flow-mcp: Chrome profile `~/.flow-mcp/chrome-profile` on debug port 9333, and the Flow Studio dashboard at http://127.0.0.1:8787 (`node dist/studio.js`). If 8787 dies, restart it standalone and resubmit the lost items.
 - Reference the project's existing tiles (`asset:<name>`, e.g. `asset:K1330_refs-scene-01`) for character and place references. Never re-upload PNGs from disk, because that creates duplicate tiles and the jobs fail while the upload processes.
+- One master per recurring object (e.g. the kolam): make the place reference FROM the object's tile so both show the same design, then reference one of them per shot. Say "exactly one <object>" in the prompt: Flow can draw a large flat prop twice, overlapping (K0100 shot 2), even from a single reference.
+- Check every downloaded file is the shot you asked for: flow-mcp once saved an older tile (a prop reference) under a shot's name.
 - Reference images steer more than the prompt does. If the reference shows a brown door, the character will hold a brown door even if the prompt says "green gate". Fix the reference image, not just the prompt.
 - Watch for continuity bugs:
   - two phones in one hand
