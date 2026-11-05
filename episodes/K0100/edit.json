@@ -1,0 +1,81 @@
+{
+ "1": {
+  "zoom": {
+   "from": 1.0,
+   "to": 1.08
+  }
+ },
+ "2": {
+  "zoom": {
+   "from": 1.06,
+   "to": 1.0
+  }
+ },
+ "7": {
+  "zoom": {
+   "from": 1.0,
+   "to": 1.05
+  }
+ },
+ "ambience": {
+  "file": "sfx/dawn_ambience.wav",
+  "gain_db": -28
+ },
+ "sfx": [
+  {
+   "file": "sfx/whoosh.wav",
+   "shot": 1,
+   "at": 0.0,
+   "gain_db": -16
+  },
+  {
+   "file": "sfx/sprinkle.wav",
+   "shot": 3,
+   "at": 0.0,
+   "gain_db": -20
+  },
+  {
+   "file": "sfx/heartbeat.wav",
+   "shot": 4,
+   "at": 0.0,
+   "gain_db": -20
+  },
+  {
+   "file": "sfx/chime.wav",
+   "shot": 5,
+   "at": 1.0,
+   "gain_db": -17
+  },
+  {
+   "file": "sfx/sprinkle.wav",
+   "shot": 8,
+   "at": 1.0,
+   "gain_db": -22
+  },
+  {
+   "file": "sfx/diya_flicker.wav",
+   "shot": 9,
+   "at": 0.0,
+   "gain_db": -24
+  }
+ ],
+ "kural": {
+  "text_y": 430
+ },
+ "10": {
+  "still": {
+   "frame": 7.8,
+   "at": 0.0,
+   "push": 1.06,
+   "seconds": 3.0
+  }
+ },
+ "6": {
+  "still": {
+   "frame": 3.8,
+   "at": 0.0,
+   "push": 1.05,
+   "seconds": 1.5
+  }
+ }
+}

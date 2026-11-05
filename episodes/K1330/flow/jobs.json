@@ -1,0 +1,286 @@
+{
+ "episode_id": "K1330",
+ "clip_credits": 64,
+ "daily_credits": 1050,
+ "clip_days": 1,
+ "monthly_credits_used": 0,
+ "jobs": [
+  {
+   "kind": "character_ref",
+   "id": "kathir",
+   "save_as": "episodes/K1330/refs/characters/kathir.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Character reference sheet for an animated series. Kathir, a 30-year-old Tamil pharmacist at a neighbourhood medical shop. Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals. Show the same character twice side by side: full body standing front view, and a head-and-shoulders close-up. Neutral expression. Plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_character_kathir"
+  },
+  {
+   "kind": "character_ref",
+   "id": "mithra",
+   "save_as": "episodes/K1330/refs/characters/mithra.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Character reference sheet for an animated series. Mithra, a 27-year-old Tamil runs a blouse-stitching tailoring business from home. Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows. A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists. Show the same character twice side by side: full body standing front view, and a head-and-shoulders close-up. Neutral expression. Plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_character_mithra"
+  },
+  {
+   "kind": "location_ref",
+   "id": "flat_hall",
+   "save_as": "episodes/K1330/refs/locations/flat_hall.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. A small rented first-floor flat in a Tamil Nadu town: a hall with a small wooden dining table and two chairs, a sewing machine with folded blouse pieces on a side table, the open kitchen counter behind with a steel coffee filter and a gas stove, the front door on the right with a shoe rack, rain streaking the window. 9:40 pm, warm white tube light inside; dark rainy night outside the window. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_flat_hall"
+  },
+  {
+   "kind": "location_ref",
+   "id": "street_shop",
+   "save_as": "episodes/K1330/refs/locations/street_shop.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. The wet street below the flat: a small provision shop with its shutter half down, sacks and glass jars inside, a single yellow streetlight, puddles reflecting the light, signs with no readable words. Night, heavy rain, yellow streetlight and the shop's single bulb. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_street_shop"
+  },
+  {
+   "kind": "location_ref",
+   "id": "balcony",
+   "save_as": "episodes/K1330/refs/locations/balcony.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. The flat's narrow balcony: a low parapet wall with a few potted tulsi and jasmine plants, a plastic chair, a clothesline, rain falling beyond the parapet onto the street below. Night, rain, warm light spilling out from the hall door behind them. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_balcony"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "tumbler",
+   "save_as": "episodes/K1330/refs/props/tumbler.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: One stainless-steel tumbler and davara (filter-coffee cup and saucer), plain and shiny. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_tumbler"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "coffee_packet",
+   "save_as": "episodes/K1330/refs/props/coffee_packet.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: A small brown paper packet of coffee powder folded at the top, no writing, wet with rain. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_coffee_packet"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "scooter",
+   "save_as": "episodes/K1330/refs/props/scooter.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Kathir's plain teal scooter with a black seat, no logos or writing. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_scooter"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "towel",
+   "save_as": "episodes/K1330/refs/props/towel.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: A thin white cotton towel with a red border. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_towel"
+  },
+  {
+   "kind": "image",
+   "shot": 1,
+   "save_as": "episodes/K1330/images/shot01.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/mithra.png",
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/locations/flat_hall.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A small rented first-floor flat in a Tamil Nadu town: a hall with a small wooden dining table and two chairs, a sewing machine with folded blouse pieces on a side table, the open kitchen counter behind with a steel coffee filter and a gas stove, the front door on the right with a shoe rack, rain streaking the window. Light: 9:40 pm, warm white tube light inside; dark rainy night outside the window. Staging: Mithra at the dining table on the left, facing right; Kathir at the front door on the right, facing her; in the kitchen Kathir stands at the counter on the right, Mithra on the left.\nMithra: Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows. Wearing (same in every shot): A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nProp, tumbler: One stainless-steel tumbler and davara (filter-coffee cup and saucer), plain and shiny.\nShot: Mithra at the dining table on the left, mid-motion setting the steel tumbler down hard, frowning at Kathir; Kathir in the open front doorway on the right, office bag on his shoulder, frozen with a guilty half-smile. Camera: Static medium shot from the kitchen side, eye level, Mithra in front, Kathir in the doorway behind.\nReference images: image 1 is Mithra; image 2 is Kathir; image 3 is the place (flat_hall). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot01_image"
+  },
+  {
+   "kind": "image",
+   "shot": 3,
+   "save_as": "episodes/K1330/images/shot03.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/locations/flat_hall.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A small rented first-floor flat in a Tamil Nadu town: a hall with a small wooden dining table and two chairs, a sewing machine with folded blouse pieces on a side table, the open kitchen counter behind with a steel coffee filter and a gas stove, the front door on the right with a shoe rack, rain streaking the window. Light: 9:40 pm, warm white tube light inside; dark rainy night outside the window. Staging: Mithra at the dining table on the left, facing right; Kathir at the front door on the right, facing her; in the kitchen Kathir stands at the counter on the right, Mithra on the left.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nShot: Kathir at the open front door, his office bag just set down on the shoe rack, picking a key off a wall hook, rain visible on the stairs outside. Camera: Medium shot from inside the hall towards the front door.\nReference images: image 1 is Kathir; image 2 is the place (flat_hall). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot03_image"
+  },
+  {
+   "kind": "image",
+   "shot": 4,
+   "save_as": "episodes/K1330/images/shot04.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/locations/street_shop.png",
+    "episodes/K1330/refs/props/scooter.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The wet street below the flat: a small provision shop with its shutter half down, sacks and glass jars inside, a single yellow streetlight, puddles reflecting the light, signs with no readable words. Light: Night, heavy rain, yellow streetlight and the shop's single bulb. Staging: Kathir parks his scooter on the left and stands at the shop counter on the right; the shopkeeper is only a hand passing the packet.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nProp, scooter: Kathir's plain teal scooter with a black seat, no logos or writing.\nProp, coffee packet: A small brown paper packet of coffee powder folded at the top, no writing, wet with rain.\nShot: Kathir, hair and shirt soaked, stands at the half-shuttered provision shop under its single bulb, his teal scooter parked on the left in a puddle, holding out his hand towards the counter. Camera: Medium shot from the street, eye level, rain falling between camera and Kathir.\nReference images: image 1 is Kathir; image 2 is the place (street_shop); image 3 is the scooter. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot04_image"
+  },
+  {
+   "kind": "image",
+   "shot": 5,
+   "save_as": "episodes/K1330/images/shot05.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/characters/mithra.png",
+    "episodes/K1330/refs/locations/flat_hall.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A small rented first-floor flat in a Tamil Nadu town: a hall with a small wooden dining table and two chairs, a sewing machine with folded blouse pieces on a side table, the open kitchen counter behind with a steel coffee filter and a gas stove, the front door on the right with a shoe rack, rain streaking the window. Light: 9:40 pm, warm white tube light inside; dark rainy night outside the window. Staging: Mithra at the dining table on the left, facing right; Kathir at the front door on the right, facing her; in the kitchen Kathir stands at the counter on the right, Mithra on the left.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nMithra: Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows. Wearing (same in every shot): A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists.\nProp, coffee packet: A small brown paper packet of coffee powder folded at the top, no writing, wet with rain.\nShot: Kathir in the front doorway, completely drenched, water dripping from his hair and shirt, holding up the small brown paper packet with a proud grin; Mithra in the foreground on the left, back half-turned, glancing at him from the corner of her eye. Camera: Medium shot from beside the dining table, Mithra's shoulder in the foreground, Kathir at the door.\nReference images: image 1 is Kathir; image 2 is Mithra; image 3 is the place (flat_hall). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot05_image"
+  },
+  {
+   "kind": "image",
+   "shot": 6,
+   "save_as": "episodes/K1330/images/shot06.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/characters/mithra.png",
+    "episodes/K1330/refs/locations/flat_hall.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A small rented first-floor flat in a Tamil Nadu town: a hall with a small wooden dining table and two chairs, a sewing machine with folded blouse pieces on a side table, the open kitchen counter behind with a steel coffee filter and a gas stove, the front door on the right with a shoe rack, rain streaking the window. Light: 9:40 pm, warm white tube light inside; dark rainy night outside the window. Staging: Mithra at the dining table on the left, facing right; Kathir at the front door on the right, facing her; in the kitchen Kathir stands at the counter on the right, Mithra on the left.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nMithra: Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows. Wearing (same in every shot): A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists.\nProp, tumbler: One stainless-steel tumbler and davara (filter-coffee cup and saucer), plain and shiny.\nProp, towel: A thin white cotton towel with a red border.\nShot: In the kitchen, Kathir on the right with the white towel over his wet head, holding out the steel tumbler and davara with both hands to Mithra on the left, who stands with arms still folded, eyebrows raised. Camera: Static medium two-shot at the kitchen counter, eye level, both faces in view.\nReference images: image 1 is Kathir; image 2 is Mithra; image 3 is the place (flat_hall). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot06_image"
+  },
+  {
+   "kind": "image",
+   "shot": 7,
+   "save_as": "episodes/K1330/images/shot07.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/mithra.png",
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/locations/balcony.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The flat's narrow balcony: a low parapet wall with a few potted tulsi and jasmine plants, a plastic chair, a clothesline, rain falling beyond the parapet onto the street below. Light: Night, rain, warm light spilling out from the hall door behind them. Staging: Mithra on the left, Kathir on the right, both sitting on the parapet's low ledge facing the rain, shoulder to shoulder.\nMithra: Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows. Wearing (same in every shot): A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nProp, tumbler: One stainless-steel tumbler and davara (filter-coffee cup and saucer), plain and shiny.\nProp, towel: A thin white cotton towel with a red border.\nShot: Mithra and Kathir sitting close on the balcony ledge facing the rain, Mithra on the left holding the steel tumbler in both hands, her head resting on Kathir's shoulder; Kathir on the right, the white towel around his shoulders. Camera: Medium wide shot from behind and slightly to the side, the rain and the street lights beyond them.\nReference images: image 1 is Mithra; image 2 is Kathir; image 3 is the place (balcony). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot07_image"
+  },
+  {
+   "kind": "image",
+   "shot": 8,
+   "save_as": "episodes/K1330/images/shot08.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K1330/refs/characters/mithra.png",
+    "episodes/K1330/refs/characters/kathir.png",
+    "episodes/K1330/refs/locations/balcony.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The flat's narrow balcony: a low parapet wall with a few potted tulsi and jasmine plants, a plastic chair, a clothesline, rain falling beyond the parapet onto the street below. Light: Night, rain, warm light spilling out from the hall door behind them. Staging: Mithra on the left, Kathir on the right, both sitting on the parapet's low ledge facing the rain, shoulder to shoulder.\nMithra: Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows. Wearing (same in every shot): A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists.\nKathir: Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles. Wearing (same in every shot): A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.\nProp, tumbler: One stainless-steel tumbler and davara (filter-coffee cup and saucer), plain and shiny.\nShot: Close-up of Mithra's hand with glass bangles and Kathir's hand together around the one steel tumbler, rain drops blurred behind them. Camera: Close-up on hands and tumbler, shallow depth of field.\nReference images: image 1 is Mithra; image 2 is Kathir; image 3 is the place (balcony). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K1330_shot08_image"
+  },
+  {
+   "kind": "clip",
+   "shot": 1,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K1330/clips/shot01.mp4",
+   "start_frame": "episodes/K1330/images/shot01.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Mithra sets the tumbler down with a firm tap and speaks sharply to Kathir; then she turns her chair away from him and folds her arms, chin up. Kathir rubs the back of his neck, looks at the window where rain is falling, and nods to himself. Exactly one tumbler in the shot; nothing else changes hands. Camera: Static medium shot from the kitchen side, eye level, Mithra in front, Kathir in the doorway behind. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Mithra says this line aloud in a firm, clear 27-year-old Tamil woman's voice that softens into laughter, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"மூணாவது தடவை மறந்துட்டீங்க!\" Meanwhile Kathir keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K1330_shot01_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 3,
+   "day": 1,
+   "priority": 2,
+   "save_as": "episodes/K1330/clips/shot03.mp4",
+   "start_frame": "episodes/K1330/images/shot03.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Kathir takes the key, glances back once at the hall, and steps out of the door into the rainy stairway, leaving the umbrella on the rack. Nobody speaks. Camera: Medium shot from inside the hall towards the front door. About 4 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K1330_shot03_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 4,
+   "day": 1,
+   "priority": 3,
+   "save_as": "episodes/K1330/clips/shot04.mp4",
+   "start_frame": "episodes/K1330/images/shot04.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "A hand from inside the shop passes him a small brown paper packet; Kathir tucks it inside his shirt to keep it dry, grins, and turns back to the scooter. Rain pours steadily. Camera: Medium shot from the street, eye level, rain falling between camera and Kathir. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K1330_shot04_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 5,
+   "day": 1,
+   "priority": 2,
+   "save_as": "episodes/K1330/clips/shot05.mp4",
+   "start_frame": "episodes/K1330/images/shot05.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Kathir lifts the packet a little higher and raises his eyebrows; water drips onto the floor. Mithra quickly looks away again, pressing her lips together to hide a smile. Nobody speaks. Camera: Medium shot from beside the dining table, Mithra's shoulder in the foreground, Kathir at the door. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K1330_shot05_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 6,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K1330/clips/shot06.mp4",
+   "start_frame": "episodes/K1330/images/shot06.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Kathir speaks first with a hopeful smile and offers the tumbler; Mithra takes it, sips, scrunches up her face and speaks, then cannot hold it in and laughs, covering her mouth; Kathir laughs with her. Exactly one tumbler, passed once from Kathir to Mithra. Camera: Static medium two-shot at the kitchen counter, eye level, both faces in view. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Kathir says this line aloud in a clear, light, playful 30-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"மேடம், காபி ரெடி. கோபம் இன்னும் எவ்வளவு நேரம்?\" Meanwhile Mithra keeps their mouth closed and listens. From about 4.0 s, Mithra says this line aloud in a firm, clear 27-year-old Tamil woman's voice that softens into laughter, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"ஐயோ... இது காபியா, கஷாயமா?\" Meanwhile Kathir keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K1330_shot06_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 7,
+   "day": 1,
+   "priority": 4,
+   "save_as": "episodes/K1330/clips/shot07.mp4",
+   "start_frame": "episodes/K1330/images/shot07.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Kathir lifts one side of the towel and wraps it around Mithra's shoulders too; she smiles and passes him the tumbler; he sips and passes it back. Rain falls steadily. Nobody speaks. Camera: Medium wide shot from behind and slightly to the side, the rain and the street lights beyond them. About 8 seconds, one continuous shot, no cuts. From 0 s to 7 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K1330_shot07_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 8,
+   "day": 1,
+   "priority": 5,
+   "save_as": "episodes/K1330/clips/shot08.mp4",
+   "start_frame": "episodes/K1330/images/shot08.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Kathir's thumb gently taps Mithra's fingers; her bangles clink softly; a little steam rises from the tumbler. Camera: Close-up on hands and tumbler, shallow depth of field. About 4 seconds, one continuous shot, no cuts. From 0 s to 2 s nobody on screen talks: every mouth stays closed. From 2 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K1330_shot08_clip"
+  }
+ ],
+ "flow_project": null
+}

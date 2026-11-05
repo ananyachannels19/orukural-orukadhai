@@ -1,0 +1,434 @@
+{
+ "dry_run": false,
+ "model": "claude session",
+ "cost_usd": 0.0,
+ "cached": false,
+ "kural_id": "K0100",
+ "errors": [],
+ "warnings": [],
+ "script": {
+  "kural_number": 100,
+  "story_title_ta": "தீபாவளி கோலமும் அண்ணனின் சொல்லும்",
+  "story_title_en": "The Deepavali kolam and a brother's words",
+  "logline_en": "Back from a night shift on Deepavali morning, bus conductor Muthu finds fault with his sister Kayal's first big kolam; one quiet question from her makes him look again and see the peacock she drew for him in the middle.",
+  "originality_note_en": "A tired brother's first word on his sister's Deepavali kolam is a complaint, until he notices the peacock at its centre was drawn for him, which is the ripe fruit he walked past.",
+  "meaning_ta": "இனிமையான சொற்கள் தன்னிடம் இருக்கும்போதே கடுமையான சொற்களைச் சொல்வது, கனிந்த பழம் கையில் இருக்கும்போது அதை விட்டுவிட்டுக் காயைப் பறித்துத் தின்பது போன்றது.",
+  "meaning_en": "Speaking harsh words when kind ones are right there is like leaving the ripe fruit in your hand and picking the unripe one to eat.",
+  "cast": [
+   {
+    "id": "muthu",
+    "name_ta": "முத்து",
+    "age": 28,
+    "job": "government town-bus conductor",
+    "look_en": "Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses.",
+    "outfit_en": "A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals.",
+    "gender": "male",
+    "age_group": "adult",
+    "personality": "blunt when tired, warm underneath",
+    "voice": "Alnilam",
+    "voice_en": "a firm, tired 28-year-old Tamil man's voice",
+    "voice_source": "tts"
+   },
+   {
+    "id": "kayal",
+    "name_ta": "கயல்",
+    "age": 22,
+    "job": "final-year B.Com student",
+    "look_en": "Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes.",
+    "outfit_en": "A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.",
+    "gender": "female",
+    "age_group": "adult",
+    "personality": "bright, sensitive, quietly direct",
+    "voice": "Autonoe",
+    "voice_en": "a bright, soft 21-year-old Tamil woman's voice",
+    "voice_source": "tts"
+   }
+  ],
+  "thatha_cameo": false,
+  "continuity": {
+   "locations": [
+    {
+     "id": "house_front",
+     "description_en": "The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step.",
+     "light_en": "Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on.",
+     "blocking_en": "The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it."
+    }
+   ],
+   "props": [
+    {
+     "id": "kolam",
+     "name_ta": "கோலம்",
+     "description_en": "A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven."
+    },
+    {
+     "id": "powder_bowl",
+     "name_ta": "கோலப்பொடி",
+     "description_en": "A small round brass bowl full of white kolam powder."
+    },
+    {
+     "id": "diyas",
+     "name_ta": "விளக்கு",
+     "description_en": "Small terracotta clay diyas with cotton wicks, each with a small steady flame once lit."
+    },
+    {
+     "id": "bag",
+     "name_ta": "",
+     "description_en": "Muthu's worn brown leather conductor's bag on a strap across his chest, no writing."
+    }
+   ],
+   "outfits": []
+  },
+  "hooks": [
+   {
+    "style": "tense_moment",
+    "on_screen_ta": "6:10 AM\nதீபாவளி காலை.",
+    "narration_ta": "இதுக்கு பேரு கோலமா?"
+   },
+   {
+    "style": "question",
+    "on_screen_ta": "முதல்ல கண்ணுக்கு தெரியறது குறையா?",
+    "narration_ta": "நல்லது முன்னால இருந்தாலும், முதல்ல குறை தான் தெரியுதா?"
+   },
+   {
+    "style": "surprising_line",
+    "on_screen_ta": "மயில் அவனுக்காக.",
+    "narration_ta": "கோலத்துல நடுவுல இருந்த மயில், அவனுக்காக தான்."
+   }
+  ],
+  "chosen_hook": 0,
+  "segments": [
+   {
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "speaker": "muthu",
+    "narration_ta": "இதுக்கு பேரு கோலமா?",
+    "delivery": "tired, irritated, blunt; frowning, no smile",
+    "on_screen_ta": "6:10 AM\nதீபாவளி காலை."
+   },
+   {
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 7.0,
+    "speaker": "narrator",
+    "narration_ta": "ராத்திரி டியூட்டி முடிஞ்சு வந்த முத்து, பார்த்ததும் குறை தான் சொன்னான்.",
+    "delivery": "matter-of-fact, slightly sad",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 7.0,
+    "end_s": 10.0,
+    "speaker": "muthu",
+    "narration_ta": "எல்லாம் கோணல் மாணலா இருக்கு.",
+    "delivery": "dismissive, tired, frowning",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 10.0,
+    "end_s": 14.0,
+    "speaker": "narrator",
+    "narration_ta": "கயல் கையில இருந்த கோலப்பொடி, அப்படியே நின்னுச்சு.",
+    "delivery": "quiet, gentle",
+    "on_screen_ta": "முதல்ல கண்ணுக்கு தெரியறது குறையா?"
+   },
+   {
+    "beat": "story",
+    "start_s": 14.0,
+    "end_s": 17.0,
+    "speaker": "kayal",
+    "narration_ta": "அண்ணா... இதுல ஒண்ணு கூடவா நல்லா இல்ல?",
+    "delivery": "quiet, hurt, steady; not crying, not smiling",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 17.0,
+    "end_s": 21.0,
+    "speaker": "narrator",
+    "narration_ta": "முத்து மறுபடி பார்த்தான். நடுவுல, அவனுக்கு பிடிச்ச மயில்.",
+    "delivery": "slowing down, warm",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 21.0,
+    "end_s": 24.0,
+    "speaker": "muthu",
+    "narration_ta": "மயில்... ரொம்ப... அழகா இருக்கு, கயல்.",
+    "delivery": "soft, sorry, a small smile",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "kural",
+    "start_s": 24.0,
+    "end_s": 33.0,
+    "speaker": "narrator",
+    "narration_ta": "இனிய உளவாக இன்னாத கூறல் கனிஇருப்பக் காய்கவர்ந் தற்று. பழம் கையில இருக்கும்போது, காயை எதுக்கு பறிக்கணும்?",
+    "delivery": "slow, warm, reverent",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "lesson",
+    "start_s": 33.0,
+    "end_s": 36.5,
+    "speaker": "narrator",
+    "narration_ta": "இனிய சொல் இருக்கும்போது, கசப்பான சொல் எதுக்கு?",
+    "delivery": "warm, certain",
+    "on_screen_ta": "இனிய சொல் இருக்க, கசப்பு எதுக்கு?"
+   },
+   {
+    "beat": "lesson",
+    "start_s": 36.5,
+    "end_s": 40.0,
+    "speaker": "narrator",
+    "narration_ta": "முதல்ல குறை சொல்லுற உங்க அண்ணன், அக்காவை டேக் பண்ணுங்க!",
+    "delivery": "warm, smiling, inviting",
+    "on_screen_ta": ""
+   }
+  ],
+  "shots": [
+   {
+    "n": 1,
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "characters": [
+     "muthu",
+     "kayal"
+    ],
+    "location": "house_front",
+    "props": [
+     "kolam",
+     "powder_bowl",
+     "bag"
+    ],
+    "action_en": "Muthu, just back from his night shift, frowns down at Kayal's kolam and says his line sharply.",
+    "camera_en": "Low static medium shot from the kolam's edge, looking up at Muthu, Kayal kneeling at the right edge of frame.",
+    "image_prompt_en": "Muthu standing at the gate side of the yard in his khaki uniform with the bag across his chest, frowning down at the kolam towards the camera, face clearly visible; Kayal kneeling at the right edge of frame beside the kolam holding the brass bowl, looking up at him.",
+    "motion_prompt_en": "Muthu frowns and says his line sharply, facing the camera, irritated and tired, with no smile at any moment; Kayal holds still, mouth closed, looking up at him. Nothing else moves.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 2,
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 10.0,
+    "characters": [
+     "muthu",
+     "kayal"
+    ],
+    "location": "house_front",
+    "props": [
+     "kolam",
+     "powder_bowl",
+     "bag"
+    ],
+    "action_en": "Muthu points at the uneven outer lines and says everything is crooked; Kayal's face falls.",
+    "camera_en": "Static medium two-shot from the steps side, both faces in view.",
+    "image_prompt_en": "Muthu standing on the left, frowning, pointing down at the uneven outer lines of the kolam; Kayal kneeling on the right with the brass bowl in her hands, her proud expression starting to fade, both faces in view.",
+    "motion_prompt_en": "For the first few seconds nobody speaks: Muthu looks over the kolam, frowning. Then Muthu says his line flatly, frowning, pointing at the edge; no smile at any moment. Kayal's face slowly falls; her mouth stays closed. The brass bowl stays in her two hands the whole time.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 3,
+    "beat": "story",
+    "start_s": 10.0,
+    "end_s": 14.0,
+    "characters": [
+     "kayal"
+    ],
+    "location": "house_front",
+    "props": [
+     "powder_bowl",
+     "kolam"
+    ],
+    "action_en": "Close on Kayal's hands: the pinch of white powder stops mid-line; she lowers the bowl.",
+    "camera_en": "Close-up on her hands and the kolam line, shallow depth of field.",
+    "image_prompt_en": "Close-up of Kayal's hand with glass bangles, a pinch of white kolam powder between her fingers above an unfinished line, the brass bowl in her other hand.",
+    "motion_prompt_en": "Her fingers stop; a little powder falls; she slowly lowers the bowl onto the cement beside the kolam. Nobody speaks.",
+    "motion_priority": 3,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 4,
+    "beat": "story",
+    "start_s": 14.0,
+    "end_s": 17.0,
+    "characters": [
+     "kayal"
+    ],
+    "location": "house_front",
+    "props": [
+     "kolam"
+    ],
+    "action_en": "Kayal looks up at Muthu and asks, quietly, whether not even one thing in it is nice.",
+    "camera_en": "Static medium close-up on Kayal from Muthu's side, her face fully to camera.",
+    "image_prompt_en": "Kayal kneeling beside the kolam, looking up towards the camera, hurt but steady, her face fully in view, hands resting on her knees, nothing in her hands.",
+    "motion_prompt_en": "Kayal says her line quietly, looking up into the camera, hurt but steady, no smile and no tears; her hands stay on her knees, nothing near her mouth.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 5,
+    "beat": "story",
+    "start_s": 17.0,
+    "end_s": 19.9,
+    "characters": [],
+    "location": "house_front",
+    "props": [
+     "kolam"
+    ],
+    "action_en": "Muthu looks again: top-down on the kolam, its centre a blue-and-green peacock.",
+    "camera_en": "Top-down view of the whole kolam, then a slow push-in towards the peacock at its centre.",
+    "image_prompt_en": "Top-down view of the whole round kolam on the grey cement in morning light, the blue-and-green peacock at its exact centre, the tips of Muthu's sandals at the bottom edge of frame.",
+    "motion_prompt_en": "Slow push-in from the whole kolam to the peacock at its centre; morning light; nothing else moves.",
+    "motion_priority": 4,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 6,
+    "beat": "story",
+    "start_s": 19.9,
+    "end_s": 21.0,
+    "characters": [],
+    "location": "house_front",
+    "props": [
+     "kolam"
+    ],
+    "action_en": "Hold on the peacock at the kolam's centre.",
+    "camera_en": "Top-down view of the whole kolam, then a slow push-in towards the peacock at its centre.",
+    "image_prompt_en": "Second cut from shot 5's clip (see shot 5): its last frame held with a slow push-in.",
+    "motion_prompt_en": "Second cut from shot 5's clip (see shot 5): its last frame held with a slow push-in.",
+    "motion_priority": 5,
+    "clip_from": 5,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 7,
+    "beat": "story",
+    "start_s": 21.0,
+    "end_s": 24.0,
+    "characters": [
+     "muthu",
+     "kayal"
+    ],
+    "location": "house_front",
+    "props": [
+     "kolam",
+     "bag"
+    ],
+    "action_en": "Muthu crouches down beside the peacock, softens and tells her it is beautiful; Kayal's face lifts.",
+    "camera_en": "Static medium two-shot at kolam level, both faces in view.",
+    "image_prompt_en": "Muthu crouching on the left beside the kolam, his bag pushed to his back, looking at the peacock and then at Kayal, his face softening; Kayal kneeling on the right, looking at him.",
+    "motion_prompt_en": "Muthu says his line softly to Kayal, facing her and the camera, with a small apologetic smile; Kayal's face slowly lifts into a smile while her mouth stays closed. Nobody holds anything.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 8,
+    "beat": "kural",
+    "start_s": 24.0,
+    "end_s": 31.0,
+    "characters": [
+     "muthu",
+     "kayal"
+    ],
+    "location": "house_front",
+    "props": [
+     "kolam",
+     "diyas"
+    ],
+    "action_en": "Brother and sister kneel together colouring the last petals of the kolam while the diyas on the step burn.",
+    "camera_en": "Wide static shot from the steps, the sunrise behind the gate.",
+    "image_prompt_en": "Muthu and Kayal kneeling side by side at the edge of the kolam in the golden morning light, Muthu sprinkling orange rangoli powder into a petal, Kayal guiding his hand, the row of lit clay diyas on the step in the foreground.",
+    "motion_prompt_en": "They colour one petal together, Kayal smiling and pointing, Muthu nodding; the diya flames flicker gently. Nobody speaks; mouths closed.",
+    "motion_priority": 4,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 9,
+    "beat": "lesson",
+    "start_s": 31.0,
+    "end_s": 37.5,
+    "characters": [
+     "kayal",
+     "muthu"
+    ],
+    "location": "house_front",
+    "props": [
+     "kolam",
+     "diyas"
+    ],
+    "action_en": "Close on the finished peacock as Kayal places one lit diya beside it and Muthu's hand adds a last dot of colour.",
+    "camera_en": "Close shot on the peacock at kolam level, shallow depth of field.",
+    "image_prompt_en": "Close shot of the finished blue-and-green peacock in the kolam, Kayal's hand with green and gold bangles placing a lit clay diya beside it, Muthu's hand above it with a pinch of yellow powder.",
+    "motion_prompt_en": "Kayal sets the diya down; Muthu drops a last dot of yellow powder on the peacock's crest; the flame flickers. Slow push-in.",
+    "motion_priority": 5,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 10,
+    "beat": "lesson",
+    "start_s": 37.5,
+    "end_s": 40.0,
+    "characters": [],
+    "location": "house_front",
+    "props": [
+     "kolam",
+     "diyas"
+    ],
+    "action_en": "Hold on the peacock and the lit diya, slow push-in, under the tag line.",
+    "camera_en": "Close shot on the peacock at kolam level, shallow depth of field.",
+    "image_prompt_en": "Second cut from shot 8's clip (see shot 8): its last frame held with a slow push-in.",
+    "motion_prompt_en": "Second cut from shot 8's clip (see shot 8): its last frame held with a slow push-in.",
+    "motion_priority": 5,
+    "clip_from": 9,
+    "clip_offset_s": 0.0
+   }
+  ],
+  "lesson_ta": "இனிய சொல் இருக்க, கசப்பு எதுக்கு?",
+  "tag_question_ta": "முதல்ல குறை சொல்லுற உங்க அண்ணன், அக்காவை tag பண்ணுங்க",
+  "loop_note_en": "The film ends close on the finished kolam and opens on the same kolam with Muthu frowning over it, so the replay flows from the kolam back into his first harsh line.",
+  "youtube": {
+   "title": "குறள் 100 | தீபாவளி கோலமும் அண்ணனின் சொல்லும் | Thirukkural Story #Shorts",
+   "description_intro_ta": "தீபாவளி காலை. கயல் போட்ட முதல் பெரிய கோலம். முத்து பார்த்ததும் சொன்னது குறை தான். ஆனா நடுவுல இருந்த மயில்...\nமுதல்ல குறை சொல்லுற உங்க அண்ணன், அக்காவை tag பண்ணுங்க 👇",
+   "tags": [
+    "திருக்குறள்",
+    "thirukkural",
+    "thirukkural story",
+    "kural 100",
+    "இனியவை கூறல்",
+    "இனிய உளவாக",
+    "கனிஇருப்பக் காய்கவர்ந் தற்று",
+    "kind words",
+    "siblings",
+    "அண்ணன் தங்கை",
+    "deepavali kolam",
+    "tamil shorts"
+   ],
+   "pinned_comment_ta": "முதல்ல குறை சொல்லுற உங்க அண்ணன், அக்காவை tag பண்ணுங்க 👇"
+  },
+  "instagram": {
+   "caption_ta": "தீபாவளி காலை. முதல் பெரிய கோலம். ✨\n\nமுத்து பார்த்ததும் குறை தான் சொன்னான். கயல் ஒண்ணு தான் கேட்டா. நடுவுல இருந்த மயில், அவனுக்காக தான். 🦚\n\n📜 குறள் #100\nஇனிய உளவாக இன்னாத கூறல்\nகனிஇருப்பக் காய்கவர்ந் தற்று.\n\nமுதல்ல குறை சொல்லுற உங்க அண்ணன், அக்காவை tag பண்ணுங்க 👇",
+   "hashtags": [
+    "#திருக்குறள்",
+    "#thirukkural",
+    "#ஒருகுறள்ஒருகதை",
+    "#அண்ணன்தங்கை",
+    "#tamilstories"
+   ]
+  }
+ }
+}

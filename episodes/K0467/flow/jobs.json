@@ -1,0 +1,343 @@
+{
+ "episode_id": "K0467",
+ "clip_credits": 93,
+ "daily_credits": 1050,
+ "clip_days": 1,
+ "monthly_credits_used": 0,
+ "jobs": [
+  {
+   "kind": "character_ref",
+   "id": "priya",
+   "save_as": "episodes/K0467/refs/characters/priya.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Character reference sheet for an animated series. Priya, a 26-year-old Tamil backend developer. Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. White shirt with loose black blazer, dark trousers, silver earrings. Show the same character twice side by side: full body standing front view, and a head-and-shoulders close-up. Neutral expression. Plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_character_priya"
+  },
+  {
+   "kind": "character_ref",
+   "id": "ravi",
+   "save_as": "episodes/K0467/refs/characters/ravi.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Character reference sheet for an animated series. Ravi, a 32-year-old Tamil senior software developer. Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Light grey polo shirt, dark jeans, simple black watch. Show the same character twice side by side: full body standing front view, and a head-and-shoulders close-up. Neutral expression. Plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_character_ravi"
+  },
+  {
+   "kind": "location_ref",
+   "id": "office_cubicle",
+   "save_as": "episodes/K0467/refs/locations/office_cubicle.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. A tech company's open-plan office with modular desks. Cool fluorescent overhead lights mixed with warm window light; soft shadows. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_office_cubicle"
+  },
+  {
+   "kind": "location_ref",
+   "id": "conference_room",
+   "save_as": "episodes/K0467/refs/locations/conference_room.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. A glass-walled meeting room with a long table and whiteboard. Cool fluorescents, brighter; reflections in glass walls. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_conference_room"
+  },
+  {
+   "kind": "location_ref",
+   "id": "server_room_window",
+   "save_as": "episodes/K0467/refs/locations/server_room_window.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. A window looking into the company's server room. Blue and amber equipment lights inside, dimmer corridor light outside. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_server_room_window"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "whiteboard",
+   "save_as": "episodes/K0467/refs/props/whiteboard.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Glass whiteboard with architecture diagrams in colored markers. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_whiteboard"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "sticky_notes",
+   "save_as": "episodes/K0467/refs/props/sticky_notes.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Neon sticky notes on Priya's desk with different options. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_sticky_notes"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "coffee_cup",
+   "save_as": "episodes/K0467/refs/props/coffee_cup.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Half-empty coffee cup with lipstick marks. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_coffee_cup"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "closed_laptop",
+   "save_as": "episodes/K0467/refs/props/closed_laptop.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Closed laptop placed face-down (Ravi's determined gesture). Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_closed_laptop"
+  },
+  {
+   "kind": "image",
+   "shot": 1,
+   "save_as": "episodes/K0467/images/shot01.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/office_cubicle.png",
+    "episodes/K0467/refs/props/sticky_notes.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A tech company's open-plan office with modular desks. Light: Cool fluorescent overhead lights mixed with warm window light; soft shadows. Staging: Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nProp, sticky notes: Neon sticky notes on Priya's desk with different options.\nProp, coffee cup: Half-empty coffee cup with lipstick marks.\nShot: Close-up of Priya at her tech office desk, neon sticky notes spread across the desk surface with options written on them. Her expression is anxious, eyes focused on her monitor, one hand raised to her chin in a worried gesture. Cool fluorescent office lighting mixed with warm window light from the left. Camera: Medium close-up, slight push-in on Priya's face reflecting monitor light.\nReference images: image 1 is Priya; image 2 is the place (office_cubicle); image 3 is the sticky notes. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot01_image"
+  },
+  {
+   "kind": "image",
+   "shot": 2,
+   "save_as": "episodes/K0467/images/shot02.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/ravi.png",
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/conference_room.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A glass-walled meeting room with a long table and whiteboard. Light: Cool fluorescents, brighter; reflections in glass walls. Staging: Ravi stands by the whiteboard on the right, Priya sits at the table on the left.\nRavi: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Wearing (same in every shot): Light grey polo shirt, dark jeans, simple black watch.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nProp, whiteboard: Glass whiteboard with architecture diagrams in colored markers.\nShot: Conference room with glass walls. Ravi stands by a whiteboard with architecture diagrams in colored markers, pointing at one system with calm confidence. Priya sits at the table facing him, pen in hand, leaning forward with uncertain expression. Camera: Two-shot from slight angle, Ravi dominant on right.\nReference images: image 1 is Ravi; image 2 is Priya; image 3 is the place (conference_room). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot02_image"
+  },
+  {
+   "kind": "image",
+   "shot": 3,
+   "save_as": "episodes/K0467/images/shot03.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/office_cubicle.png",
+    "episodes/K0467/refs/props/sticky_notes.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A tech company's open-plan office with modular desks. Light: Cool fluorescent overhead lights mixed with warm window light; soft shadows. Staging: Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nProp, sticky notes: Neon sticky notes on Priya's desk with different options.\nShot: Priya at her desk typing rapidly, then turning in her chair toward Ravi's adjacent desk. Her hair is messed, one strand loose from her pin. Multiple documents and sticky notes scattered across her workspace. Camera: Side profile, Priya's stressed posture visible, swivel motion clear.\nReference images: image 1 is Priya; image 2 is the place (office_cubicle); image 3 is the sticky notes. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot03_image"
+  },
+  {
+   "kind": "image",
+   "shot": 4,
+   "save_as": "episodes/K0467/images/shot04.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/ravi.png",
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/office_cubicle.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A tech company's open-plan office with modular desks. Light: Cool fluorescent overhead lights mixed with warm window light; soft shadows. Staging: Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them.\nRavi: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Wearing (same in every shot): Light grey polo shirt, dark jeans, simple black watch.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nShot: Ravi at his desk looking at his monitor, Priya leaning over from her desk to talk to him. His expression patient but shoulders gradually tensing. Office background shows glass conference rooms out of focus. Camera: Over-the-shoulder from Ravi's perspective, Priya's face hopeful/anxious.\nReference images: image 1 is Ravi; image 2 is Priya; image 3 is the place (office_cubicle). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot04_image"
+  },
+  {
+   "kind": "image",
+   "shot": 5,
+   "save_as": "episodes/K0467/images/shot05.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/office_cubicle.png",
+    "episodes/K0467/refs/props/coffee_cup.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A tech company's open-plan office with modular desks. Light: Cool fluorescent overhead lights mixed with warm window light; soft shadows. Staging: Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nProp, coffee cup: Half-empty coffee cup with lipstick marks.\nProp, sticky notes: Neon sticky notes on Priya's desk with different options.\nShot: Priya at her desk covering her face with both hands in frustration. Her shoulders are tensed. Front-side angle view. Multiple sticky notes visible, empty coffee cup on desk corner. Camera: Close-up on Priya's face, eyes visible between fingers, then pulling hands away.\nReference images: image 1 is Priya; image 2 is the place (office_cubicle); image 3 is the coffee cup. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot05_image"
+  },
+  {
+   "kind": "image",
+   "shot": 6,
+   "save_as": "episodes/K0467/images/shot06.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/ravi.png",
+    "episodes/K0467/refs/locations/office_cubicle.png",
+    "episodes/K0467/refs/props/closed_laptop.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A tech company's open-plan office with modular desks. Light: Cool fluorescent overhead lights mixed with warm window light; soft shadows. Staging: Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them.\nRavi: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Wearing (same in every shot): Light grey polo shirt, dark jeans, simple black watch.\nProp, closed laptop: Closed laptop placed face-down (Ravi's determined gesture).\nShot: Ravi at his desk closing his laptop with a firm motion, then standing up. His expression shows calm, kind determination. He adjusts his polo shirt sleeves. Office behind him slightly blurred. Camera: Low angle, looking up at Ravi standing, determined and calm.\nReference images: image 1 is Ravi; image 2 is the place (office_cubicle); image 3 is the closed laptop. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot06_image"
+  },
+  {
+   "kind": "image",
+   "shot": 7,
+   "save_as": "episodes/K0467/images/shot07.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/ravi.png",
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/server_room_window.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A window looking into the company's server room. Light: Blue and amber equipment lights inside, dimmer corridor light outside. Staging: Both characters stand at the window looking in.\nRavi: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Wearing (same in every shot): Light grey polo shirt, dark jeans, simple black watch.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nShot: Ravi and Priya at a window looking into a server room. Inside, racks of servers glow with blue and amber lights. Ravi is pointing, talking calmly with kind expression. Priya's reflection shows her listening intently, anxious expression softening. Camera: Two-shot, reflections in glass window, blue and amber equipment lights inside.\nReference images: image 1 is Ravi; image 2 is Priya; image 3 is the place (server_room_window). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot07_image"
+  },
+  {
+   "kind": "image",
+   "shot": 8,
+   "save_as": "episodes/K0467/images/shot08.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/ravi.png",
+    "episodes/K0467/refs/locations/conference_room.png",
+    "episodes/K0467/refs/props/whiteboard.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A glass-walled meeting room with a long table and whiteboard. Light: Cool fluorescents, brighter; reflections in glass walls. Staging: Ravi stands by the whiteboard on the right, Priya sits at the table on the left.\nRavi: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Wearing (same in every shot): Light grey polo shirt, dark jeans, simple black watch.\nProp, whiteboard: Glass whiteboard with architecture diagrams in colored markers.\nShot: Ravi in conference room at the whiteboard, writing Tamil text with black marker. His posture is teaching-like, calm and instructive. Whiteboard shows kural in Tamil script as he writes. Camera: Medium shot, Ravi in profile, marker moving across whiteboard, contemplative.\nReference images: image 1 is Ravi; image 2 is the place (conference_room); image 3 is the whiteboard. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot08_image"
+  },
+  {
+   "kind": "image",
+   "shot": 9,
+   "save_as": "episodes/K0467/images/shot09.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0467/refs/characters/ravi.png",
+    "episodes/K0467/refs/characters/priya.png",
+    "episodes/K0467/refs/locations/office_cubicle.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: A tech company's open-plan office with modular desks. Light: Cool fluorescent overhead lights mixed with warm window light; soft shadows. Staging: Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them.\nRavi: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes. Wearing (same in every shot): Light grey polo shirt, dark jeans, simple black watch.\nPriya: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face. Wearing (same in every shot): White shirt with loose black blazer, dark trousers, silver hoop earrings.\nProp, sticky notes: Neon sticky notes on Priya's desk with different options.\nShot: Wide shot of office cubicles showing Ravi and Priya at adjacent desks, both typing with focus and determination. Priya's posture is straight and confident. Sticky notes consolidated into one clear list. Warm window light mixes gently with cool fluorescent office lighting. Camera: Wide shot of both desks, side by side, each absorbed in work.\nReference images: image 1 is Ravi; image 2 is Priya; image 3 is the place (office_cubicle). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0467_shot09_image"
+  },
+  {
+   "kind": "clip",
+   "shot": 1,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0467/clips/shot01.mp4",
+   "start_frame": "episodes/K0467/images/shot01.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Priya's eyes dart from sticky note to monitor; she picks up her coffee cup, realizes it's cold, sets it back; her jaw clenches. Camera: Medium close-up, slight push-in on Priya's face reflecting monitor light. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Priya says this line aloud in the natural voice of a 26-year-old Tamil backend developer, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"நாலணா மணிக்குள்ல backend system வேலை முடிய வேண்டும். ப்ரியாவுக்கு எந்த solution தேர்வு செய்য வேண்டுமோ அதுவே தெரியல.\" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K0467_shot01_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 2,
+   "day": 1,
+   "priority": 2,
+   "save_as": "episodes/K0467/clips/shot02.mp4",
+   "start_frame": "episodes/K0467/images/shot02.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Ravi's hand traces diagram lines smoothly; Priya nods but her fingers fidget with the pen. Camera: Two-shot from slight angle, Ravi dominant on right. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Ravi says this line aloud in the natural voice of a 32-year-old Tamil senior software developer, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"சீனியர் டெவலப்பர் ராவி வந்து சொல்றான்: ப்ரியா, இந்த architecture தான் சரி. நான் implementation முழுசுக் கவர் பண்ணுறேன்.\" Meanwhile Priya keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K0467_shot02_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 3,
+   "day": 1,
+   "priority": 3,
+   "save_as": "episodes/K0467/clips/shot03.mp4",
+   "start_frame": "episodes/K0467/images/shot03.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Quick typing motions, then Priya stops, thinks, and swivels her chair smoothly. Camera: Side profile, Priya's stressed posture visible, swivel motion clear. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s Priya is talking: lips and jaw move clearly as if speaking, with small natural gestures. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot03_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 4,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0467/clips/shot04.mp4",
+   "start_frame": "episodes/K0467/images/shot04.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Priya leans toward Ravi; Ravi turns to face her, nodding slowly; his hands rest on desk, fingers tap once; he leans back. Camera: Over-the-shoulder from Ravi's perspective, Priya's face hopeful/anxious. About 8 seconds, one continuous shot, no cuts. From 0 s to 2 s Priya is talking: lips and jaw move clearly as if speaking, with small natural gestures. Ravi keeps their mouth closed and listens. From 2 s to 6 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. Priya keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot04_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 5,
+   "day": 1,
+   "priority": 2,
+   "save_as": "episodes/K0467/clips/shot05.mp4",
+   "start_frame": "episodes/K0467/images/shot05.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Priya covers her face and takes a deep breath, hands slowly lowering; she leans back in chair with defeated expression. Camera: Close-up on Priya's face, eyes visible between fingers, then pulling hands away. About 8 seconds, one continuous shot, no cuts. From 0 s to 2 s nobody on screen talks: every mouth stays closed. From 2 s to 6 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot05_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 6,
+   "day": 1,
+   "priority": 3,
+   "save_as": "episodes/K0467/clips/shot06.mp4",
+   "start_frame": "episodes/K0467/images/shot06.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Ravi's hands close the laptop firmly; he stands slowly, pushing his chair back; he adjusts his sleeves and walks toward Priya. Camera: Low angle, looking up at Ravi standing, determined and calm. About 8 seconds, one continuous shot, no cuts. From 0 s to 1 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. From 1 s to 6 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot06_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 7,
+   "day": 1,
+   "priority": 2,
+   "save_as": "episodes/K0467/clips/shot07.mp4",
+   "start_frame": "episodes/K0467/images/shot07.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Ravi gestures at servers; Priya nods slowly; their reflections move in glass; server lights provide ambient motion. Camera: Two-shot, reflections in glass window, blue and amber equipment lights inside. About 8 seconds, one continuous shot, no cuts. From 0 s to 4 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. Priya keeps their mouth closed and listens. From 4 s to 6 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. Priya keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot07_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 8,
+   "day": 1,
+   "priority": 4,
+   "save_as": "episodes/K0467/clips/shot08.mp4",
+   "start_frame": "episodes/K0467/images/shot08.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Ravi's hand moves smoothly across whiteboard, writing each line of kural; camera pans slightly to follow the writing. Camera: Medium shot, Ravi in profile, marker moving across whiteboard, contemplative. About 8 seconds, one continuous shot, no cuts. From 0 s to 6 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot08_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 9,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0467/clips/shot09.mp4",
+   "start_frame": "episodes/K0467/images/shot09.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Priya types steadily with purpose; Ravi glances over with calm, satisfied smile, then focuses on work; both characters' shoulders relaxed now. Camera: Wide shot of both desks, side by side, each absorbed in work. About 4 seconds, one continuous shot, no cuts. From 0 s to 1 s Ravi is talking: lips and jaw move clearly as if speaking, with small natural gestures. Priya keeps their mouth closed and listens. From 1 s to 3 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0467_shot09_clip"
+  }
+ ],
+ "flow_project": "https://flow.google.com/project/89e57707-dd73-439e-bb3d-47d5f53883ee"
+}

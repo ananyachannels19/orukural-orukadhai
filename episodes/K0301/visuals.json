@@ -1,0 +1,79 @@
+{
+ "dry_run": false,
+ "animated": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10
+ ],
+ "animated_made": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10
+ ],
+ "shots": [
+  {
+   "n": 1,
+   "image": "shot01.png",
+   "clip": "shot01.mp4"
+  },
+  {
+   "n": 2,
+   "image": "shot02.png",
+   "clip": "shot02.mp4"
+  },
+  {
+   "n": 3,
+   "image": "shot03.png",
+   "clip": "shot03.mp4"
+  },
+  {
+   "n": 4,
+   "image": "shot04.png",
+   "clip": "shot04.mp4"
+  },
+  {
+   "n": 5,
+   "image": "shot05.png",
+   "clip": "shot05.mp4"
+  },
+  {
+   "n": 6,
+   "image": "shot06.png",
+   "clip": "shot06.mp4"
+  },
+  {
+   "n": 7,
+   "image": "shot07.png",
+   "clip": "shot07.mp4"
+  },
+  {
+   "n": 8,
+   "image": "shot08.png",
+   "clip": "shot08.mp4"
+  },
+  {
+   "n": 9,
+   "image": "shot09.png",
+   "clip": "shot09.mp4"
+  },
+  {
+   "n": 10,
+   "image": "shot10.png",
+   "clip": "shot10.mp4"
+  }
+ ]
+}

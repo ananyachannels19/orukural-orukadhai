@@ -1,0 +1,20 @@
+# Ledger of published episodes. Updated by the orukural-publish skill after every post,
+# then committed and pushed to GitHub. Internal record only: never shown to viewers.
+published:
+- episode: K0301
+  kural: 301
+  youtube: https://youtube.com/shorts/ZYqsCislNog
+  instagram: https://www.instagram.com/orukural.orukadhai/reel/De_wlASJEre/
+- episode: K0788
+  kural: 788
+  youtube: https://youtube.com/shorts/F6HmVInNjME
+  instagram: https://www.instagram.com/orukural.orukadhai/reel/DfHaowDJI97/
+- episode: K1330
+  kural: 1330
+  youtube: https://youtube.com/shorts/MxeAbBQPX3E
+  instagram: https://www.instagram.com/reel/DfO07Obp9o_/
+- episode: K0467
+  kural: 467
+  youtube: https://youtube.com/shorts/F2VpdIn3fbI
+  instagram: https://www.instagram.com/reel/DfUPmGnT2UW/   # per Windsor; earlier notes had DfUNs-ppBGm, to confirm
+# K0100: final ready, not yet posted (held for Saturday).

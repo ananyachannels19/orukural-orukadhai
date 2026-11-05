@@ -118,6 +118,8 @@ flow:
     K0788: https://flow.google.com/u/2/project/dbd31b05-2737-4682-a9ab-b83a04d7ffdf   # new account (from 28 Oct)
     K0788_archived: https://flow.google.com/u/1/project/17cdee32-abf4-4416-8c3d-321b921530b4   # old account: refs, images, clips 1/3/4/5/6
     K1330: https://flow.google.com/u/2/project/c67884f6-487e-43e9-a6c8-e555ed19f88e
+    K0100: https://flow.google.com/u/1/project/79afd990-d322-4100-871c-d97938a32a86
+    K0467: https://flow.google.com/project/0e34f70e-be49-4bb0-b336-c4100d2dee30
   # From 28 Oct 2026 all Flow work runs on the new Google account only (Flow tab /u/2, PRO plan,
   # 1050 credits that day). Never switch back to the old /u/1 account. The flow sheet plans clips
   # against this pool instead of the old 50-a-day limit; per_reel_credits (75) still caps a reel.

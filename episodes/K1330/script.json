@@ -1,0 +1,448 @@
+{
+ "dry_run": false,
+ "model": "claude session",
+ "cost_usd": 0.0,
+ "cached": false,
+ "kural_id": "K1330",
+ "errors": [],
+ "warnings": [],
+ "script": {
+  "kural_number": 1330,
+  "story_title_ta": "காபி பொடியும் செல்லக் கோபமும்",
+  "story_title_en": "The coffee powder and the little sulk",
+  "logline_en": "Kathir forgets the filter-coffee powder for the third time and Mithra goes silent; instead of arguing he rides out in the rain, comes back dripping, makes her a terrible coffee, and her sulk melts into laughter on the balcony.",
+  "originality_note_en": "A pharmacist's soaked dash for one packet of coffee powder and his badly made filter coffee turn a home-tailor's silent sulk into the making-up the kural praises.",
+  "meaning_ta": "காதலில் சிறு ஊடல் (செல்லக் கோபம்) ஒரு இன்பம். அந்த ஊடலுக்கே இன்பம் தருவது, அது தீர்ந்து இருவரும் மீண்டும் அன்போடு சேர்ந்து அணைத்துக்கொள்ளும் அந்த நொடிதான்.",
+  "meaning_en": "In love, a small sulk is itself a pleasure; and what makes the sulk sweet is the moment it ends and the two come back together in an embrace.",
+  "cast": [
+   {
+    "id": "kathir",
+    "name_ta": "கதிர்",
+    "age": 30,
+    "job": "pharmacist at a neighbourhood medical shop",
+    "look_en": "Tall and slim, square jaw, light-brown skin, very short crew-cut black hair, a thick black moustache, no beard, no glasses, a dimple when he smiles.",
+    "outfit_en": "A light-yellow formal half-sleeve shirt, dark-grey trousers, black sandals.",
+    "gender": "male",
+    "age_group": "adult",
+    "personality": "easy-going, playful, never argues",
+    "voice": "Iapetus",
+    "voice_en": "a clear, light, playful 30-year-old Tamil man's voice",
+    "voice_source": "tts"
+   },
+   {
+    "id": "mithra",
+    "name_ta": "மித்ரா",
+    "age": 27,
+    "job": "runs a blouse-stitching tailoring business from home",
+    "look_en": "Medium height, round face, dusky skin, long thick black hair in a loose single plait, a small gold nose stud, a small black bindi, expressive eyebrows.",
+    "outfit_en": "A peach cotton salwar kameez with a plain white dupatta over one shoulder, a measuring tape around her neck, glass bangles on both wrists.",
+    "gender": "female",
+    "age_group": "adult",
+    "personality": "firm, quick to sulk, quicker to laugh",
+    "voice": "Kore",
+    "voice_en": "a firm, clear 27-year-old Tamil woman's voice that softens into laughter",
+    "voice_source": "tts"
+   }
+  ],
+  "thatha_cameo": false,
+  "continuity": {
+   "locations": [
+    {
+     "id": "flat_hall",
+     "description_en": "A small rented first-floor flat in a Tamil Nadu town: a hall with a small wooden dining table and two chairs, a sewing machine with folded blouse pieces on a side table, the open kitchen counter behind with a steel coffee filter and a gas stove, the front door on the right with a shoe rack, rain streaking the window.",
+     "light_en": "9:40 pm, warm white tube light inside; dark rainy night outside the window.",
+     "blocking_en": "Mithra at the dining table on the left, facing right; Kathir at the front door on the right, facing her; in the kitchen Kathir stands at the counter on the right, Mithra on the left."
+    },
+    {
+     "id": "street_shop",
+     "description_en": "The wet street below the flat: a small provision shop with its shutter half down, sacks and glass jars inside, a single yellow streetlight, puddles reflecting the light, signs with no readable words.",
+     "light_en": "Night, heavy rain, yellow streetlight and the shop's single bulb.",
+     "blocking_en": "Kathir parks his scooter on the left and stands at the shop counter on the right; the shopkeeper is only a hand passing the packet."
+    },
+    {
+     "id": "balcony",
+     "description_en": "The flat's narrow balcony: a low parapet wall with a few potted tulsi and jasmine plants, a plastic chair, a clothesline, rain falling beyond the parapet onto the street below.",
+     "light_en": "Night, rain, warm light spilling out from the hall door behind them.",
+     "blocking_en": "Mithra on the left, Kathir on the right, both sitting on the parapet's low ledge facing the rain, shoulder to shoulder."
+    }
+   ],
+   "props": [
+    {
+     "id": "tumbler",
+     "name_ta": "டம்ளர்",
+     "description_en": "One stainless-steel tumbler and davara (filter-coffee cup and saucer), plain and shiny."
+    },
+    {
+     "id": "coffee_packet",
+     "name_ta": "காபி பொடி",
+     "description_en": "A small brown paper packet of coffee powder folded at the top, no writing, wet with rain."
+    },
+    {
+     "id": "scooter",
+     "name_ta": "",
+     "description_en": "Kathir's plain teal scooter with a black seat, no logos or writing."
+    },
+    {
+     "id": "towel",
+     "name_ta": "",
+     "description_en": "A thin white cotton towel with a red border."
+    }
+   ],
+   "outfits": []
+  },
+  "hooks": [
+   {
+    "style": "tense_moment",
+    "on_screen_ta": "9:40 PM\nகாபி பொடி இல்ல.",
+    "narration_ta": "மூணாவது தடவை மறந்துட்டீங்க!"
+   },
+   {
+    "style": "question",
+    "on_screen_ta": "செல்லக் கோபம் எப்போ இனிக்கும்?",
+    "narration_ta": "சின்னச் சண்டை, எப்போ இனிக்கும் தெரியுமா?"
+   },
+   {
+    "style": "surprising_line",
+    "on_screen_ta": "அவன் சண்டை போடல.",
+    "narration_ta": "அவ கோபப்பட்டா. அவன் சண்டை போடல. மழையில கிளம்பிட்டான்."
+   }
+  ],
+  "chosen_hook": 0,
+  "segments": [
+   {
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "speaker": "mithra",
+    "narration_ta": "மூணாவது தடவை மறந்துட்டீங்க!",
+    "delivery": "annoyed, sulking, sharp",
+    "on_screen_ta": "9:40 PM\nகாபி பொடி இல்ல."
+   },
+   {
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 7.0,
+    "speaker": "narrator",
+    "narration_ta": "மித்ரா அதுக்கு மேல ஒரு வார்த்தை பேசல. திரும்பி உக்காந்துட்டா.",
+    "delivery": "light, amused",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 7.0,
+    "end_s": 10.0,
+    "speaker": "narrator",
+    "narration_ta": "கதிர் சண்டை போடல. குடை கூட எடுக்கல.",
+    "delivery": "quick, playful",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 10.0,
+    "end_s": 14.0,
+    "speaker": "narrator",
+    "narration_ta": "மழையில நனைஞ்சுக்கிட்டே, கடைக்குக் கிளம்பிட்டான்.",
+    "delivery": "brisk, warm",
+    "on_screen_ta": "சின்ன ஊடல்... எப்போ இனிக்கும்?"
+   },
+   {
+    "beat": "story",
+    "start_s": 14.0,
+    "end_s": 18.0,
+    "speaker": "narrator",
+    "narration_ta": "திரும்பி வந்தான். கையில காபி பொடி. தலையில இருந்து சொட்டுற தண்ணி.",
+    "delivery": "amused, warm",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 18.0,
+    "end_s": 22.0,
+    "speaker": "kathir",
+    "narration_ta": "மேடம், காபி ரெடி. கோபம் இன்னும் எவ்வளவு நேரம்?",
+    "delivery": "playful, gentle, hopeful",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 22.0,
+    "end_s": 26.0,
+    "speaker": "mithra",
+    "narration_ta": "ஐயோ... இது காபியா, கஷாயமா?",
+    "delivery": "trying to stay angry, then bursting into laughter",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "kural",
+    "start_s": 26.0,
+    "end_s": 35.0,
+    "speaker": "narrator",
+    "narration_ta": "ஊடுதல் காமத்திற்கு இன்பம் அதற்கின்பம் கூடி முயங்கப் பெறின். செல்லக் கோபம் ஒரு இனிமை. அது தீர்ந்து சேர்றது, இன்னும் இனிமை.",
+    "delivery": "slow, warm, tender",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "lesson",
+    "start_s": 35.0,
+    "end_s": 38.5,
+    "speaker": "narrator",
+    "narration_ta": "சண்டை சின்னதா இருக்கட்டும். சமாதானம் சூடா இருக்கட்டும்.",
+    "delivery": "warm, smiling",
+    "on_screen_ta": "ஊடலின் இனிமை சமாதானத்தில் தான்"
+   },
+   {
+    "beat": "lesson",
+    "start_s": 38.5,
+    "end_s": 41.0,
+    "speaker": "narrator",
+    "narration_ta": "சண்டைக்கு அப்புறம் காபி போடுற உங்க ஆள டேக் பண்ணுங்க!",
+    "delivery": "warm, smiling, inviting",
+    "on_screen_ta": ""
+   }
+  ],
+  "shots": [
+   {
+    "n": 1,
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "characters": [
+     "mithra",
+     "kathir"
+    ],
+    "location": "flat_hall",
+    "props": [
+     "tumbler"
+    ],
+    "action_en": "Mithra puts a tumbler of black tea down hard on the table and tells Kathir he forgot the coffee powder for the third time, then turns her back on him.",
+    "camera_en": "Static medium shot from the kitchen side, eye level, Mithra in front, Kathir in the doorway behind.",
+    "image_prompt_en": "Mithra at the dining table on the left, mid-motion setting the steel tumbler down hard, frowning at Kathir; Kathir in the open front doorway on the right, office bag on his shoulder, frozen with a guilty half-smile.",
+    "motion_prompt_en": "Mithra sets the tumbler down with a firm tap and speaks sharply to Kathir; then she turns her chair away from him and folds her arms, chin up. Kathir rubs the back of his neck, looks at the window where rain is falling, and nods to himself. Exactly one tumbler in the shot; nothing else changes hands.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 2,
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 7.0,
+    "characters": [
+     "mithra",
+     "kathir"
+    ],
+    "location": "flat_hall",
+    "props": [
+     "tumbler"
+    ],
+    "action_en": "Mithra sits with her back to Kathir, arms folded, refusing to talk.",
+    "camera_en": "Same as shot 1.",
+    "image_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_priority": 2,
+    "clip_from": 1,
+    "clip_offset_s": 4.0
+   },
+   {
+    "n": 3,
+    "beat": "story",
+    "start_s": 7.0,
+    "end_s": 10.0,
+    "characters": [
+     "kathir"
+    ],
+    "location": "flat_hall",
+    "props": [],
+    "action_en": "Kathir drops his bag, grabs his scooter key from the hook and steps out into the rain without an umbrella.",
+    "camera_en": "Medium shot from inside the hall towards the front door.",
+    "image_prompt_en": "Kathir at the open front door, his office bag just set down on the shoe rack, picking a key off a wall hook, rain visible on the stairs outside.",
+    "motion_prompt_en": "Kathir takes the key, glances back once at the hall, and steps out of the door into the rainy stairway, leaving the umbrella on the rack. Nobody speaks.",
+    "motion_priority": 2,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 4,
+    "beat": "story",
+    "start_s": 10.0,
+    "end_s": 14.0,
+    "characters": [
+     "kathir"
+    ],
+    "location": "street_shop",
+    "props": [
+     "scooter",
+     "coffee_packet"
+    ],
+    "action_en": "In the pouring rain Kathir, soaked, buys a packet of coffee powder at the half-shuttered shop.",
+    "camera_en": "Medium shot from the street, eye level, rain falling between camera and Kathir.",
+    "image_prompt_en": "Kathir, hair and shirt soaked, stands at the half-shuttered provision shop under its single bulb, his teal scooter parked on the left in a puddle, holding out his hand towards the counter.",
+    "motion_prompt_en": "A hand from inside the shop passes him a small brown paper packet; Kathir tucks it inside his shirt to keep it dry, grins, and turns back to the scooter. Rain pours steadily.",
+    "motion_priority": 3,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 5,
+    "beat": "story",
+    "start_s": 14.0,
+    "end_s": 18.0,
+    "characters": [
+     "kathir",
+     "mithra"
+    ],
+    "location": "flat_hall",
+    "props": [
+     "coffee_packet"
+    ],
+    "action_en": "Kathir comes back dripping and holds up the coffee packet; Mithra peeks over her shoulder, pretending not to look.",
+    "camera_en": "Medium shot from beside the dining table, Mithra's shoulder in the foreground, Kathir at the door.",
+    "image_prompt_en": "Kathir in the front doorway, completely drenched, water dripping from his hair and shirt, holding up the small brown paper packet with a proud grin; Mithra in the foreground on the left, back half-turned, glancing at him from the corner of her eye.",
+    "motion_prompt_en": "Kathir lifts the packet a little higher and raises his eyebrows; water drips onto the floor. Mithra quickly looks away again, pressing her lips together to hide a smile. Nobody speaks.",
+    "motion_priority": 2,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 6,
+    "beat": "story",
+    "start_s": 18.0,
+    "end_s": 25.6,
+    "characters": [
+     "kathir",
+     "mithra"
+    ],
+    "location": "flat_hall",
+    "props": [
+     "tumbler",
+     "towel"
+    ],
+    "action_en": "With a towel on his head Kathir offers Mithra the coffee he made and asks how long the anger will last; she sips, makes a face, and bursts out laughing.",
+    "camera_en": "Static medium two-shot at the kitchen counter, eye level, both faces in view.",
+    "image_prompt_en": "In the kitchen, Kathir on the right with the white towel over his wet head, holding out the steel tumbler and davara with both hands to Mithra on the left, who stands with arms still folded, eyebrows raised.",
+    "motion_prompt_en": "Kathir speaks first with a hopeful smile and offers the tumbler; Mithra takes it, sips, scrunches up her face and speaks, then cannot hold it in and laughs, covering her mouth; Kathir laughs with her. Exactly one tumbler, passed once from Kathir to Mithra.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 7,
+    "beat": "kural",
+    "start_s": 25.6,
+    "end_s": 30.5,
+    "characters": [
+     "mithra",
+     "kathir"
+    ],
+    "location": "balcony",
+    "props": [
+     "tumbler",
+     "towel"
+    ],
+    "action_en": "On the rainy balcony the two sit shoulder to shoulder, sharing the one tumbler; Mithra rests her head on Kathir's shoulder and he puts the towel around both of them.",
+    "camera_en": "Medium wide shot from behind and slightly to the side, the rain and the street lights beyond them.",
+    "image_prompt_en": "Mithra and Kathir sitting close on the balcony ledge facing the rain, Mithra on the left holding the steel tumbler in both hands, her head resting on Kathir's shoulder; Kathir on the right, the white towel around his shoulders.",
+    "motion_prompt_en": "Kathir lifts one side of the towel and wraps it around Mithra's shoulders too; she smiles and passes him the tumbler; he sips and passes it back. Rain falls steadily. Nobody speaks.",
+    "motion_priority": 4,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 8,
+    "beat": "lesson",
+    "start_s": 30.5,
+    "end_s": 34.5,
+    "characters": [
+     "mithra",
+     "kathir"
+    ],
+    "location": "balcony",
+    "props": [
+     "tumbler"
+    ],
+    "action_en": "Close on their two hands holding the one steel tumbler together, rain behind.",
+    "camera_en": "Close-up on hands and tumbler, shallow depth of field.",
+    "image_prompt_en": "Close-up of Mithra's hand with glass bangles and Kathir's hand together around the one steel tumbler, rain drops blurred behind them.",
+    "motion_prompt_en": "Kathir's thumb gently taps Mithra's fingers; her bangles clink softly; a little steam rises from the tumbler.",
+    "motion_priority": 5,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 9,
+    "beat": "lesson",
+    "start_s": 34.5,
+    "end_s": 38.5,
+    "characters": [
+     "mithra",
+     "kathir"
+    ],
+    "location": "balcony",
+    "props": [
+     "tumbler"
+    ],
+    "action_en": "Hold on the two hands around the one tumbler while the lesson is said.",
+    "camera_en": "Close-up on hands and tumbler, shallow depth of field.",
+    "image_prompt_en": "Second cut from shot 8's clip (see shot 8): its last frame held with a slow push-in.",
+    "motion_prompt_en": "Second cut from shot 8's clip (see shot 8): its last frame held with a slow push-in.",
+    "motion_priority": 5,
+    "clip_from": 8,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 10,
+    "beat": "lesson",
+    "start_s": 38.5,
+    "end_s": 41.0,
+    "characters": [
+     "mithra",
+     "kathir"
+    ],
+    "location": "flat_hall",
+    "props": [
+     "tumbler"
+    ],
+    "action_en": "Back to the start: Mithra setting the tumbler down hard, so the replay flows into her opening line.",
+    "camera_en": "Same as shot 1.",
+    "image_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_priority": 5,
+    "clip_from": 1,
+    "clip_offset_s": 4.3
+   }
+  ],
+  "lesson_ta": "ஊடலின் இனிமை சமாதானத்தில் தான்",
+  "tag_question_ta": "சண்டைக்கு அப்புறம் காபி போடுற உங்க ஆள tag பண்ணுங்க",
+  "loop_note_en": "The last shot is the opening moment again (the tumbler set down hard), so the replay's first line, Mithra's 'third time you forgot', follows straight on from it.",
+  "youtube": {
+   "title": "குறள் 1330 | காபி பொடியும் செல்லக் கோபமும் | Thirukkural Story #Shorts",
+   "description_intro_ta": "மூணாவது தடவையும் காபி பொடி மறந்தா? மித்ரா பேசவே இல்ல. கதிர் சண்டை போடல, மழையில கிளம்பிட்டான்.\nசண்டைக்கு அப்புறம் காபி போடுற உங்க ஆள tag பண்ணுங்க 👇",
+   "tags": [
+    "திருக்குறள்",
+    "thirukkural",
+    "thirukkural story",
+    "kural 1330",
+    "ஊடலுவகை",
+    "ஊடல்",
+    "ஊடுதல் காமத்திற்கு இன்பம்",
+    "காதல்",
+    "love",
+    "couple",
+    "husband wife",
+    "tamil love story",
+    "tamil shorts"
+   ],
+   "pinned_comment_ta": "சண்டைக்கு அப்புறம் காபி போடுற உங்க ஆள tag பண்ணுங்க 👇"
+  },
+  "instagram": {
+   "caption_ta": "மூணாவது தடவை. காபி பொடி இல்ல. ☕\n\nமித்ரா பேசல. கதிர் சண்டை போடல. மழையில போய் வாங்கிட்டு வந்து, அவனே காபி போட்டான். அது கஷாயம் மாதிரி இருந்தாலும், கோபம் சிரிப்பா உருகிடுச்சு. 🌧️\n\n📜 குறள் #1330\nஊடுதல் காமத்திற்கு இன்பம் அதற்கின்பம்\nகூடி முயங்கப் பெறின்.\n\nசண்டைக்கு அப்புறம் காபி போடுற உங்க ஆள tag பண்ணுங்க 👇",
+   "hashtags": [
+    "#திருக்குறள்",
+    "#thirukkural",
+    "#ஒருகுறள்ஒருகதை",
+    "#காதல்",
+    "#tamilstories"
+   ]
+  }
+ }
+}

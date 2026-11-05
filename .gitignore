@@ -9,17 +9,40 @@ credentials/
 data/sources/
 
 # generated media and caches (big, reproducible from cache/ledger)
-episodes/*/
-!episodes/.gitkeep
+# episodes: track text (script, edit.json, episode.yaml, retro.md, publish/*.md); ignore media
+episodes/*/**/*.mp4
+episodes/*/**/*.mov
+episodes/*/**/*.mp3
+episodes/*/**/*.wav
+episodes/*/**/*.m4a
+episodes/*/**/*.png
+episodes/*/**/*.jpg
+episodes/*/**/*.jpeg
+episodes/*/**/*.webp
+episodes/*/**/*.bak
+episodes/*/script.json.*
+episodes/*/*_v0_*/
+episodes/*/clips*/
+episodes/*/render/
+episodes/*/pieces/
+episodes/*/voice*/
+episodes/*/images/
+episodes/*/refs/
 cache/
 review/*
 !review/.gitkeep
 assets/music/*
 !assets/music/README.md
-logs/
+logs/*
+!logs/spend.jsonl
 
 __pycache__/
 *.pyc
 .venv/
 .pytest_cache/
 .DS_Store
+
+# local tooling and archives
+flow-mcp/
+flow-mcp-out/
+*.bundle

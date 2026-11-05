@@ -1,0 +1,296 @@
+{
+ "episode_id": "K0100",
+ "clip_credits": 71,
+ "daily_credits": 1050,
+ "clip_days": 1,
+ "monthly_credits_used": 0,
+ "jobs": [
+  {
+   "kind": "character_ref",
+   "id": "kayal",
+   "save_as": "episodes/K0100/refs/characters/kayal.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Character reference sheet for an animated series. Kayal, a 22-year-old Tamil final-year B.Com student. Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot. Show the same character twice side by side: full body standing front view, and a head-and-shoulders close-up. Neutral expression. Plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_character_kayal"
+  },
+  {
+   "kind": "character_ref",
+   "id": "muthu",
+   "save_as": "episodes/K0100/refs/characters/muthu.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Character reference sheet for an animated series. Muthu, a 28-year-old Tamil government town-bus conductor. Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses. A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals. Show the same character twice side by side: full body standing front view, and a head-and-shoulders close-up. Neutral expression. Plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_character_muthu"
+  },
+  {
+   "kind": "location_ref",
+   "id": "house_front",
+   "save_as": "episodes/K0100/refs/locations/house_front.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Location reference plate for an animated series, vertical 9:16, wide establishing view, no people. The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_location_house_front"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "kolam",
+   "save_as": "episodes/K0100/refs/props/kolam.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_kolam"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "powder_bowl",
+   "save_as": "episodes/K0100/refs/props/powder_bowl.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: A small round brass bowl full of white kolam powder. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_powder_bowl"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "diyas",
+   "save_as": "episodes/K0100/refs/props/diyas.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Small terracotta clay diyas with cotton wicks, each with a small steady flame once lit. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_diyas"
+  },
+  {
+   "kind": "prop_ref",
+   "id": "bag",
+   "save_as": "episodes/K0100/refs/props/bag.png",
+   "aspect_ratio": "1:1",
+   "model": "Nano Banana 2 Lite",
+   "prompt": "Prop reference for an animated series: Muthu's worn brown leather conductor's bag on a strap across his chest, no writing. Shown alone, whole, centred, three-quarter view on a plain light warm-grey background. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).",
+   "flow_name": "ref_prop_bag"
+  },
+  {
+   "kind": "image",
+   "shot": 1,
+   "save_as": "episodes/K0100/images/shot01.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/muthu.png",
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/locations/house_front.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nMuthu: Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses. Wearing (same in every shot): A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nProp, powder bowl: A small round brass bowl full of white kolam powder.\nProp, bag: Muthu's worn brown leather conductor's bag on a strap across his chest, no writing.\nShot: Muthu standing at the gate side of the yard in his khaki uniform with the bag across his chest, frowning down at the kolam towards the camera, face clearly visible; Kayal kneeling at the right edge of frame beside the kolam holding the brass bowl, looking up at him. Camera: Low static medium shot from the kolam's edge, looking up at Muthu, Kayal kneeling at the right edge of frame.\nReference images: image 1 is Muthu; image 2 is Kayal; image 3 is the place (house_front). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot01_image"
+  },
+  {
+   "kind": "image",
+   "shot": 2,
+   "save_as": "episodes/K0100/images/shot02.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/muthu.png",
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/locations/house_front.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nMuthu: Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses. Wearing (same in every shot): A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nProp, powder bowl: A small round brass bowl full of white kolam powder.\nProp, bag: Muthu's worn brown leather conductor's bag on a strap across his chest, no writing.\nShot: Muthu standing on the left, frowning, pointing down at the uneven outer lines of the kolam; Kayal kneeling on the right with the brass bowl in her hands, her proud expression starting to fade, both faces in view. Camera: Static medium two-shot from the steps side, both faces in view.\nReference images: image 1 is Muthu; image 2 is Kayal; image 3 is the place (house_front). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot02_image"
+  },
+  {
+   "kind": "image",
+   "shot": 3,
+   "save_as": "episodes/K0100/images/shot03.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/locations/house_front.png",
+    "episodes/K0100/refs/props/powder_bowl.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nProp, powder bowl: A small round brass bowl full of white kolam powder.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nShot: Close-up of Kayal's hand with glass bangles, a pinch of white kolam powder between her fingers above an unfinished line, the brass bowl in her other hand. Camera: Close-up on her hands and the kolam line, shallow depth of field.\nReference images: image 1 is Kayal; image 2 is the place (house_front); image 3 is the powder bowl. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot03_image"
+  },
+  {
+   "kind": "image",
+   "shot": 4,
+   "save_as": "episodes/K0100/images/shot04.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/locations/house_front.png",
+    "episodes/K0100/refs/props/kolam.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nShot: Kayal kneeling beside the kolam, looking up towards the camera, hurt but steady, her face fully in view, hands resting on her knees, nothing in her hands. Camera: Static medium close-up on Kayal from Muthu's side, her face fully to camera.\nReference images: image 1 is Kayal; image 2 is the place (house_front); image 3 is the kolam. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot04_image"
+  },
+  {
+   "kind": "image",
+   "shot": 5,
+   "save_as": "episodes/K0100/images/shot05.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/locations/house_front.png",
+    "episodes/K0100/refs/props/kolam.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nShot: Top-down view of the whole round kolam on the grey cement in morning light, the blue-and-green peacock at its exact centre, the tips of Muthu's sandals at the bottom edge of frame. Camera: Top-down view of the whole kolam, then a slow push-in towards the peacock at its centre.\nReference images: image 1 is the place (house_front); image 2 is the kolam. Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot05_image"
+  },
+  {
+   "kind": "image",
+   "shot": 6,
+   "save_as": "episodes/K0100/images/shot06.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/muthu.png",
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/locations/house_front.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nMuthu: Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses. Wearing (same in every shot): A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nProp, bag: Muthu's worn brown leather conductor's bag on a strap across his chest, no writing.\nShot: Muthu crouching on the left beside the kolam, his bag pushed to his back, looking at the peacock and then at Kayal, his face softening; Kayal kneeling on the right, looking at him. Camera: Static medium two-shot at kolam level, both faces in view.\nReference images: image 1 is Muthu; image 2 is Kayal; image 3 is the place (house_front). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot06_image"
+  },
+  {
+   "kind": "image",
+   "shot": 7,
+   "save_as": "episodes/K0100/images/shot07.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/muthu.png",
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/locations/house_front.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nMuthu: Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses. Wearing (same in every shot): A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nProp, diyas: Small terracotta clay diyas with cotton wicks, each with a small steady flame once lit.\nShot: Muthu and Kayal kneeling side by side at the edge of the kolam in the golden morning light, Muthu sprinkling orange rangoli powder into a petal, Kayal guiding his hand, the row of lit clay diyas on the step in the foreground. Camera: Wide static shot from the steps, the sunrise behind the gate.\nReference images: image 1 is Muthu; image 2 is Kayal; image 3 is the place (house_front). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot07_image"
+  },
+  {
+   "kind": "image",
+   "shot": 8,
+   "save_as": "episodes/K0100/images/shot08.png",
+   "aspect_ratio": "9:16",
+   "model": "Nano Banana 2 Lite",
+   "reference_images": [
+    "episodes/K0100/refs/characters/kayal.png",
+    "episodes/K0100/refs/characters/muthu.png",
+    "episodes/K0100/refs/locations/house_front.png"
+   ],
+   "prompt": "Vertical 9:16 frame. Style: Warm, painterly 3D animation look, soft golden-hour light, gentle film grain, expressive faces, shallow depth of field. Consistent across all episodes. No text inside generated images (we add Tamil text ourselves).\nPlace: The front of a small one-storey house in a Tamil Nadu town on Deepavali morning: a swept, dry, smooth grey cement front yard, two red-oxide steps up to a teak front door with a mango-leaf thoranam strung across the top, a low compound wall painted pale blue with a blue wooden gate on the left, a tulsi pot on a small stand by the steps, a row of small clay diyas along the edge of the top step. Light: Just after sunrise, soft golden sunlight from the left, long gentle shadows, a clear pale-blue sky; the diyas are lit from shot 7 on. Staging: The kolam lies in the middle of the yard; Kayal kneels on its right edge facing left; Muthu stands at the gate side on the left facing right, looking down at it.\nKayal: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver jhumka earrings, no nose stud, large expressive eyes. Wearing (same in every shot): A mustard-yellow cotton churidar with a maroon dupatta tied around her waist, glass bangles in green and gold on both wrists, barefoot.\nMuthu: Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on his left cheek, tired eyes, no glasses. Wearing (same in every shot): A khaki conductor's half-sleeve shirt and khaki trousers, a brown leather conductor's bag on a strap across his chest, black sandals.\nProp, kolam: A large round Deepavali kolam about 1.5 m across drawn on the cement in white rice-flour lines with loops and dots, coloured with rangoli powder in magenta, orange and yellow, and in its exact centre a peacock in blue and green with a fanned tail; a few lines on its outer edge are slightly uneven.\nProp, diyas: Small terracotta clay diyas with cotton wicks, each with a small steady flame once lit.\nShot: Close shot of the finished blue-and-green peacock in the kolam, Kayal's hand with green and gold bangles placing a lit clay diya beside it, Muthu's hand above it with a pinch of yellow powder. Camera: Close shot on the peacock at kolam level, shallow depth of field.\nReference images: image 1 is Kayal; image 2 is Muthu; image 3 is the place (house_front). Match faces, hair, glasses, body, clothes, the place and every prop exactly as in them; do not copy their layout or background.\nNo text, letters, logos or subtitles anywhere in the image.",
+   "flow_name": "K0100_shot08_image"
+  },
+  {
+   "kind": "clip",
+   "shot": 1,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0100/clips/shot01.mp4",
+   "start_frame": "episodes/K0100/images/shot01.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Muthu frowns and says his line sharply, facing the camera, irritated and tired, with no smile at any moment; Kayal holds still, mouth closed, looking up at him. Nothing else moves. Camera: Low static medium shot from the kolam's edge, looking up at Muthu, Kayal kneeling at the right edge of frame. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Muthu says this line aloud in a firm, tired 28-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"இதுக்கு பேரு கோலமா?\" Meanwhile Kayal keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K0100_shot01_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 2,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0100/clips/shot02.mp4",
+   "start_frame": "episodes/K0100/images/shot02.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "For the first few seconds nobody speaks: Muthu looks over the kolam, frowning. Then Muthu says his line flatly, frowning, pointing at the edge; no smile at any moment. Kayal's face slowly falls; her mouth stays closed. The brass bowl stays in her two hands the whole time. Camera: Static medium two-shot from the steps side, both faces in view. About 8 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. From about 4.0 s, Muthu says this line aloud in a firm, tired 28-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"எல்லாம் கோணல் மாணலா இருக்கு.\" Meanwhile Kayal keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K0100_shot02_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 3,
+   "day": 1,
+   "priority": 3,
+   "save_as": "episodes/K0100/clips/shot03.mp4",
+   "start_frame": "episodes/K0100/images/shot03.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Her fingers stop; a little powder falls; she slowly lowers the bowl onto the cement beside the kolam. Nobody speaks. Camera: Close-up on her hands and the kolam line, shallow depth of field. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0100_shot03_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 4,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0100/clips/shot04.mp4",
+   "start_frame": "episodes/K0100/images/shot04.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Kayal says her line quietly, looking up into the camera, hurt but steady, no smile and no tears; her hands stay on her knees, nothing near her mouth. Camera: Static medium close-up on Kayal from Muthu's side, her face fully to camera. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Kayal says this line aloud in a bright, soft 21-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"அண்ணா... இதுல ஒண்ணு கூடவா நல்லா இல்ல?\" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K0100_shot04_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 5,
+   "day": 1,
+   "priority": 4,
+   "save_as": "episodes/K0100/clips/shot05.mp4",
+   "start_frame": "episodes/K0100/images/shot05.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Slow push-in from the whole kolam to the peacock at its centre; morning light; nothing else moves. Camera: Top-down view of the whole kolam, then a slow push-in towards the peacock at its centre. About 4 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0100_shot05_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 6,
+   "day": 1,
+   "priority": 1,
+   "save_as": "episodes/K0100/clips/shot06.mp4",
+   "start_frame": "episodes/K0100/images/shot06.png",
+   "model": "Omni Flash 720p",
+   "seconds": 4,
+   "aspect_ratio": "9:16",
+   "credits": 7,
+   "prompt": "Muthu says his line softly to Kayal, facing her and the camera, with a small apologetic smile; Kayal's face slowly lifts into a smile while her mouth stays closed. Nobody holds anything. Camera: Static medium two-shot at kolam level, both faces in view. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Muthu says this line aloud in a firm, tired 28-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: \"மயில்... ரொம்ப அழகா இருக்கு, கயல்.\" Meanwhile Kayal keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.",
+   "flow_name": "K0100_shot06_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 7,
+   "day": 1,
+   "priority": 4,
+   "save_as": "episodes/K0100/clips/shot07.mp4",
+   "start_frame": "episodes/K0100/images/shot07.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "They colour one petal together, Kayal smiling and pointing, Muthu nodding; the diya flames flicker gently. Nobody speaks; mouths closed. Camera: Wide static shot from the steps, the sunrise behind the gate. About 8 seconds, one continuous shot, no cuts. From 0 s to 7 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0100_shot07_clip"
+  },
+  {
+   "kind": "clip",
+   "shot": 8,
+   "day": 1,
+   "priority": 5,
+   "save_as": "episodes/K0100/clips/shot08.mp4",
+   "start_frame": "episodes/K0100/images/shot08.png",
+   "model": "Omni Flash 720p",
+   "seconds": 8,
+   "aspect_ratio": "9:16",
+   "credits": 12,
+   "prompt": "Kayal sets the diya down; Muthu drops a last dot of yellow powder on the peacock's crest; the flame flickers. Slow push-in. Camera: Close shot on the peacock at kolam level, shallow depth of field. About 8 seconds, one continuous shot, no cuts. From 0 s to 2 s nobody on screen talks: every mouth stays closed. From 2 s to 6 s nobody on screen talks: every mouth stays closed. From 6 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.",
+   "flow_name": "K0100_shot08_clip"
+  }
+ ],
+ "flow_project": "https://flow.google.com/u/1/project/79afd990-d322-4100-871c-d97938a32a86"
+}

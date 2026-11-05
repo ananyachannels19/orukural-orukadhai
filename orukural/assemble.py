@@ -27,7 +27,14 @@ MUSIC_EXT = {".mp3", ".wav", ".m4a", ".aac", ".flac", ".ogg"}
 def real_timeline(s: Settings, script: EpisodeScript, voice: dict) -> tuple[list[dict], list[tuple[float, float]]]:
     gap = s["voice"]["gap_seconds"]
     t, segs, anchors = 0.0, [], [(0.0, 0.0)]
+    prev_end = None
     for seg, v in zip(script.segments, voice["segments"]):
+        # a deliberate silent beat in the script (a silent shot, a pause before a line) is kept as real time:
+        # without it the beat is squeezed away and the next line plays over the wrong picture
+        if prev_end is not None and seg.start_s - prev_end > 0.3:
+            t += seg.start_s - prev_end
+            anchors.append((seg.start_s, t))
+        prev_end = seg.end_s
         planned = seg.end_s - seg.start_s
         slot = max(planned, v["seconds"] + gap)
         segs.append({"n": v["n"], "beat": seg.beat, "speaker": seg.speaker, "file": v["file"],

@@ -67,3 +67,39 @@ episodes:
   - flat_hall
   - street_shop
   - balcony
+- episode: K0100
+  characters:
+  - id: muthu
+    name_ta: முத்து
+    age: 28
+    job: government town-bus conductor
+    look: Medium height, sturdy build, round face, medium-brown skin, short wavy black hair, clean-shaven, a small mole on
+      his left cheek, tired eyes, no glasses.
+    voice: Alnilam
+  - id: kayal
+    name_ta: கயல்
+    age: 22
+    job: final-year B.Com student
+    look: Slim, oval face, wheatish skin, shoulder-length wavy black hair in a half ponytail, a small red bindi, small silver
+      jhumka earrings, no nose stud, large expressive eyes.
+    voice: Autonoe
+  places:
+  - house_front
+- episode: K0467
+  characters:
+  - id: ravi
+    name_ta: ராவி
+    age: 32
+    job: senior software developer
+    look: Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes.
+    voice: Algieba
+  - id: priya
+    name_ta: பிரியா
+    age: 26
+    job: backend developer
+    look: Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face.
+    voice: Despina
+  places:
+  - office_cubicle
+  - conference_room
+  - server_room_window

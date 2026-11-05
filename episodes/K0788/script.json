@@ -1,0 +1,438 @@
+{
+ "dry_run": false,
+ "model": "claude session",
+ "cost_usd": 0.0,
+ "cached": false,
+ "kural_id": "K0788",
+ "errors": [],
+ "warnings": [],
+ "script": {
+  "kural_number": 788,
+  "story_title_ta": "3 மணிக்கு வந்த நண்பன்",
+  "story_title_en": "The friend at the gate at 3 am",
+  "logline_en": "At 3 am Saro's father can't breathe; Saro is still on the phone to his school friend Vignesh when Vignesh's headlight is already at the gate, and by morning Saro realises he never even asked.",
+  "originality_note_en": "A bank clerk drives his mechanic friend's own auto to hospital and pays the bill before being asked, and answers 'I never called you' with a joke about a slipping lungi that is the kural itself.",
+  "meaning_ta": "ஆடை நழுவும் அந்த நொடியிலேயே, யாரும் சொல்லாமல் கை தானாக அதைப் பிடிக்கும். அதுபோல நண்பனுக்குத் துன்பம் வந்த உடனே, கேட்கப்படாமலே ஓடி வந்து அதை நீக்குவதுதான் நட்பு.",
+  "meaning_en": "The moment a garment slips, the hand catches it on its own, without being told. Friendship is like that: it rushes in and clears a friend's trouble the moment it comes, without waiting to be asked.",
+  "cast": [
+   {
+    "id": "vignesh",
+    "name_ta": "விக்னேஷ்",
+    "age": 29,
+    "job": "bank clerk",
+    "look_en": "Lean build, long oval face, wheatish skin, short neatly side-parted black hair, thin black rectangular glasses, clean-shaven, calm eyes.",
+    "outfit_en": "Grey track pants, navy blue half-sleeve T-shirt with a blue-and-white checked shirt thrown on open over it, black rubber slippers, a silver wristwatch.",
+    "gender": "male",
+    "age_group": "adult",
+    "personality": "calm, friendly",
+    "voice": "Achird",
+    "voice_en": "a calm, friendly, low and steady 29-year-old Tamil man's voice",
+    "voice_source": "tts"
+   },
+   {
+    "id": "saro",
+    "name_ta": "சரோ",
+    "age": 29,
+    "job": "auto mechanic",
+    "look_en": "Stocky build, broad round face, dark skin, thick curly black hair, full short beard and moustache, a small scar through his left eyebrow, strong hands.",
+    "outfit_en": "Faded maroon sleeveless vest, a green-and-white checked lungi, a black thread on his right wrist, barefoot.",
+    "gender": "male",
+    "age_group": "adult",
+    "personality": "breathy, anxious, warm-hearted",
+    "voice": "Enceladus",
+    "voice_en": "a husky, breathless 29-year-old Tamil man's voice",
+    "voice_source": "tts"
+   },
+   {
+    "id": "appa",
+    "name_ta": "அப்பா",
+    "age": 62,
+    "job": "retired lorry driver",
+    "look_en": "Thin, elderly, short grey hair, grey stubble, deep lines on a kind face, dark skin, bony shoulders.",
+    "outfit_en": "A white cotton banian and a plain white veshti, a thin towel over one shoulder.",
+    "gender": "male",
+    "age_group": "elder",
+    "personality": "frail, quiet, gentle",
+    "voice": "Sadaltager",
+    "voice_en": "a weak, hoarse 62-year-old Tamil man's voice",
+    "voice_source": "tts"
+   }
+  ],
+  "thatha_cameo": false,
+  "continuity": {
+   "locations": [
+    {
+     "id": "saro_gate",
+     "description_en": "A narrow residential street in a Tamil Nadu town: Saro's small one-storey house with a sky-blue wall, a short green iron gate, a coconut tree by the wall, Saro's black-and-yellow auto parked beside the gate, a single yellow streetlight further down.",
+     "light_en": "3 am, deep blue night; a warm bulb in the doorway behind Saro and the yellow streetlight; a white motorbike headlight from shot 1's second half on.",
+     "blocking_en": "Saro in the doorway, then at the gate on the left facing right; Vignesh arrives from the right on his motorbike and stands on the right facing Saro; the auto is parked at the left of the gate."
+    },
+    {
+     "id": "hospital_corridor",
+     "description_en": "A clean government-hospital corridor: pale green walls, a long row of steel bench seats on the left, a billing counter window with a steel grille at the far end, tall windows on the right, signs with no readable words.",
+     "light_en": "Cool white tube lights at night; from shot 7 first pale-orange dawn light comes in through the windows.",
+     "blocking_en": "Saro sits on the left end of the bench, Vignesh sits to his right; at the windows Saro stands left, Vignesh right."
+    },
+    {
+     "id": "hospital_front",
+     "description_en": "The front steps of the same hospital: wide stone steps, a neem tree, a small tea stall at the side with a steel kettle, an empty road beyond.",
+     "light_en": "Sunrise, low golden light from the right.",
+     "blocking_en": "The two walk down the steps towards the camera, Saro on the left, Vignesh on the right with his arm around Saro's shoulder."
+    }
+   ],
+   "props": [
+    {
+     "id": "phone",
+     "name_ta": "",
+     "description_en": "Saro's old black smartphone with a cracked corner and a plain dark rubber cover, screen glowing."
+    },
+    {
+     "id": "auto_key",
+     "name_ta": "சாவி",
+     "description_en": "A single auto-rickshaw key on a small brass ring with a red thread tassel."
+    },
+    {
+     "id": "auto",
+     "name_ta": "ஆட்டோ",
+     "description_en": "Saro's black-and-yellow three-wheeler auto-rickshaw with a black canvas hood, a small plastic jasmine garland on the front, no writing."
+    },
+    {
+     "id": "bike",
+     "name_ta": "",
+     "description_en": "Vignesh's plain dark-grey commuter motorbike with a round white headlight, no logos."
+    },
+    {
+     "id": "tea_cups",
+     "name_ta": "",
+     "description_en": "Two small white paper cups of milky tea, steaming."
+    }
+   ],
+   "outfits": []
+  },
+  "hooks": [
+   {
+    "style": "tense_moment",
+    "on_screen_ta": "3:04 AM\nஒரு அழைப்பு.",
+    "narration_ta": "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!"
+   },
+   {
+    "style": "question",
+    "on_screen_ta": "உங்களுக்கு யார் வருவாங்க?",
+    "narration_ta": "ராத்திரி மூணு மணிக்கு கூப்பிட்டா, யார் வருவாங்க?"
+   },
+   {
+    "style": "surprising_line",
+    "on_screen_ta": "அவன் கூப்பிடவே இல்ல.",
+    "narration_ta": "சரோ கூப்பிடவே இல்ல. ஆனா விக்னேஷ் வந்துட்டான்."
+   }
+  ],
+  "chosen_hook": 0,
+  "segments": [
+   {
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "speaker": "saro",
+    "narration_ta": "விக்கி... அப்பாவுக்கு மூச்சு விட முடியலடா!",
+    "delivery": "panicked, breathless, close to tears",
+    "on_screen_ta": "3:04 AM\nஒரு அழைப்பு."
+   },
+   {
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 8.0,
+    "speaker": "narrator",
+    "narration_ta": "சரோ இன்னும் பேசி முடிக்கல. அதுக்குள்ள, கேட்டுல ஒரு பைக் வெளிச்சம்.",
+    "delivery": "hushed, tense",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 8.0,
+    "end_s": 11.0,
+    "speaker": "vignesh",
+    "narration_ta": "சாவியக் குடு. நீ அப்பா கூட இரு.",
+    "delivery": "calm, firm and quick",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 11.0,
+    "end_s": 16.0,
+    "speaker": "narrator",
+    "narration_ta": "விக்னேஷ் ஆட்டோ ஓட்டினான். பின்னால, அப்பாவ தாங்கிக்கிட்டு சரோ.",
+    "delivery": "urgent, low",
+    "on_screen_ta": "கூப்பிடும் முன்னே வருபவன் யார்?"
+   },
+   {
+    "beat": "story",
+    "start_s": 16.0,
+    "end_s": 19.0,
+    "speaker": "narrator",
+    "narration_ta": "சரோ கேக்கும் முன்னே, பணமும் கட்டிட்டான்.",
+    "delivery": "quiet, warm",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 19.0,
+    "end_s": 22.0,
+    "speaker": "saro",
+    "narration_ta": "நான் உன்னக் கூப்பிடவே இல்லையேடா...",
+    "delivery": "tired, tearful, grateful",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 22.0,
+    "end_s": 26.0,
+    "speaker": "vignesh",
+    "narration_ta": "லுங்கி நழுவுனா, கை பெர்மிஷன் கேட்டுட்டா பிடிக்குது?",
+    "delivery": "gently teasing, warm",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "kural",
+    "start_s": 26.0,
+    "end_s": 35.0,
+    "speaker": "narrator",
+    "narration_ta": "உடுக்கை இழந்தவன் கைபோல ஆங்கே இடுக்கண் களைவதாம் நட்பு. ஆடை நழுவினா, கை கேக்காமலே பிடிக்கும். அதுதான் நட்பு.",
+    "delivery": "slow, warm, reverent",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "lesson",
+    "start_s": 35.0,
+    "end_s": 38.5,
+    "speaker": "narrator",
+    "narration_ta": "உண்மையான நண்பனை, நீ கூப்பிடவே வேண்டாம்.",
+    "delivery": "warm, certain",
+    "on_screen_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்"
+   },
+   {
+    "beat": "lesson",
+    "start_s": 38.5,
+    "end_s": 41.0,
+    "speaker": "narrator",
+    "narration_ta": "அப்படிப்பட்ட உங்க ஃப்ரெண்ட்-அ டேக் பண்ணுங்க!",
+    "delivery": "warm, smiling, inviting",
+    "on_screen_ta": ""
+   }
+  ],
+  "shots": [
+   {
+    "n": 1,
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "characters": [
+     "saro"
+    ],
+    "location": "saro_gate",
+    "props": [
+     "phone"
+    ],
+    "action_en": "Saro, panicking, tells Vignesh on the phone that his father can't breathe; a headlight then sweeps over him.",
+    "camera_en": "Static medium close-up at eye level, slight handheld feel.",
+    "image_prompt_en": "Saro stands in the open doorway of his house at night, phone pressed to his right ear, eyes wide with panic, free hand gripping the door frame; the doorway bulb behind him, the dark street to the right.",
+    "motion_prompt_en": "Saro speaks urgently into the phone. After he finishes, a bright white motorbike headlight sweeps across his face from the street: Vignesh (lean, thin black rectangular glasses, short side-parted black hair, blue-and-white checked shirt open over a navy T-shirt, grey track pants) rides his plain dark-grey motorbike in from the right and keeps rolling slowly towards the gate until the clip ends; he never stops in frame. Saro lowers the phone a little, turns towards the gate and squints into the light, breathing hard. The rider is Vignesh, nobody else.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 2,
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 8.0,
+    "characters": [
+     "saro"
+    ],
+    "location": "saro_gate",
+    "props": [
+     "phone"
+    ],
+    "action_en": "The headlight reaches Saro before he has finished the call.",
+    "camera_en": "Same as shot 1.",
+    "image_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_priority": 1,
+    "clip_from": 1,
+    "clip_offset_s": 3.0
+   },
+   {
+    "n": 3,
+    "beat": "story",
+    "start_s": 8.0,
+    "end_s": 12.0,
+    "characters": [
+     "vignesh",
+     "saro"
+    ],
+    "location": "saro_gate",
+    "props": [
+     "auto_key",
+     "bike"
+    ],
+    "action_en": "At the gate Vignesh holds out his hand for the auto key and tells Saro to stay with his father.",
+    "camera_en": "Medium two-shot from the street side, eye level.",
+    "image_prompt_en": "At the green gate at night, Vignesh stands on the right beside his motorbike, its headlight still on behind him, holding out his open palm towards Saro; Saro on the left clutches the auto key, looking at him.",
+    "motion_prompt_en": "Saro lets go of the key; Vignesh closes his hand around it and speaks to Saro, calm and quick; Saro nods. Exactly one key in the whole shot, in Vignesh's hand once Saro lets go; nobody holds anything else.",
+    "motion_priority": 2,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 4,
+    "beat": "story",
+    "start_s": 12.0,
+    "end_s": 16.0,
+    "characters": [
+     "vignesh",
+     "saro",
+     "appa"
+    ],
+    "location": "saro_gate",
+    "props": [
+     "auto"
+    ],
+    "action_en": "Inside the moving auto at night: Vignesh drives; in the back Saro holds his father, who leans on him, eyes half-closed, breathing hard, a hand on his chest.",
+    "camera_en": "Medium shot from just in front of the auto, looking in at all three, eye level.",
+    "image_prompt_en": "Inside Saro's auto at night: Vignesh at the handlebar in front, eyes on the road; in the back seat Saro sits with his arm around his father, who leans his head on Saro's shoulder, eyes half-closed, one hand resting on his chest; Saro looks down at him, worried. Calm and gentle, nothing medical in view.",
+    "motion_prompt_en": "The auto moves down the empty night street; passing streetlights slide over their faces. The father breathes slowly and heavily, chest rising; Saro tightens his arm around him and rubs his shoulder; Vignesh glances back once, then forward. Nobody speaks.",
+    "motion_priority": 2,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 5,
+    "beat": "story",
+    "start_s": 16.0,
+    "end_s": 19.0,
+    "characters": [
+     "vignesh"
+    ],
+    "location": "hospital_corridor",
+    "props": [],
+    "action_en": "At the billing counter Vignesh pays before Saro has asked.",
+    "camera_en": "Medium shot from beside the counter window.",
+    "image_prompt_en": "Vignesh at the billing counter window with the steel grille, sliding a plain card and a folded form under the grille, glancing back down the corridor.",
+    "motion_prompt_en": "Vignesh slides the card under the grille, nods, and takes back a printed slip.",
+    "motion_priority": 3,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 6,
+    "beat": "story",
+    "start_s": 19.0,
+    "end_s": 26.0,
+    "characters": [
+     "saro",
+     "vignesh"
+    ],
+    "location": "hospital_corridor",
+    "props": [],
+    "action_en": "On the bench Saro says he never even called him; Vignesh answers with a question about a slipping lungi.",
+    "camera_en": "Static medium two-shot, eye level, both faces in view.",
+    "image_prompt_en": "Saro and Vignesh side by side on the steel bench at night, Saro on the left, elbows on knees, tired, turning to Vignesh; Vignesh on the right, sitting back, looking at him.",
+    "motion_prompt_en": "Saro speaks first, voice cracking; then Vignesh answers with a small smile and a light shrug, miming a hand catching something; Saro laughs once through tired eyes.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 7,
+    "beat": "kural",
+    "start_s": 26.0,
+    "end_s": 31.26,
+    "characters": [
+     "saro",
+     "vignesh"
+    ],
+    "location": "hospital_corridor",
+    "props": [
+     "tea_cups"
+    ],
+    "action_en": "Dawn at the corridor windows: Vignesh hands Saro a cup of tea; the worst is over.",
+    "camera_en": "Medium wide shot from inside the corridor, the windows bright behind them.",
+    "image_prompt_en": "Saro and Vignesh standing at the tall corridor windows in pale-orange first light, Saro on the left, Vignesh on the right holding out a small paper cup of tea to him.",
+    "motion_prompt_en": "Saro and Vignesh stand at the corridor window at dawn, each already holding his own small steel tumbler from the first frame; they sip slowly and look out at the sunrise, shoulders relaxing; faint steam rises. Exactly two steel tumblers throughout: no cup is passed, added or removed. Nobody speaks; mouths stay closed except to sip.",
+    "motion_priority": 4,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 8,
+    "beat": "lesson",
+    "start_s": 31.26,
+    "end_s": 34.8,
+    "characters": [
+     "saro",
+     "vignesh"
+    ],
+    "location": "hospital_front",
+    "props": [],
+    "action_en": "The two walk down the hospital steps in the sunrise, Vignesh's arm around Saro's shoulder.",
+    "camera_en": "Wide shot from the bottom of the steps, low angle.",
+    "image_prompt_en": "Saro and Vignesh walking down the wide stone steps towards the camera at sunrise, Vignesh's arm around Saro's shoulder, Saro tired but smiling.",
+    "motion_prompt_en": "They walk down two or three steps; Vignesh pats Saro's shoulder; the low sun flares behind them.",
+    "motion_priority": 3,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 9,
+    "beat": "lesson",
+    "start_s": 34.8,
+    "end_s": 41.0,
+    "characters": [
+     "saro"
+    ],
+    "location": "saro_gate",
+    "props": [
+     "phone"
+    ],
+    "action_en": "Back to the night: Saro at the gate, the phone at his ear, as in the opening, so the replay flows into his call.",
+    "camera_en": "Same as shot 1.",
+    "image_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_prompt_en": "Second cut from shot 1's clip (see shot 1).",
+    "motion_priority": 5,
+    "clip_from": 1,
+    "clip_offset_s": 0.25
+   }
+  ],
+  "lesson_ta": "கூப்பிடாமலே வருபவன் தான் நண்பன்",
+  "tag_question_ta": "உங்க 3 AM நண்பனை tag பண்ணுங்க",
+  "loop_note_en": "The last shot is the same doorway moment as the opening (the headlight reaching Saro), so the replay's first line, Saro's call to Vignesh, follows straight on from it.",
+  "youtube": {
+   "title": "குறள் 788 | 3 மணிக்கு வந்த நண்பன் | Thirukkural Story #Shorts",
+   "description_intro_ta": "ராத்திரி 3 மணிக்கு சரோவோட அப்பாவுக்கு மூச்சு விட முடியல. அவன் phone-ல பேசி முடிக்கும் முன்னே, விக்னேஷ் கேட்டுல நின்னான்.\nஉங்க 3 AM நண்பனை tag பண்ணுங்க 👇",
+   "tags": [
+    "திருக்குறள்",
+    "thirukkural",
+    "thirukkural story",
+    "kural 788",
+    "நட்பு",
+    "friendship",
+    "உடுக்கை இழந்தவன்",
+    "இடுக்கண் களைவதாம் நட்பு",
+    "best friend",
+    "friends",
+    "tamil friendship story",
+    "tamil shorts"
+   ],
+   "pinned_comment_ta": "உங்க 3 AM நண்பனை tag பண்ணுங்க 👇"
+  },
+  "instagram": {
+   "caption_ta": "ராத்திரி 3 மணி. ஒரு call. 📞\n\nசரோ பேசி முடிக்கும் முன்னே, விக்னேஷ் கேட்டுல நின்னான். ஆட்டோ ஓட்டினான், பணம் கட்டினான், ஒண்ணும் கேக்கல. 🤝\n\n📜 குறள் #788\nஉடுக்கை இழந்தவன் கைபோல ஆங்கே\nஇடுக்கண் களைவதாம் நட்பு.\n\nஉங்க 3 AM நண்பனை tag பண்ணுங்க 👇",
+   "hashtags": [
+    "#திருக்குறள்",
+    "#thirukkural",
+    "#ஒருகுறள்ஒருகதை",
+    "#நட்பு",
+    "#tamilstories"
+   ]
+  }
+ }
+}

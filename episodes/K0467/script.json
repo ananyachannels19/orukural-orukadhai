@@ -1,0 +1,390 @@
+{
+ "dry_run": false,
+ "model": "hand-written for K0467",
+ "cost_usd": 0.0,
+ "cached": false,
+ "kural_id": "K0467",
+ "errors": [
+  "1 hooks, expected 3",
+  "gap/overlap between segments at 4.35s and 4.55s",
+  "gap/overlap between segments at 8.71s and 8.91s",
+  "gap/overlap between segments at 12.07s and 12.27s",
+  "gap/overlap between segments at 16.35s and 19.55s",
+  "gap/overlap between segments at 23.31s and 23.51s",
+  "gap/overlap between segments at 29.27s and 29.97s",
+  "gap/overlap between segments at 34.73s and 34.93s",
+  "shots end at 38.81s but narration ends at 37.21s",
+  "English letters in narration at 0 s: 'backend system'; write loanwords in Tamil script (bike → பைக்)",
+  "English letters in narration at 0 s: 'solution'; write loanwords in Tamil script (bike → பைக்)",
+  "English letters in narration at 4.55 s: 'architecture'; write loanwords in Tamil script (bike → பைக்)",
+  "English letters in narration at 4.55 s: 'Implementation'; write loanwords in Tamil script (bike → பைக்)",
+  "English letters in on-screen text at 4.55 s: 'architecture'; write loanwords in Tamil script (bike → பைக்)",
+  "English letters in narration at 8.91 s: 'option'; write loanwords in Tamil script (bike → பைக்)",
+  "English letters in narration at 8.91 s: 'Security risk'; write loanwords in Tamil script (bike → பைக்)",
+  "the narrator says the kural, over the lesson card",
+  "clips need 98 Flow credits, over the 75 a reel may use; reuse a clip for two cuts or shorten shots"
+ ],
+ "warnings": [
+  "hook runs to 4.3s (target ≤ 3s)",
+  "first segment does not use the chosen hook's narration",
+  "no one-line lesson teaser on screen at 10–12 s",
+  "the last line should be the narrator's call to action: tag that kind of friend (\"…டேக் பண்ணுங்க\")",
+  "no tag question (tag a friend, partner or sibling)"
+ ],
+ "script": {
+  "kural_number": 467,
+  "story_title_ta": "முடிவு மாற்றுறவன் முத்தமை விளை",
+  "story_title_en": "The cost of changing your mind",
+  "logline_en": "Ravi, a senior developer, recommends a software solution to his anxious colleague Priya during a tight deadline. Priya second-guesses him obsessively, switching decisions three times, until Ravi asks her a simple question about who pays the price for indecision.",
+  "originality_note_en": "The ancient wisdom about decisive action is shown through modern workplace anxiety: a colleague frozen by doubt, a mentor learning when to push back, and the cost of wasted time that compounds every indecision.",
+  "meaning_ta": "முடிவு எடுக்க வேண்டிய நேரத்தில், சிந்தித்து முடிவு எடுக்க வேண்டும். ஆனால் முடிவு எடுத்த பிறகு அதையே திரும்பத் திரும்பச் சந்தேகித்து மாற்றுவது வீனான செயல்.",
+  "meaning_en": "Deliberate action requires careful thought before deciding, but endless second-guessing after commitment is waste. Think before you decide; then stand by your decision.",
+  "continuity": {
+   "locations": [
+    {
+     "id": "office_cubicle",
+     "description_en": "A tech company's open-plan office with modular desks.",
+     "light_en": "Cool fluorescent overhead lights mixed with warm window light; soft shadows.",
+     "blocking_en": "Ravi's desk is on the right, Priya's is on the left; glass conference rooms are behind them."
+    },
+    {
+     "id": "conference_room",
+     "description_en": "A glass-walled meeting room with a long table and whiteboard.",
+     "light_en": "Cool fluorescents, brighter; reflections in glass walls.",
+     "blocking_en": "Ravi stands by the whiteboard on the right, Priya sits at the table on the left."
+    },
+    {
+     "id": "server_room_window",
+     "description_en": "A window looking into the company's server room.",
+     "light_en": "Blue and amber equipment lights inside, dimmer corridor light outside.",
+     "blocking_en": "Both characters stand at the window looking in."
+    }
+   ],
+   "props": [
+    {
+     "id": "whiteboard",
+     "name_ta": "",
+     "description_en": "Glass whiteboard with architecture diagrams in colored markers."
+    },
+    {
+     "id": "sticky_notes",
+     "name_ta": "",
+     "description_en": "Neon sticky notes on Priya's desk with different options."
+    },
+    {
+     "id": "coffee_cup",
+     "name_ta": "",
+     "description_en": "Half-empty coffee cup with lipstick marks."
+    },
+    {
+     "id": "closed_laptop",
+     "name_ta": "",
+     "description_en": "Closed laptop placed face-down (Ravi's determined gesture)."
+    }
+   ],
+   "outfits": [
+    {
+     "character": "ravi",
+     "outfit_en": "Light grey polo shirt, dark jeans, simple black watch."
+    },
+    {
+     "character": "priya",
+     "outfit_en": "White shirt with loose black blazer, dark trousers, silver hoop earrings."
+    }
+   ]
+  },
+  "cast": [
+   {
+    "id": "ravi",
+    "name_ta": "ராவி",
+    "age": 32,
+    "gender": "male",
+    "job": "senior software developer",
+    "look_en": "Medium height, athletic build, medium-brown skin, short curly black hair, clean-shaven, calm dark eyes.",
+    "outfit_en": "Light grey polo shirt, dark jeans, simple black watch.",
+    "voice": "Algieba",
+    "delivery_default": "calm"
+   },
+   {
+    "id": "priya",
+    "name_ta": "பிரியா",
+    "age": 26,
+    "gender": "female",
+    "job": "backend developer",
+    "look_en": "Medium height, slim, wheatish skin, long thick black hair in plait, silver hoop earrings, expressive face.",
+    "outfit_en": "White shirt with loose black blazer, dark trousers, silver earrings.",
+    "voice": "Despina",
+    "delivery_default": "anxious"
+   }
+  ],
+  "hooks": [
+   {
+    "style": "tense_moment",
+    "on_screen_ta": "எந்த solution தேர்வு பண்ணணும்?",
+    "narration_ta": "நாலணா மணிக்குள்ல வேலை முடிய வேண்டும். ப்ரியா திரும்பி திரும்பி கேக்குறாள்: வேறு வழி ஷ்டையுல்ல?"
+   }
+  ],
+  "chosen_hook": 0,
+  "segments": [
+   {
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 4.35,
+    "speaker": "priya",
+    "narration_ta": "நாலு மணிக்குள்ள backend system முடியணும். எந்த solution-னு தெரியல.",
+    "on_screen_ta": "நாலு\nமணிக்குள்ள\nமுடிக்கணும்!"
+   },
+   {
+    "beat": "story",
+    "start_s": 4.55,
+    "end_s": 8.71,
+    "speaker": "ravi",
+    "narration_ta": "ப்ரியா, இந்த architecture தான் சரி. Implementation-ஐ நான் பாத்துக்கறேன்.",
+    "on_screen_ta": "இந்த architecture சிறந்தது"
+   },
+   {
+    "beat": "story",
+    "start_s": 8.91,
+    "end_s": 12.07,
+    "speaker": "priya",
+    "narration_ta": "வேற option இருக்கா? Security risk இல்லையே?",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 12.27,
+    "end_s": 16.35,
+    "speaker": "ravi",
+    "narration_ta": "ஒரு மணி நேரமா இதே பேசறோம், ப்ரியா. இன்னும் என்ன சந்தேகம்?",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 19.55,
+    "end_s": 23.31,
+    "speaker": "ravi",
+    "narration_ta": "இப்படியே மாத்திட்டே இருந்தா, நேரம் எல்லாம் வீணாகிடும்.",
+    "on_screen_ta": "மாத்திட்டே இருந்தா\nநேரம் வீணாகும்"
+   },
+   {
+    "beat": "kural",
+    "start_s": 23.51,
+    "end_s": 29.27,
+    "speaker": "ravi",
+    "narration_ta": "வள்ளுவர் சொல்றார்: எண்ணித் துணிக கருமம் துணிந்தபின் எண்ணுவம் என்பது இழுக்கு.",
+    "on_screen_ta": "எண்ணித் துணிக கருமம் துணிந்தபின்\nஎண்ணுவம் என்பது இழுக்கு"
+   },
+   {
+    "beat": "lesson",
+    "start_s": 29.97,
+    "end_s": 34.73,
+    "speaker": "ravi",
+    "narration_ta": "முடிவெடுக்கும் முன் யோசி. எடுத்தபின் திரும்பத் திரும்ப மாத்தாதே.",
+    "on_screen_ta": "முடிவெடுத்தபின்\nதிரும்ப மாத்தாதே"
+   },
+   {
+    "beat": "tease",
+    "start_s": 34.93,
+    "end_s": 37.21,
+    "speaker": "narrator",
+    "narration_ta": "நீங்க முடிவை மாத்திட்டே இருக்கீங்களா?",
+    "on_screen_ta": ""
+   }
+  ],
+  "shots": [
+   {
+    "n": 1,
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 4.55,
+    "characters": [
+     "priya"
+    ],
+    "location": "office_cubicle",
+    "action_en": "Priya sits at her desk, looking stressed, with sticky notes around her workspace. She glances at the time on her monitor—close to deadline.",
+    "camera_en": "Medium close-up, slight push-in on Priya's face reflecting monitor light.",
+    "image_prompt_en": "Close-up of Priya at her tech office desk, neon sticky notes spread across the desk surface with options written on them. Her expression is anxious, eyes focused on her monitor, one hand raised to her chin in a worried gesture. Cool fluorescent office lighting mixed with warm window light from the left.",
+    "motion_prompt_en": "Priya's eyes dart from sticky note to monitor; she picks up her coffee cup, realizes it's cold, sets it back; her jaw clenches.",
+    "motion_priority": 1,
+    "props": [
+     "sticky_notes",
+     "coffee_cup"
+    ]
+   },
+   {
+    "n": 2,
+    "beat": "hook",
+    "start_s": 4.55,
+    "end_s": 8.91,
+    "characters": [
+     "ravi",
+     "priya"
+    ],
+    "location": "conference_room",
+    "action_en": "Ravi points confidently to a diagram on the whiteboard while Priya listens, taking notes. Ravi's hand is steady, Priya's pen wavers.",
+    "camera_en": "Two-shot from slight angle, Ravi dominant on right.",
+    "image_prompt_en": "Conference room with glass walls. Ravi stands by a whiteboard with architecture diagrams in colored markers, pointing at one system with calm confidence. Priya sits at the table facing him, pen in hand, leaning forward with uncertain expression.",
+    "motion_prompt_en": "Ravi's hand traces diagram lines smoothly; Priya nods but her fingers fidget with the pen.",
+    "motion_priority": 2,
+    "props": [
+     "whiteboard"
+    ]
+   },
+   {
+    "n": 3,
+    "beat": "story",
+    "start_s": 8.91,
+    "end_s": 12.27,
+    "characters": [
+     "priya"
+    ],
+    "location": "office_cubicle",
+    "action_en": "Priya types furiously, then stops, bites her lip, and swivels her chair toward Ravi's desk.",
+    "camera_en": "Side profile, Priya's stressed posture visible, swivel motion clear.",
+    "image_prompt_en": "Priya at her desk typing rapidly, then turning in her chair toward Ravi's adjacent desk. Her hair is messed, one strand loose from her pin. Multiple documents and sticky notes scattered across her workspace.",
+    "motion_prompt_en": "Quick typing motions, then Priya stops, thinks, and swivels her chair smoothly.",
+    "motion_priority": 3,
+    "props": [
+     "sticky_notes"
+    ]
+   },
+   {
+    "n": 4,
+    "beat": "story",
+    "start_s": 12.27,
+    "end_s": 16.55,
+    "characters": [
+     "ravi",
+     "priya"
+    ],
+    "location": "office_cubicle",
+    "action_en": "Priya asks Ravi about alternatives while he's trying to work. His expression is patient but gradually tensing. They talk back and forth.",
+    "camera_en": "Over-the-shoulder from Ravi's perspective, Priya's face hopeful/anxious.",
+    "image_prompt_en": "Ravi at his desk looking at his monitor, Priya leaning over from her desk to talk to him. His expression patient but shoulders gradually tensing. Office background shows glass conference rooms out of focus.",
+    "motion_prompt_en": "Priya leans toward Ravi; Ravi turns to face her, nodding slowly; his hands rest on desk, fingers tap once; he leans back.",
+    "motion_priority": 1,
+    "props": []
+   },
+   {
+    "n": 5,
+    "beat": "story",
+    "start_s": 16.55,
+    "end_s": 19.55,
+    "characters": [
+     "priya"
+    ],
+    "location": "office_cubicle",
+    "action_en": "Priya changes her mind again about a new framework. She covers her face with her hands in frustration, then pushes her chair back.",
+    "camera_en": "Close-up on Priya's face, eyes visible between fingers, then pulling hands away.",
+    "image_prompt_en": "Priya at her desk covering her face with both hands in frustration. Her shoulders are tensed. Front-side angle view. Multiple sticky notes visible, empty coffee cup on desk corner.",
+    "motion_prompt_en": "Priya covers her face and takes a deep breath, hands slowly lowering; she leans back in chair with defeated expression.",
+    "motion_priority": 2,
+    "props": [
+     "coffee_cup",
+     "sticky_notes"
+    ]
+   },
+   {
+    "n": 6,
+    "beat": "story",
+    "start_s": 19.55,
+    "end_s": 23.51,
+    "characters": [
+     "ravi"
+    ],
+    "location": "office_cubicle",
+    "action_en": "Ravi looks up from his work, closes his laptop with a decisive motion, and stands. His body language shows he's made a decision. He approaches Priya.",
+    "camera_en": "Low angle, looking up at Ravi standing, determined and calm.",
+    "image_prompt_en": "Ravi at his desk closing his laptop with a firm motion, then standing up. His expression shows calm, kind determination. He adjusts his polo shirt sleeves. Office behind him slightly blurred.",
+    "motion_prompt_en": "Ravi's hands close the laptop firmly; he stands slowly, pushing his chair back; he adjusts his sleeves and walks toward Priya.",
+    "motion_priority": 3,
+    "props": [
+     "closed_laptop"
+    ]
+   },
+   {
+    "n": 7,
+    "beat": "story",
+    "start_s": 23.51,
+    "end_s": 29.97,
+    "characters": [
+     "ravi",
+     "priya"
+    ],
+    "location": "server_room_window",
+    "action_en": "Ravi and Priya stand at the window looking into the server room. Ravi gestures at the equipment, asking his pivotal question. Priya's expression shifts from anxious to understanding.",
+    "camera_en": "Two-shot, reflections in glass window, blue and amber equipment lights inside.",
+    "image_prompt_en": "Ravi and Priya at a window looking into a server room. Inside, racks of servers glow with blue and amber lights. Ravi is pointing, talking calmly with kind expression. Priya's reflection shows her listening intently, anxious expression softening.",
+    "motion_prompt_en": "Ravi gestures at servers; Priya nods slowly; their reflections move in glass; server lights provide ambient motion.",
+    "motion_priority": 2,
+    "props": []
+   },
+   {
+    "n": 8,
+    "beat": "kural",
+    "start_s": 29.97,
+    "end_s": 34.93,
+    "characters": [
+     "ravi"
+    ],
+    "location": "conference_room",
+    "action_en": "Ravi stands at the whiteboard, writing the kural as he recites it. Words appear line by line in Tamil script.",
+    "camera_en": "Medium shot, Ravi in profile, marker moving across whiteboard, contemplative.",
+    "image_prompt_en": "Ravi in conference room at the whiteboard, writing Tamil text with black marker. His posture is teaching-like, calm and instructive. Whiteboard shows kural in Tamil script as he writes.",
+    "motion_prompt_en": "Ravi's hand moves smoothly across whiteboard, writing each line of kural; camera pans slightly to follow the writing.",
+    "motion_priority": 4,
+    "props": [
+     "whiteboard"
+    ]
+   },
+   {
+    "n": 9,
+    "beat": "lesson",
+    "start_s": 34.93,
+    "end_s": 38.81,
+    "characters": [
+     "ravi",
+     "priya"
+    ],
+    "location": "office_cubicle",
+    "action_en": "Both return to their desks. Priya types with new confidence. Ravi watches briefly with a smile, then focuses on his work. They work in focused, determined silence.",
+    "camera_en": "Wide shot of both desks, side by side, each absorbed in work.",
+    "image_prompt_en": "Wide shot of office cubicles showing Ravi and Priya at adjacent desks, both typing with focus and determination. Priya's posture is straight and confident. Sticky notes consolidated into one clear list. Warm window light mixes gently with cool fluorescent office lighting.",
+    "motion_prompt_en": "Priya types steadily with purpose; Ravi glances over with calm, satisfied smile, then focuses on work; both characters' shoulders relaxed now.",
+    "motion_priority": 1,
+    "props": [
+     "sticky_notes"
+    ]
+   }
+  ],
+  "lesson_ta": "முடிவை நிறைவேற்றுக, திரும்பி சிந்திக்க வேண்டாம்",
+  "tease_ta": "நீங்க வேலையில் முடிவு மாற்றினீங்களா?",
+  "loop_note_en": "The opening shot of Priya stressed at her desk echoes at the end when she types with new confidence. The story shows transformation from anxiety to decision, making it a complete character arc.",
+  "youtube": {
+   "title": "குறள் 467 | முடிவு எடுத்தபின் அதையே மாற்றுவது இழுக்கு | Decision-Making Story",
+   "description_intro_ta": "ப்ரியா ஒரு சிரமான முடிவையை எடுக்க சிரமப்படுகிறாள். ராவி ஒரு தீர்வை சொல்கிறான். ஆனால் ப்ரியா மீண்டும் மீண்டும் சந்தேகிக்கிறாள். முடிவை எடுக்க வேண்டியது எப்போது?",
+   "tags": [
+    "திருக்குறள்",
+    "thirukkural",
+    "thirukkural story",
+    "kural 467",
+    "குறள் 467",
+    "decision making",
+    "workplace stories",
+    "thirukkural on decisions",
+    "tamil shorts",
+    "orukural orukadhai"
+   ],
+   "pinned_comment_ta": "உங்க பிரச்சனை என்ன? முடிவு எடுக்க முடியல, அல்லது முடிவை நிறை வேற்ற முடியல? 👇"
+  },
+  "instagram": {
+   "caption_ta": "நாலணா மணிக்குள்ள வேலை. சிறிய முடிவே பெரிய தடை. 📊\nகுறள் 467: முடிவு எடுத்தபின் அதையே மாற்றுவது வீணாகுறது.\n\nநீங்க எப்படி முடிவு எடுப்பீங்க? கமெண்ட்ல சொல்லுங்க 👇",
+   "hashtags": [
+    "#திருக்குறள்",
+    "#thirukkural",
+    "#ஒருகுறள்ஒருகதை",
+    "#முடிவு"
+   ]
+  }
+ }
+}
