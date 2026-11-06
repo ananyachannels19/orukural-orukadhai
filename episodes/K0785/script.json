@@ -4,8 +4,12 @@
  "cost_usd": 0.0,
  "cached": false,
  "kural_id": "K0785",
- "errors": [],
- "warnings": [],
+ "errors": [
+  "clips need 79 Flow credits, over the 75 a reel may use; reuse a clip for two cuts or shorten shots"
+ ],
+ "warnings": [
+  "hook runs to 3.8s (target ≤ 3s)"
+ ],
  "script": {
   "kural_number": 785,
   "story_title_ta": "நாலு வருஷம் பேசாத தோழி",
@@ -108,17 +112,17 @@
   "segments": [
    {
     "beat": "hook",
-    "start_s": 0.0,
-    "end_s": 3.0,
+    "start_s": 0,
+    "end_s": 3.8,
     "speaker": "selvi",
     "narration_ta": "நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?",
-    "delivery": "anxious, quiet, hopeful and hurt; not smiling",
+    "delivery": "tense, brisk and worried, quick and clipped, no long pauses; not smiling",
     "on_screen_ta": "நாலு வருஷம்,\nஒரு போனும் இல்ல."
    },
    {
     "beat": "story",
-    "start_s": 3.0,
-    "end_s": 7.0,
+    "start_s": 3.8,
+    "end_s": 7.2,
     "speaker": "narrator",
     "narration_ta": "செல்வியோட புது இட்லிக் கடைக்கு, இன்னைக்குத் தொடக்கம்.",
     "delivery": "matter-of-fact, gentle",
@@ -126,8 +130,8 @@
    },
    {
     "beat": "story",
-    "start_s": 7.0,
-    "end_s": 10.0,
+    "start_s": 7.2,
+    "end_s": 10.6,
     "speaker": "pavi",
     "narration_ta": "பேசாதவ வருவான்னு நம்பறியா, செல்வி?",
     "delivery": "blunt, teasing but doubtful; frowning, no smile",
@@ -135,7 +139,7 @@
    },
    {
     "beat": "story",
-    "start_s": 10.0,
+    "start_s": 10.6,
     "end_s": 14.0,
     "speaker": "narrator",
     "narration_ta": "பேசாம இருந்தா, நட்பு குறைஞ்சு போயிடுமா?",
@@ -145,7 +149,7 @@
    {
     "beat": "story",
     "start_s": 14.0,
-    "end_s": 17.0,
+    "end_s": 17.4,
     "speaker": "selvi",
     "narration_ta": "பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது.",
     "delivery": "quiet, hurt, steady; not crying, not smiling",
@@ -153,8 +157,8 @@
    },
    {
     "beat": "story",
-    "start_s": 17.0,
-    "end_s": 21.0,
+    "start_s": 17.4,
+    "end_s": 21.2,
     "speaker": "narrator",
     "narration_ta": "அப்போ கடை வாசல்ல, ஒரு பழைய டிபன் பாக்ஸோட, ஜனனி.",
     "delivery": "warm, slowing down",
@@ -162,8 +166,8 @@
    },
    {
     "beat": "story",
-    "start_s": 21.0,
-    "end_s": 24.0,
+    "start_s": 21.2,
+    "end_s": 24.5,
     "speaker": "janani",
     "narration_ta": "பேசலைன்னாலும், இதை உனக்குத்தான் வெச்சிருந்தேன்.",
     "delivery": "shy, soft, a small smile",
@@ -171,8 +175,8 @@
    },
    {
     "beat": "story",
-    "start_s": 24.0,
-    "end_s": 27.0,
+    "start_s": 24.5,
+    "end_s": 27.5,
     "speaker": "selvi",
     "narration_ta": "அடியே... இது நம்ம ஸ்கூல் டிபன் பாக்ஸ்!",
     "delivery": "tearful, breaking into a smile",
@@ -180,7 +184,7 @@
    },
    {
     "beat": "kural",
-    "start_s": 27.0,
+    "start_s": 27.5,
     "end_s": 35.0,
     "speaker": "narrator",
     "narration_ta": "புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான் நட்பாங் கிழமை தரும். பழகாட்டியும், உணர்வு இருந்தா போதும்.",
@@ -210,8 +214,8 @@
    {
     "n": 1,
     "beat": "hook",
-    "start_s": 0.0,
-    "end_s": 3.0,
+    "start_s": 0,
+    "end_s": 3.8,
     "characters": [
      "selvi",
      "pavi"
@@ -232,8 +236,8 @@
    {
     "n": 2,
     "beat": "story",
-    "start_s": 3.0,
-    "end_s": 10.0,
+    "start_s": 3.8,
+    "end_s": 10.6,
     "characters": [
      "selvi",
      "pavi"
@@ -245,7 +249,7 @@
     "action_en": "Selvi lifts the idli vessel's lid, steam rising, as the narrator introduces the opening; then Pavi turns to her and says her doubtful line.",
     "camera_en": "Static medium two-shot from the front of the counter, both faces in view.",
     "image_prompt_en": "Selvi lifting the cloth-covered lid of the steaming idli vessel with both hands, a tray of fresh idlis inside, a jasmine garland on the awning above; Pavi at her left turning towards her, frowning, both faces in view.",
-    "motion_prompt_en": "For the first four seconds Selvi lifts the lid and steam rises; nobody speaks. Then Pavi turns to Selvi and says her line flatly and doubtfully, frowning, no smile; Selvi's mouth stays closed. Static locked-off camera.",
+    "motion_prompt_en": "For the first three seconds Selvi lifts the lid and steam rises; nobody speaks. Then Pavi turns to Selvi and says her line flatly and doubtfully, frowning, no smile; Selvi's mouth stays closed. Static locked-off camera.",
     "motion_priority": 1,
     "clip_from": null,
     "clip_offset_s": 0.0
@@ -253,8 +257,8 @@
    {
     "n": 3,
     "beat": "story",
-    "start_s": 10.0,
-    "end_s": 17.0,
+    "start_s": 10.6,
+    "end_s": 17.4,
     "characters": [
      "selvi"
     ],
@@ -265,7 +269,7 @@
     "action_en": "Selvi looks at her phone's call screen, then down the road, then says quietly that she is probably busy but her heart asks.",
     "camera_en": "Static medium close-up on Selvi from the front of the counter, her face fully to camera.",
     "image_prompt_en": "Selvi behind the counter looking down at the phone in her hand, her thumb above the call button, then lifting her eyes; her face fully visible, soft worried expression, Pavi out of frame.",
-    "motion_prompt_en": "For the first four seconds Selvi looks at the phone, then puts it down on the counter and looks up the road. Then she turns to camera and says her line quietly, hurt but steady, no smile and no tears; her hands rest on the counter. Static locked-off camera.",
+    "motion_prompt_en": "For the first three seconds Selvi looks at the phone, then puts it down on the counter and looks up the road. Then she turns to camera and says her line quietly, hurt but steady, no smile and no tears; her hands rest on the counter. Static locked-off camera.",
     "motion_priority": 1,
     "clip_from": null,
     "clip_offset_s": 0.0
@@ -273,8 +277,8 @@
    {
     "n": 4,
     "beat": "story",
-    "start_s": 17.0,
-    "end_s": 24.0,
+    "start_s": 17.4,
+    "end_s": 24.5,
     "characters": [
      "selvi",
      "janani"
@@ -286,7 +290,7 @@
     "action_en": "Janani walks in from the road holding the dented tiffin box in both hands, stops in front of the counter and says her line shyly; Selvi, behind the counter, watches.",
     "camera_en": "Static medium shot from behind the counter's side, Janani facing the camera in front of the counter, Selvi at the edge of frame.",
     "image_prompt_en": "Janani standing in front of the counter in the golden light with the dented steel tiffin box held in both hands at chest height, a shy half-smile, looking at Selvi, face fully visible; Selvi at the left edge of frame behind the counter, still, looking at her.",
-    "motion_prompt_en": "For the first four seconds Janani walks up from the road on the right and stops in front of the counter holding the tiffin box in both hands. Then Janani says her line shyly, a small smile, facing the camera; Selvi stays still with mouth closed. Exactly one tiffin box. Static locked-off camera.",
+    "motion_prompt_en": "For the first three seconds Janani walks up from the road on the right and stops in front of the counter holding the tiffin box in both hands. Then Janani says her line shyly, a small smile, facing the camera; Selvi stays still with mouth closed. Exactly one tiffin box. Static locked-off camera.",
     "motion_priority": 1,
     "clip_from": null,
     "clip_offset_s": 0.0
@@ -294,8 +298,8 @@
    {
     "n": 5,
     "beat": "story",
-    "start_s": 24.0,
-    "end_s": 27.0,
+    "start_s": 24.5,
+    "end_s": 27.5,
     "characters": [
      "selvi"
     ],
@@ -314,7 +318,7 @@
    {
     "n": 6,
     "beat": "kural",
-    "start_s": 27.0,
+    "start_s": 27.5,
     "end_s": 35.0,
     "characters": [
      "selvi",
