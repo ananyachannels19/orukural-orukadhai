@@ -179,6 +179,4 @@ This video uses AI-generated visuals and an AI narrator voice. Story, script and
 புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான்
 நட்பாங் கிழமை தரும்.
 
-பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க 👇
-
 #திருக்குறள் #thirukkural #ஒருகுறள்ஒருகதை #நட்பு #tamilstories
