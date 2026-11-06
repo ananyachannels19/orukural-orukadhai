@@ -1,13 +1,13 @@
 episode: K0785
 kural: 785
-status: stage5_draft_awaiting_gate4
+status: stage6_final
 flow_account: Revathi Satheesh
 flow_project: https://flow.google.com/u/2/project/9301339c-7e97-4836-b6f3-7bf24bc2ef12
 gates:
   script: 2026-11-06
   shots: 2026-11-06
   clips: 2026-11-06
-  draft: null
+  draft: 2026-11-06
 credits:
   planned: 74
   used: 98
