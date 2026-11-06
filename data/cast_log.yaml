@@ -103,3 +103,28 @@ episodes:
   - office_cubicle
   - conference_room
   - server_room_window
+- episode: K0785
+  characters:
+  - id: selvi
+    name_ta: செல்வி
+    age: 28
+    job: starting a roadside idli stall
+    look: Short and plump, round face, warm brown skin, thick wavy black hair in a low bun with a small string of jasmine,
+      big expressive eyes, a small mole above her upper lip, no glasses.
+    voice: ''
+  - id: janani
+    name_ta: ஜனனி
+    age: 28
+    job: staff nurse in Coimbatore
+    look: Tall and slim, long oval face, light wheatish skin, a short chin-length bob with a side parting, round tortoiseshell
+      glasses, tired kind eyes, no bindi.
+    voice: ''
+  - id: pavi
+    name_ta: பவி
+    age: 24
+    job: Selvi's cousin, helping at the stall
+    look: Lean, narrow face, dusky skin, curly black hair in a high ponytail, a dimple on her right cheek, quick eyes, no
+      glasses.
+    voice: ''
+  places:
+  - stall_front

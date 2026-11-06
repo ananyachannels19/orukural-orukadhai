@@ -1,0 +1,13 @@
+episode: K0785
+kural: 785
+status: script_awaiting_gate1
+flow_account: Revathi Satheesh
+flow_project: null   # created at Stage 2, after Gate 1
+gates:
+  script: null
+  shots: null
+  clips: null
+  draft: null
+credits:
+  planned: 74
+  used: 0

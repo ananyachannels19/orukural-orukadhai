@@ -1,0 +1,393 @@
+{
+ "dry_run": false,
+ "model": "claude session",
+ "cost_usd": 0.0,
+ "cached": false,
+ "kural_id": "K0785",
+ "errors": [],
+ "warnings": [],
+ "script": {
+  "kural_number": 785,
+  "story_title_ta": "நாலு வருஷம் பேசாத தோழி",
+  "story_title_en": "The friend who hadn't called in four years",
+  "logline_en": "On the opening morning of her roadside idli stall, Selvi waits for school friend Janani, who hasn't phoned in four years; her cousin doubts she will come, until Janani turns up holding Selvi's old dented school tiffin box that she kept for this day.",
+  "originality_note_en": "A friend's four-year silence is answered not with an apology but with Selvi's own dented school tiffin box, kept all this time and returned on her shop's opening morning, which is the kural's 'feeling alone makes the friendship'.",
+  "meaning_ta": "நட்புக்கு அடிக்கடி சந்தித்துப் பழக வேண்டிய அவசியம் இல்லை. மனதில் இருக்கும் உணர்வே ஒருவரை நண்பர் என்று உரிமை கொள்ள வைக்கும்.",
+  "meaning_en": "Friendship does not need constant meeting and mixing. The feeling in the heart alone gives two people the right to call each other friends.",
+  "cast": [
+   {
+    "id": "selvi",
+    "name_ta": "செல்வி",
+    "age": 28,
+    "job": "starting a roadside idli stall",
+    "look_en": "Short and plump, round face, warm brown skin, thick wavy black hair in a low bun with a small string of jasmine, big expressive eyes, a small mole above her upper lip, no glasses.",
+    "outfit_en": "A peacock-green cotton saree with an orange border, a plain white cotton apron over it, steel bangles on both wrists.",
+    "gender": "female",
+    "age_group": "adult",
+    "personality": "warm, proud, quietly hurt",
+    "voice": "Sulafat",
+    "voice_en": "a warm, slightly husky 28-year-old Tamil woman's voice",
+    "voice_source": "tts"
+   },
+   {
+    "id": "janani",
+    "name_ta": "ஜனனி",
+    "age": 28,
+    "job": "staff nurse in Coimbatore",
+    "look_en": "Tall and slim, long oval face, light wheatish skin, a short chin-length bob with a side parting, round tortoiseshell glasses, tired kind eyes, no bindi.",
+    "outfit_en": "A pale-blue cotton churidar with a white dupatta, a small brown cloth sling bag across her body, flat sandals.",
+    "gender": "female",
+    "age_group": "adult",
+    "personality": "quiet, steady, shy with words",
+    "voice": "Aoede",
+    "voice_en": "a soft, calm 28-year-old Tamil woman's voice",
+    "voice_source": "tts"
+   },
+   {
+    "id": "pavi",
+    "name_ta": "பவி",
+    "age": 24,
+    "job": "Selvi's cousin, helping at the stall",
+    "look_en": "Lean, narrow face, dusky skin, curly black hair in a high ponytail, a dimple on her right cheek, quick eyes, no glasses.",
+    "outfit_en": "A yellow-and-white cotton kurta with black leggings, a cloth towel over her left shoulder.",
+    "gender": "female",
+    "age_group": "adult",
+    "personality": "blunt, chatty, protective",
+    "voice": "Callirrhoe",
+    "voice_en": "a quick, bright 24-year-old Tamil woman's voice",
+    "voice_source": "tts"
+   }
+  ],
+  "thatha_cameo": false,
+  "continuity": {
+   "locations": [
+    {
+     "id": "stall_front",
+     "description_en": "A brand-new roadside idli stall on a quiet Tamil Nadu town street: a waist-high tiled counter in cream tiles with a red-oxide edge, a steaming aluminium idli vessel and a steel chutney tub on the counter, a small blue-painted wooden bench on the left of the counter, a green-and-white striped cloth awning above, a fresh jasmine garland and a mango-leaf string hung on the awning, a tea-shop wall in faded turmeric yellow behind, a tarred road and a neem tree on the right.",
+     "light_en": "Early morning, about 6 am, soft golden sunlight from the right, light steam in the air; the same in every shot.",
+     "blocking_en": "Selvi stands behind the counter facing the camera and the road on the right; Pavi stands at her left by the idli vessel; the road and the neem tree are to the right of frame; Janani arrives from the road on the right and stops in front of the counter, facing Selvi and the camera."
+    }
+   ],
+   "props": [
+    {
+     "id": "tiffin",
+     "name_ta": "டிபன் பாக்ஸ்",
+     "description_en": "Exactly one small round steel tiffin box with a clipped lid, a dent on its left side, a faded red plastic handle, a few old scratches; about the size of two hands; it stays the same in every shot."
+    },
+    {
+     "id": "idli_vessel",
+     "name_ta": "இட்லி",
+     "description_en": "A steaming round aluminium idli vessel with a cloth over its lid, on the counter."
+    },
+    {
+     "id": "phone",
+     "name_ta": "போன்",
+     "description_en": "Selvi's small old black smartphone with a cracked blue case, her only phone."
+    }
+   ],
+   "outfits": []
+  },
+  "hooks": [
+   {
+    "style": "tense_moment",
+    "on_screen_ta": "நாலு வருஷம்,\nஒரு போனும் இல்ல.",
+    "narration_ta": "நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?"
+   },
+   {
+    "style": "question",
+    "on_screen_ta": "பேசாதவ,\nநண்பியா?",
+    "narration_ta": "பேசாத தோழி, நண்பியா இல்லையா?"
+   },
+   {
+    "style": "surprising_line",
+    "on_screen_ta": "அந்த டிபன்\nஇன்னும் இருக்கு.",
+    "narration_ta": "பத்து வருஷமா அந்த டிபன் பாக்ஸ் அவகிட்ட இருந்தது."
+   }
+  ],
+  "chosen_hook": 0,
+  "segments": [
+   {
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "speaker": "selvi",
+    "narration_ta": "நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?",
+    "delivery": "anxious, quiet, hopeful and hurt; not smiling",
+    "on_screen_ta": "நாலு வருஷம்,\nஒரு போனும் இல்ல."
+   },
+   {
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 7.0,
+    "speaker": "narrator",
+    "narration_ta": "செல்வியோட புது இட்லிக் கடைக்கு, இன்னைக்குத் தொடக்கம்.",
+    "delivery": "matter-of-fact, gentle",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 7.0,
+    "end_s": 10.0,
+    "speaker": "pavi",
+    "narration_ta": "பேசாதவ வருவான்னு நம்பறியா, செல்வி?",
+    "delivery": "blunt, teasing but doubtful; frowning, no smile",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 10.0,
+    "end_s": 14.0,
+    "speaker": "narrator",
+    "narration_ta": "பேசாம இருந்தா, நட்பு குறைஞ்சு போயிடுமா?",
+    "delivery": "soft, thoughtful",
+    "on_screen_ta": "பேசாம இருந்தா,\nநட்பு குறையுமா?"
+   },
+   {
+    "beat": "story",
+    "start_s": 14.0,
+    "end_s": 17.0,
+    "speaker": "selvi",
+    "narration_ta": "பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது.",
+    "delivery": "quiet, hurt, steady; not crying, not smiling",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 17.0,
+    "end_s": 21.0,
+    "speaker": "narrator",
+    "narration_ta": "அப்போ கடை வாசல்ல, ஒரு பழைய டிபன் பாக்ஸோட, ஜனனி.",
+    "delivery": "warm, slowing down",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 21.0,
+    "end_s": 24.0,
+    "speaker": "janani",
+    "narration_ta": "பேசலைன்னாலும், இதை உனக்குத்தான் வெச்சிருந்தேன்.",
+    "delivery": "shy, soft, a small smile",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "story",
+    "start_s": 24.0,
+    "end_s": 27.0,
+    "speaker": "selvi",
+    "narration_ta": "அடியே... இது நம்ம ஸ்கூல் டிபன் பாக்ஸ்!",
+    "delivery": "tearful, breaking into a smile",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "kural",
+    "start_s": 27.0,
+    "end_s": 35.0,
+    "speaker": "narrator",
+    "narration_ta": "புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான் நட்பாங் கிழமை தரும். பழகாட்டியும், உணர்வு இருந்தா போதும்.",
+    "delivery": "slow, warm, reverent",
+    "on_screen_ta": ""
+   },
+   {
+    "beat": "lesson",
+    "start_s": 35.0,
+    "end_s": 38.0,
+    "speaker": "narrator",
+    "narration_ta": "பேசாத நாட்களும், நட்பைக் குறைக்காது.",
+    "delivery": "warm, certain",
+    "on_screen_ta": "பேசாத நாட்களும்\nநட்பைக் குறைக்காது."
+   },
+   {
+    "beat": "lesson",
+    "start_s": 38.0,
+    "end_s": 41.5,
+    "speaker": "narrator",
+    "narration_ta": "பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க!",
+    "delivery": "warm, smiling, inviting",
+    "on_screen_ta": ""
+   }
+  ],
+  "shots": [
+   {
+    "n": 1,
+    "beat": "hook",
+    "start_s": 0.0,
+    "end_s": 3.0,
+    "characters": [
+     "selvi",
+     "pavi"
+    ],
+    "location": "stall_front",
+    "props": [
+     "phone",
+     "idli_vessel"
+    ],
+    "action_en": "Selvi, behind the new stall counter, looks anxiously down the road with her phone in her hand and says her line; Pavi stands beside her by the idli vessel, mouth closed.",
+    "camera_en": "Static medium shot from the front of the counter, Selvi centre facing camera, Pavi at her left.",
+    "image_prompt_en": "Selvi behind the counter facing the camera, holding the phone low in her hand, looking anxiously towards the road on the right then to camera, face clearly visible; Pavi at her left by the steaming idli vessel, arms folded, looking at the road; the empty blue bench at the left.",
+    "motion_prompt_en": "Selvi glances down the road, then turns to camera and says her line quietly, anxious and hurt, no smile; Pavi stays still with mouth closed. Static locked-off camera.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 2,
+    "beat": "story",
+    "start_s": 3.0,
+    "end_s": 10.0,
+    "characters": [
+     "selvi",
+     "pavi"
+    ],
+    "location": "stall_front",
+    "props": [
+     "idli_vessel"
+    ],
+    "action_en": "Selvi lifts the idli vessel's lid, steam rising, as the narrator introduces the opening; then Pavi turns to her and says her doubtful line.",
+    "camera_en": "Static medium two-shot from the front of the counter, both faces in view.",
+    "image_prompt_en": "Selvi lifting the cloth-covered lid of the steaming idli vessel with both hands, a tray of fresh idlis inside, a jasmine garland on the awning above; Pavi at her left turning towards her, frowning, both faces in view.",
+    "motion_prompt_en": "For the first four seconds Selvi lifts the lid and steam rises; nobody speaks. Then Pavi turns to Selvi and says her line flatly and doubtfully, frowning, no smile; Selvi's mouth stays closed. Static locked-off camera.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 3,
+    "beat": "story",
+    "start_s": 10.0,
+    "end_s": 17.0,
+    "characters": [
+     "selvi"
+    ],
+    "location": "stall_front",
+    "props": [
+     "phone"
+    ],
+    "action_en": "Selvi looks at her phone's call screen, then down the road, then says quietly that she is probably busy but her heart asks.",
+    "camera_en": "Static medium close-up on Selvi from the front of the counter, her face fully to camera.",
+    "image_prompt_en": "Selvi behind the counter looking down at the phone in her hand, her thumb above the call button, then lifting her eyes; her face fully visible, soft worried expression, Pavi out of frame.",
+    "motion_prompt_en": "For the first four seconds Selvi looks at the phone, then puts it down on the counter and looks up the road. Then she turns to camera and says her line quietly, hurt but steady, no smile and no tears; her hands rest on the counter. Static locked-off camera.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 4,
+    "beat": "story",
+    "start_s": 17.0,
+    "end_s": 24.0,
+    "characters": [
+     "selvi",
+     "janani"
+    ],
+    "location": "stall_front",
+    "props": [
+     "tiffin"
+    ],
+    "action_en": "Janani walks in from the road holding the dented tiffin box in both hands, stops in front of the counter and says her line shyly; Selvi, behind the counter, watches.",
+    "camera_en": "Static medium shot from behind the counter's side, Janani facing the camera in front of the counter, Selvi at the edge of frame.",
+    "image_prompt_en": "Janani standing in front of the counter in the golden light with the dented steel tiffin box held in both hands at chest height, a shy half-smile, looking at Selvi, face fully visible; Selvi at the left edge of frame behind the counter, still, looking at her.",
+    "motion_prompt_en": "For the first four seconds Janani walks up from the road on the right and stops in front of the counter holding the tiffin box in both hands. Then Janani says her line shyly, a small smile, facing the camera; Selvi stays still with mouth closed. Exactly one tiffin box. Static locked-off camera.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 5,
+    "beat": "story",
+    "start_s": 24.0,
+    "end_s": 27.0,
+    "characters": [
+     "selvi"
+    ],
+    "location": "stall_front",
+    "props": [
+     "tiffin"
+    ],
+    "action_en": "Selvi takes the tiffin box, sees the dent, and says her line, tearful and smiling.",
+    "camera_en": "Static medium close-up on Selvi, her face fully to camera.",
+    "image_prompt_en": "Selvi holding the dented steel tiffin box close to her chest with both hands, looking at it then up, eyes wet, a trembling smile, face fully visible.",
+    "motion_prompt_en": "Selvi looks down at the tiffin box in her hands, then says her line tearfully, breaking into a smile, facing the camera. Exactly one tiffin box in her hands. Static locked-off camera.",
+    "motion_priority": 1,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 6,
+    "beat": "kural",
+    "start_s": 27.0,
+    "end_s": 35.0,
+    "characters": [
+     "selvi",
+     "janani"
+    ],
+    "location": "stall_front",
+    "props": [
+     "tiffin",
+     "idli_vessel"
+    ],
+    "action_en": "The two friends share an idli at the counter side by side, laughing quietly; the tiffin box sits open between them.",
+    "camera_en": "Slow gentle push-in on the two friends at the counter, golden light.",
+    "image_prompt_en": "Selvi and Janani standing side by side at the counter, each holding a small steel plate with a steaming idli, laughing quietly, the dented tiffin box open on the counter between them, Pavi out of frame.",
+    "motion_prompt_en": "Selvi and Janani share an idli and laugh quietly, side by side; Janani leans her shoulder against Selvi's. No one speaks aloud. Exactly one tiffin box on the counter. Very slow push-in.",
+    "motion_priority": 2,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   },
+   {
+    "n": 7,
+    "beat": "lesson",
+    "start_s": 35.0,
+    "end_s": 41.5,
+    "characters": [
+     "selvi",
+     "janani",
+     "pavi"
+    ],
+    "location": "stall_front",
+    "props": [
+     "tiffin",
+     "idli_vessel"
+    ],
+    "action_en": "Mirror of the first shot: Selvi and Janani stand behind the counter facing the road, Pavi serves a customer's plate; the tiffin box sits on the counter.",
+    "camera_en": "Static medium shot from the front of the counter, matching shot 1's framing.",
+    "image_prompt_en": "Selvi and Janani side by side behind the counter facing the camera, Janani now wearing a spare white apron, both looking calmly down the road; Pavi at their left by the idli vessel, smiling; the dented tiffin box on the counter; the blue bench at the left now holding a customer.",
+    "motion_prompt_en": "Selvi and Janani look down the road together, then turn and smile at the camera; steam rises from the idli vessel; Pavi nods. No one speaks aloud. Static locked-off camera.",
+    "motion_priority": 3,
+    "clip_from": null,
+    "clip_offset_s": 0.0
+   }
+  ],
+  "lesson_ta": "பேசாத நாட்களும் நட்பைக் குறைக்காது.",
+  "tag_question_ta": "பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க!",
+  "loop_note_en": "The last shot repeats the first shot's framing, now with Janani beside Selvi, and the closing line about the friend who stays in your heart leads back to the opening worry, so a replay asks again whether the friend will come.",
+  "youtube": {
+   "title": "குறள் 785 | நாலு வருஷம் பேசாத தோழி | புணர்ச்சி பழகுதல் | Thirukkural Story",
+   "description_intro_ta": "செல்வியோட புது இட்லிக் கடை தொடக்கம். நாலு வருஷமா ஒரு போன் கூட பண்ணாத தோழி வருவாளா?\nபேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க 👇",
+   "tags": [
+    "திருக்குறள்",
+    "thirukkural",
+    "thirukkural story",
+    "kural 785",
+    "நட்பு",
+    "புணர்ச்சி பழகுதல் வேண்டா",
+    "நட்பாங் கிழமை தரும்",
+    "friendship",
+    "best friends",
+    "தோழி",
+    "idli stall",
+    "tamil shorts"
+   ],
+   "pinned_comment_ta": "பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க 👇"
+  },
+  "instagram": {
+   "caption_ta": "நாலு வருஷமா ஒரு போன் கூட இல்ல. ஆனாலும் அவ வந்தா. 🥹\n\nசெல்வியோட புது இட்லிக் கடை தொடக்கத்துல ஜனனி கொண்டு வந்தது ஒரு பழைய டிபன் பாக்ஸ்.\n\n📜 குறள் #785\nபுணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான்\nநட்பாங் கிழமை தரும்.\n\nபேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க 👇",
+   "hashtags": [
+    "#திருக்குறள்",
+    "#thirukkural",
+    "#ஒருகுறள்ஒருகதை",
+    "#நட்பு",
+    "#tamilstories"
+   ]
+  }
+ }
+}
