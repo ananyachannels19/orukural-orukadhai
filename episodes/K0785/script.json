@@ -4,12 +4,8 @@
  "cost_usd": 0.0,
  "cached": false,
  "kural_id": "K0785",
- "errors": [
-  "clips need 79 Flow credits, over the 75 a reel may use; reuse a clip for two cuts or shorten shots"
- ],
- "warnings": [
-  "hook runs to 3.8s (target ≤ 3s)"
- ],
+ "errors": [],
+ "warnings": [],
  "script": {
   "kural_number": 785,
   "story_title_ta": "நாலு வருஷம் பேசாத தோழி",
@@ -95,7 +91,7 @@
    {
     "style": "tense_moment",
     "on_screen_ta": "நாலு வருஷம்,\nஒரு போனும் இல்ல.",
-    "narration_ta": "நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?"
+    "narration_ta": "நாலு வருஷம் போன் இல்ல. வருவாளா?"
    },
    {
     "style": "question",
@@ -113,16 +109,16 @@
    {
     "beat": "hook",
     "start_s": 0,
-    "end_s": 3.8,
+    "end_s": 3.0,
     "speaker": "selvi",
-    "narration_ta": "நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?",
-    "delivery": "tense, brisk and worried, quick and clipped, no long pauses; not smiling",
+    "narration_ta": "நாலு வருஷம் போன் இல்ல. வருவாளா?",
+    "delivery": "fast, urgent and worried, said in one quick breath with no pauses between the two sentences; not smiling",
     "on_screen_ta": "நாலு வருஷம்,\nஒரு போனும் இல்ல."
    },
    {
     "beat": "story",
-    "start_s": 3.8,
-    "end_s": 7.2,
+    "start_s": 3.0,
+    "end_s": 6.4,
     "speaker": "narrator",
     "narration_ta": "செல்வியோட புது இட்லிக் கடைக்கு, இன்னைக்குத் தொடக்கம்.",
     "delivery": "matter-of-fact, gentle",
@@ -130,8 +126,8 @@
    },
    {
     "beat": "story",
-    "start_s": 7.2,
-    "end_s": 10.6,
+    "start_s": 6.4,
+    "end_s": 9.8,
     "speaker": "pavi",
     "narration_ta": "பேசாதவ வருவான்னு நம்பறியா, செல்வி?",
     "delivery": "blunt, teasing but doubtful; frowning, no smile",
@@ -139,8 +135,8 @@
    },
    {
     "beat": "story",
-    "start_s": 10.6,
-    "end_s": 14.0,
+    "start_s": 9.8,
+    "end_s": 13.2,
     "speaker": "narrator",
     "narration_ta": "பேசாம இருந்தா, நட்பு குறைஞ்சு போயிடுமா?",
     "delivery": "soft, thoughtful",
@@ -148,8 +144,8 @@
    },
    {
     "beat": "story",
-    "start_s": 14.0,
-    "end_s": 17.4,
+    "start_s": 13.2,
+    "end_s": 16.6,
     "speaker": "selvi",
     "narration_ta": "பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது.",
     "delivery": "quiet, hurt, steady; not crying, not smiling",
@@ -157,8 +153,8 @@
    },
    {
     "beat": "story",
-    "start_s": 17.4,
-    "end_s": 21.2,
+    "start_s": 16.6,
+    "end_s": 20.4,
     "speaker": "narrator",
     "narration_ta": "அப்போ கடை வாசல்ல, ஒரு பழைய டிபன் பாக்ஸோட, ஜனனி.",
     "delivery": "warm, slowing down",
@@ -166,8 +162,8 @@
    },
    {
     "beat": "story",
-    "start_s": 21.2,
-    "end_s": 24.5,
+    "start_s": 20.4,
+    "end_s": 23.7,
     "speaker": "janani",
     "narration_ta": "பேசலைன்னாலும், இதை உனக்குத்தான் வெச்சிருந்தேன்.",
     "delivery": "shy, soft, a small smile",
@@ -175,8 +171,8 @@
    },
    {
     "beat": "story",
-    "start_s": 24.5,
-    "end_s": 27.5,
+    "start_s": 23.7,
+    "end_s": 26.7,
     "speaker": "selvi",
     "narration_ta": "அடியே... இது நம்ம ஸ்கூல் டிபன் பாக்ஸ்!",
     "delivery": "tearful, breaking into a smile",
@@ -184,8 +180,8 @@
    },
    {
     "beat": "kural",
-    "start_s": 27.5,
-    "end_s": 35.0,
+    "start_s": 26.7,
+    "end_s": 34.2,
     "speaker": "narrator",
     "narration_ta": "புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான் நட்பாங் கிழமை தரும். பழகாட்டியும், உணர்வு இருந்தா போதும்.",
     "delivery": "slow, warm, reverent",
@@ -193,8 +189,8 @@
    },
    {
     "beat": "lesson",
-    "start_s": 35.0,
-    "end_s": 38.0,
+    "start_s": 34.2,
+    "end_s": 37.2,
     "speaker": "narrator",
     "narration_ta": "பேசாத நாட்களும், நட்பைக் குறைக்காது.",
     "delivery": "warm, certain",
@@ -202,8 +198,8 @@
    },
    {
     "beat": "lesson",
-    "start_s": 38.0,
-    "end_s": 41.5,
+    "start_s": 37.2,
+    "end_s": 40.7,
     "speaker": "narrator",
     "narration_ta": "பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க!",
     "delivery": "warm, smiling, inviting",
@@ -215,7 +211,7 @@
     "n": 1,
     "beat": "hook",
     "start_s": 0,
-    "end_s": 3.8,
+    "end_s": 3.0,
     "characters": [
      "selvi",
      "pavi"
@@ -236,8 +232,8 @@
    {
     "n": 2,
     "beat": "story",
-    "start_s": 3.8,
-    "end_s": 10.6,
+    "start_s": 3.0,
+    "end_s": 9.8,
     "characters": [
      "selvi",
      "pavi"
@@ -257,8 +253,8 @@
    {
     "n": 3,
     "beat": "story",
-    "start_s": 10.6,
-    "end_s": 17.4,
+    "start_s": 9.8,
+    "end_s": 16.6,
     "characters": [
      "selvi"
     ],
@@ -277,8 +273,8 @@
    {
     "n": 4,
     "beat": "story",
-    "start_s": 17.4,
-    "end_s": 24.5,
+    "start_s": 16.6,
+    "end_s": 23.7,
     "characters": [
      "selvi",
      "janani"
@@ -298,8 +294,8 @@
    {
     "n": 5,
     "beat": "story",
-    "start_s": 24.5,
-    "end_s": 27.5,
+    "start_s": 23.7,
+    "end_s": 26.7,
     "characters": [
      "selvi"
     ],
@@ -318,8 +314,8 @@
    {
     "n": 6,
     "beat": "kural",
-    "start_s": 27.5,
-    "end_s": 35.0,
+    "start_s": 26.7,
+    "end_s": 34.2,
     "characters": [
      "selvi",
      "janani"
@@ -340,8 +336,8 @@
    {
     "n": 7,
     "beat": "lesson",
-    "start_s": 35.0,
-    "end_s": 41.5,
+    "start_s": 34.2,
+    "end_s": 40.7,
     "characters": [
      "selvi",
      "janani",

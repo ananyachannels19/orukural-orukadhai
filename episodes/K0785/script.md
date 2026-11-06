@@ -1,5 +1,5 @@
 # குறள் #785 · நாலு வருஷம் பேசாத தோழி
-*The friend who hadn't called in four years* · அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால் · runtime 42 s
+*The friend who hadn't called in four years* · அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால் · runtime 41 s
 
 > புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான்  
 > நட்பாங் கிழமை தரும்.
@@ -9,11 +9,6 @@
 
 **Logline:** On the opening morning of her roadside idli stall, Selvi waits for school friend Janani, who hasn't phoned in four years; her cousin doubts she will come, until Janani turns up holding Selvi's old dented school tiffin box that she kept for this day.  
 **Why it's original:** A friend's four-year silence is answered not with an apology but with Selvi's own dented school tiffin box, kept all this time and returned on her shop's opening morning, which is the kural's 'feeling alone makes the friendship'.
-
-## Checks
-
-- ❌ clips need 79 Flow credits, over the 75 a reel may use; reuse a clip for two cuts or shorten shots
-- ⚠️ hook runs to 3.8s (target ≤ 3s)
 
 ## Cast
 
@@ -25,7 +20,7 @@
 
 1. **நாலு வருஷம்,
 ஒரு போனும் இல்ல.** (tense_moment) ← used  
-   🎙 நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?
+   🎙 நாலு வருஷம் போன் இல்ல. வருவாளா?
 2. **பேசாதவ,
 நண்பியா?** (question)  
    🎙 பேசாத தோழி, நண்பியா இல்லையா?
@@ -37,17 +32,17 @@
 
 | Time | Beat | Who | Narration | On screen |
 |---|---|---|---|---|
-| 0–3.8 s | hook | selvi (tense, brisk and worried, quick and clipped, no long pauses; not smiling) | நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா? | நாலு வருஷம்,<br>ஒரு போனும் இல்ல. |
-| 3.8–7.2 s | story | narrator (matter-of-fact, gentle) | செல்வியோட புது இட்லிக் கடைக்கு, இன்னைக்குத் தொடக்கம். |  |
-| 7.2–10.6 s | story | pavi (blunt, teasing but doubtful; frowning, no smile) | பேசாதவ வருவான்னு நம்பறியா, செல்வி? |  |
-| 10.6–14 s | story | narrator (soft, thoughtful) | பேசாம இருந்தா, நட்பு குறைஞ்சு போயிடுமா? | பேசாம இருந்தா,<br>நட்பு குறையுமா? |
-| 14–17.4 s | story | selvi (quiet, hurt, steady; not crying, not smiling) | பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது. |  |
-| 17.4–21.2 s | story | narrator (warm, slowing down) | அப்போ கடை வாசல்ல, ஒரு பழைய டிபன் பாக்ஸோட, ஜனனி. |  |
-| 21.2–24.5 s | story | janani (shy, soft, a small smile) | பேசலைன்னாலும், இதை உனக்குத்தான் வெச்சிருந்தேன். |  |
-| 24.5–27.5 s | story | selvi (tearful, breaking into a smile) | அடியே... இது நம்ம ஸ்கூல் டிபன் பாக்ஸ்! |  |
-| 27.5–35 s | kural | narrator (slow, warm, reverent) | புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான் நட்பாங் கிழமை தரும். பழகாட்டியும், உணர்வு இருந்தா போதும். |  |
-| 35–38 s | lesson | narrator (warm, certain) | பேசாத நாட்களும், நட்பைக் குறைக்காது. | பேசாத நாட்களும்<br>நட்பைக் குறைக்காது. |
-| 38–41.5 s | lesson | narrator (warm, smiling, inviting) | பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க! |  |
+| 0–3 s | hook | selvi (fast, urgent and worried, said in one quick breath with no pauses between the two sentences; not smiling) | நாலு வருஷம் போன் இல்ல. வருவாளா? | நாலு வருஷம்,<br>ஒரு போனும் இல்ல. |
+| 3–6.4 s | story | narrator (matter-of-fact, gentle) | செல்வியோட புது இட்லிக் கடைக்கு, இன்னைக்குத் தொடக்கம். |  |
+| 6.4–9.8 s | story | pavi (blunt, teasing but doubtful; frowning, no smile) | பேசாதவ வருவான்னு நம்பறியா, செல்வி? |  |
+| 9.8–13.2 s | story | narrator (soft, thoughtful) | பேசாம இருந்தா, நட்பு குறைஞ்சு போயிடுமா? | பேசாம இருந்தா,<br>நட்பு குறையுமா? |
+| 13.2–16.6 s | story | selvi (quiet, hurt, steady; not crying, not smiling) | பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது. |  |
+| 16.6–20.4 s | story | narrator (warm, slowing down) | அப்போ கடை வாசல்ல, ஒரு பழைய டிபன் பாக்ஸோட, ஜனனி. |  |
+| 20.4–23.7 s | story | janani (shy, soft, a small smile) | பேசலைன்னாலும், இதை உனக்குத்தான் வெச்சிருந்தேன். |  |
+| 23.7–26.7 s | story | selvi (tearful, breaking into a smile) | அடியே... இது நம்ம ஸ்கூல் டிபன் பாக்ஸ்! |  |
+| 26.7–34.2 s | kural | narrator (slow, warm, reverent) | புணர்ச்சி பழகுதல் வேண்டா உணர்ச்சிதான் நட்பாங் கிழமை தரும். பழகாட்டியும், உணர்வு இருந்தா போதும். |  |
+| 34.2–37.2 s | lesson | narrator (warm, certain) | பேசாத நாட்களும், நட்பைக் குறைக்காது. | பேசாத நாட்களும்<br>நட்பைக் குறைக்காது. |
+| 37.2–40.7 s | lesson | narrator (warm, smiling, inviting) | பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க! |  |
 
 **Lesson:** பேசாத நாட்களும் நட்பைக் குறைக்காது.  
 **Tag question:** பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க!  
@@ -62,84 +57,84 @@
 
 ## Shot list
 
-**Shot 1** · 0–3.8 s · hook · selvi, pavi · stall_front · props: phone, idli_vessel  
+**Shot 1** · 0–3 s · hook · selvi, pavi · stall_front · props: phone, idli_vessel  
 Selvi, behind the new stall counter, looks anxiously down the road with her phone in her hand and says her line; Pavi stands beside her by the idli vessel, mouth closed. *Camera:* Static medium shot from the front of the counter, Selvi centre facing camera, Pavi at her left.  
 🖼 `Selvi behind the counter facing the camera, holding the phone low in her hand, looking anxiously towards the road on the right then to camera, face clearly visible; Pavi at her left by the steaming idli vessel, arms folded, looking at the road; the empty blue bench at the left.`  
 🎞 `Selvi glances down the road, then turns to camera and says her line quietly, anxious and hurt, no smile; Pavi stays still with mouth closed. Static locked-off camera.`
 
-**Shot 2** · 3.8–10.6 s · story · selvi, pavi · stall_front · props: idli_vessel  
+**Shot 2** · 3–9.8 s · story · selvi, pavi · stall_front · props: idli_vessel  
 Selvi lifts the idli vessel's lid, steam rising, as the narrator introduces the opening; then Pavi turns to her and says her doubtful line. *Camera:* Static medium two-shot from the front of the counter, both faces in view.  
 🖼 `Selvi lifting the cloth-covered lid of the steaming idli vessel with both hands, a tray of fresh idlis inside, a jasmine garland on the awning above; Pavi at her left turning towards her, frowning, both faces in view.`  
 🎞 `For the first three seconds Selvi lifts the lid and steam rises; nobody speaks. Then Pavi turns to Selvi and says her line flatly and doubtfully, frowning, no smile; Selvi's mouth stays closed. Static locked-off camera.`
 
-**Shot 3** · 10.6–17.4 s · story · selvi · stall_front · props: phone  
+**Shot 3** · 9.8–16.6 s · story · selvi · stall_front · props: phone  
 Selvi looks at her phone's call screen, then down the road, then says quietly that she is probably busy but her heart asks. *Camera:* Static medium close-up on Selvi from the front of the counter, her face fully to camera.  
 🖼 `Selvi behind the counter looking down at the phone in her hand, her thumb above the call button, then lifting her eyes; her face fully visible, soft worried expression, Pavi out of frame.`  
 🎞 `For the first three seconds Selvi looks at the phone, then puts it down on the counter and looks up the road. Then she turns to camera and says her line quietly, hurt but steady, no smile and no tears; her hands rest on the counter. Static locked-off camera.`
 
-**Shot 4** · 17.4–24.5 s · story · selvi, janani · stall_front · props: tiffin  
+**Shot 4** · 16.6–23.7 s · story · selvi, janani · stall_front · props: tiffin  
 Janani walks in from the road holding the dented tiffin box in both hands, stops in front of the counter and says her line shyly; Selvi, behind the counter, watches. *Camera:* Static medium shot from behind the counter's side, Janani facing the camera in front of the counter, Selvi at the edge of frame.  
 🖼 `Janani standing in front of the counter in the golden light with the dented steel tiffin box held in both hands at chest height, a shy half-smile, looking at Selvi, face fully visible; Selvi at the left edge of frame behind the counter, still, looking at her.`  
 🎞 `For the first three seconds Janani walks up from the road on the right and stops in front of the counter holding the tiffin box in both hands. Then Janani says her line shyly, a small smile, facing the camera; Selvi stays still with mouth closed. Exactly one tiffin box. Static locked-off camera.`
 
-**Shot 5** · 24.5–27.5 s · story · selvi · stall_front · props: tiffin  
+**Shot 5** · 23.7–26.7 s · story · selvi · stall_front · props: tiffin  
 Selvi takes the tiffin box, sees the dent, and says her line, tearful and smiling. *Camera:* Static medium close-up on Selvi, her face fully to camera.  
 🖼 `Selvi holding the dented steel tiffin box close to her chest with both hands, looking at it then up, eyes wet, a trembling smile, face fully visible.`  
 🎞 `Selvi looks down at the tiffin box in her hands, then says her line tearfully, breaking into a smile, facing the camera. Exactly one tiffin box in her hands. Static locked-off camera.`
 
-**Shot 6** · 27.5–35 s · kural · selvi, janani · stall_front · props: tiffin, idli_vessel  
+**Shot 6** · 26.7–34.2 s · kural · selvi, janani · stall_front · props: tiffin, idli_vessel  
 The two friends share an idli at the counter side by side, laughing quietly; the tiffin box sits open between them. *Camera:* Slow gentle push-in on the two friends at the counter, golden light.  
 🖼 `Selvi and Janani standing side by side at the counter, each holding a small steel plate with a steaming idli, laughing quietly, the dented tiffin box open on the counter between them, Pavi out of frame.`  
 🎞 `Selvi and Janani share an idli and laugh quietly, side by side; Janani leans her shoulder against Selvi's. No one speaks aloud. Exactly one tiffin box on the counter. Very slow push-in.`
 
-**Shot 7** · 35–41.5 s · lesson · selvi, janani, pavi · stall_front · props: tiffin, idli_vessel  
+**Shot 7** · 34.2–40.7 s · lesson · selvi, janani, pavi · stall_front · props: tiffin, idli_vessel  
 Mirror of the first shot: Selvi and Janani stand behind the counter facing the road, Pavi serves a customer's plate; the tiffin box sits on the counter. *Camera:* Static medium shot from the front of the counter, matching shot 1's framing.  
 🖼 `Selvi and Janani side by side behind the counter facing the camera, Janani now wearing a spare white apron, both looking calmly down the road; Pavi at their left by the idli vessel, smiling; the dented tiffin box on the counter; the blue bench at the left now holding a customer.`  
 🎞 `Selvi and Janani look down the road together, then turn and smile at the camera; steam rises from the idli vessel; Pavi nods. No one speaks aloud. Static locked-off camera.`
 
-**Flow clips:** 7 (8 s, 8 s, 8 s, 8 s, 4 s, 8 s, 8 s) · 79 credits
+**Flow clips:** 7 (4 s, 8 s, 8 s, 8 s, 4 s, 8 s, 8 s) · 74 credits
 
 ## Shot prompts (what Flow gets)
 
 The full start-image prompts, with reference images, are in `episodes/K0785/flow/README.md` (`python studio.py flow-sheet 785`). Each clip prompt below goes to Flow with the shot's approved image as its start frame.
 
-**Shot 1** · 0–3.8 s · 8 s clip · 12 credits
+**Shot 1** · 0–3 s · 4 s clip · 7 credits
 
 ```
-Selvi glances down the road, then turns to camera and says her line quietly, anxious and hurt, no smile; Pavi stays still with mouth closed. Static locked-off camera. Camera: Static medium shot from the front of the counter, Selvi centre facing camera, Pavi at her left. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Selvi says this line aloud in a warm, slightly husky 28-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "நாலு வருஷம் ஒரு போன் இல்ல. இன்னைக்கு வருவாளா?" Meanwhile Pavi keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+Selvi glances down the road, then turns to camera and says her line quietly, anxious and hurt, no smile; Pavi stays still with mouth closed. Static locked-off camera. Camera: Static medium shot from the front of the counter, Selvi centre facing camera, Pavi at her left. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Selvi says this line aloud in a warm, slightly husky 28-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "நாலு வருஷம் போன் இல்ல. வருவாளா?" Meanwhile Pavi keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 2** · 3.8–10.6 s · 8 s clip · 12 credits
+**Shot 2** · 3–9.8 s · 8 s clip · 12 credits
 
 ```
 For the first three seconds Selvi lifts the lid and steam rises; nobody speaks. Then Pavi turns to Selvi and says her line flatly and doubtfully, frowning, no smile; Selvi's mouth stays closed. Static locked-off camera. Camera: Static medium two-shot from the front of the counter, both faces in view. About 8 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. From about 3.4 s, Pavi says this line aloud in a quick, bright 24-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "பேசாதவ வருவான்னு நம்பறியா, செல்வி?" Meanwhile Selvi keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 3** · 10.6–17.4 s · 8 s clip · 12 credits
+**Shot 3** · 9.8–16.6 s · 8 s clip · 12 credits
 
 ```
 For the first three seconds Selvi looks at the phone, then puts it down on the counter and looks up the road. Then she turns to camera and says her line quietly, hurt but steady, no smile and no tears; her hands rest on the counter. Static locked-off camera. Camera: Static medium close-up on Selvi from the front of the counter, her face fully to camera. About 8 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. From about 3.4 s, Selvi says this line aloud in a warm, slightly husky 28-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது." Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 4** · 17.4–24.5 s · 8 s clip · 12 credits
+**Shot 4** · 16.6–23.7 s · 8 s clip · 12 credits
 
 ```
 For the first three seconds Janani walks up from the road on the right and stops in front of the counter holding the tiffin box in both hands. Then Janani says her line shyly, a small smile, facing the camera; Selvi stays still with mouth closed. Exactly one tiffin box. Static locked-off camera. Camera: Static medium shot from behind the counter's side, Janani facing the camera in front of the counter, Selvi at the edge of frame. About 8 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. From about 3.8 s, Janani says this line aloud in a soft, calm 28-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "பேசலைன்னாலும், இதை உனக்குத்தான் வெச்சிருந்தேன்." Meanwhile Selvi keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 5** · 24.5–27.5 s · 4 s clip · 7 credits
+**Shot 5** · 23.7–26.7 s · 4 s clip · 7 credits
 
 ```
 Selvi looks down at the tiffin box in her hands, then says her line tearfully, breaking into a smile, facing the camera. Exactly one tiffin box in her hands. Static locked-off camera. Camera: Static medium close-up on Selvi, her face fully to camera. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Selvi says this line aloud in a warm, slightly husky 28-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "அடியே... இது நம்ம ஸ்கூல் டிபன் பாக்ஸ்!" Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 6** · 27.5–35 s · 8 s clip · 12 credits
+**Shot 6** · 26.7–34.2 s · 8 s clip · 12 credits
 
 ```
 Selvi and Janani share an idli and laugh quietly, side by side; Janani leans her shoulder against Selvi's. No one speaks aloud. Exactly one tiffin box on the counter. Very slow push-in. Camera: Slow gentle push-in on the two friends at the counter, golden light. About 8 seconds, one continuous shot, no cuts. From 0 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
-**Shot 7** · 35–41.5 s · 8 s clip · 12 credits
+**Shot 7** · 34.2–40.7 s · 8 s clip · 12 credits
 
 ```
 Selvi and Janani look down the road together, then turn and smile at the camera; steam rises from the idli vessel; Pavi nods. No one speaks aloud. Static locked-off camera. Camera: Static medium shot from the front of the counter, matching shot 1's framing. About 8 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. From 3 s to 6 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
