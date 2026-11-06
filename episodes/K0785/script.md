@@ -34,7 +34,7 @@
 |---|---|---|---|---|
 | 0–3 s | hook | selvi (fast, urgent and worried, said in one quick breath with no pauses between the two sentences; not smiling) | நாலு வருஷம் போன் இல்ல. வருவாளா? | நாலு வருஷம்,<br>ஒரு போனும் இல்ல. |
 | 3–6.4 s | story | narrator (matter-of-fact, gentle) | செல்வியோட புது இட்லிக் கடைக்கு, இன்னைக்குத் தொடக்கம். |  |
-| 6.4–9.8 s | story | pavi (blunt, teasing but doubtful; frowning, no smile) | பேசாதவ வருவான்னு நம்பறியா, செல்வி? |  |
+| 6.4–9.8 s | story | pavi (quick, clipped and brisk, doubtful and flat; no long pauses; frowning, no smile) | பேசாதவ வருவான்னு நம்பறியா, செல்வி? |  |
 | 9.8–13.2 s | story | narrator (soft, thoughtful) | பேசாம இருந்தா, நட்பு குறைஞ்சு போயிடுமா? | பேசாம இருந்தா,<br>நட்பு குறையுமா? |
 | 13.2–16.6 s | story | selvi (quiet, hurt, steady; not crying, not smiling) | பிஸியா இருப்பா... ஆனாலும், மனசு கேக்குது. |  |
 | 16.6–20.4 s | story | narrator (warm, slowing down) | அப்போ கடை வாசல்ல, ஒரு பழைய டிபன் பாக்ஸோட, ஜனனி. |  |
