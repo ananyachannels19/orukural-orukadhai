@@ -1,6 +1,6 @@
 episode: K0785
 kural: 785
-status: stage4_clips_paused_for_redo_decision
+status: stage4_clips_awaiting_gate3
 flow_account: Revathi Satheesh
 flow_project: https://flow.google.com/u/2/project/9301339c-7e97-4836-b6f3-7bf24bc2ef12
 gates:
@@ -10,4 +10,7 @@ gates:
   draft: null
 credits:
   planned: 74
-  used: 43
+  used: 98
+  remakes:
+    - {shot: 2, reason: 'Pavi in profile, mouth closed during line', credits: 12, approved: 2026-11-06}
+    - {shot: 4, reason: 'Janani and Selvi swapped places mid-clip', credits: 12, approved: 2026-11-06}
