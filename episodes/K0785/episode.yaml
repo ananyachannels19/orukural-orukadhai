@@ -1,6 +1,6 @@
 episode: K0785
 kural: 785
-status: final_ready_held_not_posted
+status: posted
 flow_account: Revathi Satheesh
 flow_project: https://flow.google.com/u/2/project/9301339c-7e97-4836-b6f3-7bf24bc2ef12
 gates:
@@ -16,3 +16,9 @@ credits:
     - {shot: 4, reason: 'Janani and Selvi swapped places mid-clip', credits: 12, approved: 2026-11-06}
 final: render/K0785_final.mp4
 publish_pack: publish/K0785_post.md
+posted: 2026-11-09
+links:
+  youtube: https://youtube.com/shorts/2-wJYpPI0ms
+  instagram: https://www.instagram.com/orukural.orukadhai/reel/DfhJuAlpBoj/
+ai_label: {youtube: "altered content: yes", instagram: on}
+file_quality: "original final, 1080x1920 H.264 30fps, 9.6 Mbps video, AAC 267 kbps (LC)"

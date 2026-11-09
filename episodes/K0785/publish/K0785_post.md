@@ -5,8 +5,8 @@ Cover: K0785_cover.jpg (the Instagram cover and the YouTube thumbnail)
 
 ## YouTube Short
 
-**Title** (74 chars)
-குறள் 785 | நாலு வருஷம் பேசாத தோழி | புணர்ச்சி பழகுதல் | Thirukkural Story
+**Title** (62 chars)
+குறள் 785 | நாலு வருஷம் பேசாத தோழி | Thirukkural Story #Shorts
 
 **Description**
 
@@ -22,15 +22,12 @@ Meaning: Friendship does not need constant meeting and mixing. The feeling in th
 
 📖 அதிகாரம் 79: நட்பு (Friendship) · பொருட்பால்
 
-#திருக்குறள் #thirukkural #ஒருகுறள்ஒருகதை #நட்பு #tamilstories
+#திருக்குறள் #thirukkural #ஒருகுறள்ஒருகதை #நட்பு
 
 This video uses AI-generated visuals and an AI narrator voice. Story, script and meaning are original to this channel.
 
 **Tags**
 திருக்குறள், thirukkural, thirukkural story, kural 785, நட்பு, புணர்ச்சி பழகுதல் வேண்டா, நட்பாங் கிழமை தரும், friendship, best friends, தோழி, idli stall, tamil shorts
-
-**Pinned comment**
-பேசாட்டியும் மனசுல இருக்கிற ஃப்ரெண்டை டேக் பண்ணுங்க 👇
 
 **Settings**: Not made for kids (keeps comments on) · Altered/synthetic content: Yes
 
@@ -55,7 +52,6 @@ This video uses AI-generated visuals and an AI narrator voice. Story, script and
 
 - [ ] YouTube: K0785_cover.jpg uploaded as the thumbnail before Publish
 - [ ] YouTube: Altered/synthetic content set to Yes, Not made for kids
-- [ ] YouTube: pinned comment posted
 - [ ] Instagram: Add AI label switched ON before Share (it can't be added on the web afterwards)
 - [ ] Instagram: cover set to K0785_cover.jpg
 - [ ] No posting day or time named in the title, description, caption or comment

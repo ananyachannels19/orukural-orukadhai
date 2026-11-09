@@ -111,20 +111,38 @@ episodes:
     job: starting a roadside idli stall
     look: Short and plump, round face, warm brown skin, thick wavy black hair in a low bun with a small string of jasmine,
       big expressive eyes, a small mole above her upper lip, no glasses.
-    voice: ''
+    voice: Sulafat
   - id: janani
     name_ta: ஜனனி
     age: 28
     job: staff nurse in Coimbatore
     look: Tall and slim, long oval face, light wheatish skin, a short chin-length bob with a side parting, round tortoiseshell
       glasses, tired kind eyes, no bindi.
-    voice: ''
+    voice: Aoede
   - id: pavi
     name_ta: பவி
     age: 24
     job: Selvi's cousin, helping at the stall
     look: Lean, narrow face, dusky skin, curly black hair in a high ponytail, a dimple on her right cheek, quick eyes, no
       glasses.
-    voice: ''
+    voice: Callirrhoe
   places:
   - stall_front
+- episode: K1100
+  characters:
+  - id: naveen
+    name_ta: நவீன்
+    age: 29
+    job: school-van driver
+    look: Tall and lean, long face, dark-brown skin, short neatly trimmed full beard, thick eyebrows, short black hair side-parted,
+      kind steady eyes, no glasses.
+    voice: Fenrir
+  - id: dharani
+    name_ta: தரணி
+    age: 26
+    job: primary-school teacher
+    look: Medium height, slim, fair-wheatish skin, oval face, long black hair in a loose side braid, a tiny gold nose stud,
+      large kajal-lined eyes, a small maroon bindi, no glasses.
+    voice: Erinome
+  places:
+  - bangle_stall

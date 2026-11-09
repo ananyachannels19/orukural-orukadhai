@@ -35,7 +35,8 @@
 - The venv has no Raqm text shaping, so Pillow draws pre-base Tamil vowel signs wrongly on the cover ("போன்" splits). Use wording without ெ ே ை ொ ோ ௌ for cover text, or install libraqm.
 
 ## Analytics
-(~20 min, next day, later) Not posted yet.
+Posted 2026-11-09. YouTube https://youtube.com/shorts/2-wJYpPI0ms, Instagram https://www.instagram.com/orukural.orukadhai/reel/DfhJuAlpBoj/. Upload file: render/K0785_final.mp4, ffprobe 1080x1920, H.264, 30 fps, ~9.6 Mbps video, AAC-LC ~267 kbps (below the 320k target; not re-encoded). Instagram cover pick could not be verified in the web UI.
+(~20 min, next day, later) Not checked yet.
 
 ## Proposed lessons for data/lessons_learned.md
 (only if repeated in 2+ episodes or Ananya confirmed; she approves the edit)
