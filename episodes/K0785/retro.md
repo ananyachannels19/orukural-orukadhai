@@ -41,3 +41,6 @@ Posted 2026-11-09. YouTube https://youtube.com/shorts/2-wJYpPI0ms, Instagram htt
 ## Proposed lessons for data/lessons_learned.md
 (only if repeated in 2+ episodes or Ananya confirmed; she approves the edit)
 - Not yet repeated across episodes, so nothing is proposed now. Candidates to watch: (1) a speaking character must face the camera in the start image or the mouth stays closed (K0785 shot 2); (2) never tell a speaking character to walk round furniture, state where they stand and that they stay (K0785 shot 4); (3) a stray voice in a narrator-only clip is audible in the mix and needs muting (K0785 shot 7).
+
+## Cover fix (2026-11-09)
+The first cover was rendered without libraqm on the path, so Pillow fell back to BASIC layout and mis-drew Tamil ("நாலு" showed as "நாலூ", "குறள்" as "கூறள்"). Rebuilt with `DYLD_FALLBACK_LIBRARY_PATH=/opt/homebrew/lib` (raqm True) from images/shot01.png. Always check `features.check('raqm')` before running cover.py.
