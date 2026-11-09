@@ -1,5 +1,5 @@
 # குறள் #1100 · வளையல் பிடிக்காதுன்னு சொன்னவ
-*The woman who said she hated bangles* · அதிகாரம் 110: குறிப்பறிதல் (Recognition of the Signs) · காமத்துப்பால் · runtime 38 s
+*The woman who said she hated bangles* · அதிகாரம் 110: குறிப்பறிதல் (Recognition of the Signs) · காமத்துப்பால் · runtime 41 s
 
 > கண்ணொடு கண்இணை நோக்கொக்கின் வாய்ச்சொற்கள்  
 > என்ன பயனும் இல.
@@ -36,12 +36,12 @@
 | 6.4–9.8 s | story | naveen (calm, gentle, curious; a small steady smile) | நிஜமாவா, தரணி? என் கண்ணைப் பாத்து சொல்லு. |  |
 | 9.8–13 s | story | narrator (soft, thoughtful) | வார்த்தை பொய் சொல்லும். கண்ணு சொல்லுமா? | வார்த்தை பொய் சொல்லும்,<br>கண்ணு சொல்லுமா? |
 | 13–16.2 s | story | dharani (quiet, avoiding his eyes, a little tense; not smiling) | நான் வேண்டாம்னு சொன்னேன்ல... வீட்டுக்குப் போலாம். |  |
-| 16.2–19.6 s | story | narrator (warm, slowing down) | நவீன் வாதாடல. அவ கண்ணை மட்டும் பாத்தான். |  |
-| 19.6–23.2 s | story | dharani (soft, caught, tearful and tender, said facing camera) | உங்க கண்ணுல கவலை தெரிஞ்சுது... அதான் வேண்டாம்னேன். |  |
-| 23.2–26.4 s | story | naveen (warm, quietly proud, a small smile) | சட்டைப் பையில, இதுக்குன்னே சேத்த காசு இருக்கு. |  |
-| 26.4–34.4 s | kural | narrator (slow, warm, reverent) | கண்ணொடு கண்இணை நோக்கொக்கின் வாய்ச்சொற்கள் என்ன பயனும் இல. கண்ணே பேசிட்டா, வாய்ச்சொல் எதுக்கு? |  |
-| 34.4–36.2 s | lesson | narrator (warm, certain) | கண்ணு பேசினா, வார்த்தை வேணாம். | கண்ணு பேசினா,<br>வார்த்தை வேணாம். |
-| 36.2–38.4 s | lesson | narrator (warm, smiling, inviting) | கண்ணால பேசுற ஜோடியை டேக் பண்ணுங்க! |  |
+| 16.2–19.8 s | story | narrator (warm, slowing down) | நவீன் வாதாடல. அவ கண்ணை மட்டும் பாத்தான். |  |
+| 19.8–23.4 s | story | dharani (soft, caught, tearful and tender, said facing camera) | உங்க கண்ணுல கவலை தெரிஞ்சுது... அதான் வேண்டாம்னேன். |  |
+| 23.4–26 s | story | naveen (warm, quietly proud, a small smile) | இதுக்குன்னே சேத்த காசு இருக்கு. |  |
+| 26–34.9 s | kural | narrator (slow, warm, reverent) | கண்ணொடு கண்இணை நோக்கொக்கின் வாய்ச்சொற்கள் என்ன பயனும் இல. கண்ணே பேசிட்டா, வாய்ச்சொல் எதுக்கு? |  |
+| 34.9–37.9 s | lesson | narrator (warm, certain) | கண்ணு பேசினா, வார்த்தை வேணாம். | கண்ணு பேசினா,<br>வார்த்தை வேணாம். |
+| 37.9–40.6 s | lesson | narrator (warm, smiling, inviting) | கண்ணால பேசுற ஜோடியை டேக் பண்ணுங்க! |  |
 
 **Lesson:** கண்ணு பேசினா, வார்த்தை வேணாம்.  
 **Tag question:** கண்ணால பேசுற ஜோடியை டேக் பண்ணுங்க!  
@@ -70,27 +70,27 @@ Dharani looks away from Naveen, uneasy, then says quietly that she said no and t
 🖼 `Dharani, close, facing the camera, eyes lowered to the side then lifting, a tense uneasy mouth, bangle stand soft in the background; Naveen out of frame.`  
 🎞 `For the first three seconds Dharani keeps her eyes down and to the side, tense and quiet. Then she turns to camera and says her line quietly, not smiling. Static locked-off camera.`
 
-**Shot 4** · 16.2–23.2 s · story · dharani, naveen · bangle_stall · props: bangles  
+**Shot 4** · 16.2–23.4 s · story · dharani, naveen · bangle_stall · props: bangles  
 Naveen says nothing and simply looks into Dharani's eyes; she gives in and says she saw worry in his eyes. *Camera:* Static medium two-shot from the front, both faces in view, eyes meeting.  
 🖼 `Naveen and Dharani standing close at the stall, looking straight into each other's eyes, Naveen calm and still, Dharani's face softening, both faces clearly visible, both in the same positions as before.`  
 🎞 `For the first three seconds Naveen holds her gaze, silent, and Dharani looks back at him; neither moves from where they stand. Then Dharani turns to camera and says her line softly, tender and a little tearful; Naveen's mouth stays closed. Static locked-off camera.`
 
-**Shot 5** · 23.2–26.4 s · story · naveen, dharani · bangle_stall · props: bangles, notes  
+**Shot 5** · 23.4–26 s · story · naveen, dharani · bangle_stall · props: bangles, notes  
 Naveen takes a few folded notes from his shirt pocket and holds them up with a quiet smile as he says his line; Dharani watches, mouth closed. *Camera:* Static medium shot from the front, Naveen in focus facing the camera, Dharani at the edge of frame.  
 🖼 `Naveen facing the camera with a few folded ten-rupee notes held up in his right hand beside his shirt pocket, a quiet proud smile; Dharani at the left edge of frame, listening, moved, mouth closed; the green bangle set still on its peg.`  
 🎞 `Naveen takes the folded notes from his shirt pocket and says his line, warm and quietly proud, a small smile; Dharani stays still with mouth closed. Exactly one bangle set on the peg. Static locked-off camera.`
 
-**Shot 6** · 26.4–34.4 s · kural · naveen, dharani · bangle_stall · props: bangles  
+**Shot 6** · 26–34 s · kural · naveen, dharani · bangle_stall · props: bangles  
 Naveen slides the green bangle set onto Dharani's wrist; she lifts her eyes and they look into each other's eyes without a word. *Camera:* Static medium close two-shot from the front, hands low in frame, faces in view.  
 🖼 `Naveen gently holding Dharani's hand and sliding the green glass bangle set onto her wrist, both looking up into each other's eyes, soft smiles, warm bulb-light on their faces.`  
 🎞 `Naveen slides the green bangles onto Dharani's wrist; then both lift their eyes and look at each other, quietly smiling, nobody speaks. Exactly one bangle set, now on her wrist. Static locked-off camera.`
 
-**Shot 7** · 34.4–38.4 s · lesson · dharani, naveen · bangle_stall · props: bangles  
+**Shot 7** · 34–40.6 s · lesson · dharani, naveen · bangle_stall · props: bangles  
 Dharani, now wearing the green bangles, holds her wrist up and laughs happily to camera; Naveen beside her, smiling; the first shot's framing again. *Camera:* Static medium shot from the front of the stall, matching shot 1: Dharani centre-left facing camera, Naveen at her right shoulder.  
 🖼 `Dharani standing at the bangle stall facing the camera, the green glass bangles on her wrist raised near her cheek, a bright genuine smile; Naveen at her right shoulder, smiling at her; same framing as the opening shot.`  
 🎞 `Dharani shakes her wrist so the green bangles jingle and laughs warmly to camera; Naveen smiles at her. Nobody speaks. Static locked-off camera.`
 
-**Flow clips:** 7 (4 s, 8 s, 8 s, 8 s, 8 s, 8 s, 4 s) · 74 credits
+**Flow clips:** 7 (4 s, 8 s, 8 s, 8 s, 4 s, 8 s, 8 s) · 74 credits
 
 ## Shot prompts (what Flow gets)
 
@@ -114,28 +114,28 @@ For the first three seconds nobody speaks: Dharani's eyes slip to the green bang
 For the first three seconds Dharani keeps her eyes down and to the side, tense and quiet. Then she turns to camera and says her line quietly, not smiling. Static locked-off camera. Camera: Static medium close-up on Dharani, her face fully to camera, the bangle stand soft behind her. About 8 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. From about 3.2 s, Dharani says this line aloud in a bright, lively 26-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "நான் வேண்டாம்னு சொன்னேன்ல... வீட்டுக்குப் போலாம்." Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 4** · 16.2–23.2 s · 8 s clip · 12 credits
+**Shot 4** · 16.2–23.4 s · 8 s clip · 12 credits
 
 ```
-For the first three seconds Naveen holds her gaze, silent, and Dharani looks back at him; neither moves from where they stand. Then Dharani turns to camera and says her line softly, tender and a little tearful; Naveen's mouth stays closed. Static locked-off camera. Camera: Static medium two-shot from the front, both faces in view, eyes meeting. About 8 seconds, one continuous shot, no cuts. From 0 s to 3 s nobody on screen talks: every mouth stays closed. From about 3.4 s, Dharani says this line aloud in a bright, lively 26-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "உங்க கண்ணுல கவலை தெரிஞ்சுது... அதான் வேண்டாம்னேன்." Meanwhile Naveen keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+For the first three seconds Naveen holds her gaze, silent, and Dharani looks back at him; neither moves from where they stand. Then Dharani turns to camera and says her line softly, tender and a little tearful; Naveen's mouth stays closed. Static locked-off camera. Camera: Static medium two-shot from the front, both faces in view, eyes meeting. About 8 seconds, one continuous shot, no cuts. From 0 s to 4 s nobody on screen talks: every mouth stays closed. From about 3.6 s, Dharani says this line aloud in a bright, lively 26-year-old Tamil woman's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "உங்க கண்ணுல கவலை தெரிஞ்சுது... அதான் வேண்டாம்னேன்." Meanwhile Naveen keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 5** · 23.2–26.4 s · 8 s clip · 12 credits
+**Shot 5** · 23.4–26 s · 4 s clip · 7 credits
 
 ```
-Naveen takes the folded notes from his shirt pocket and says his line, warm and quietly proud, a small smile; Dharani stays still with mouth closed. Exactly one bangle set on the peg. Static locked-off camera. Camera: Static medium shot from the front, Naveen in focus facing the camera, Dharani at the edge of frame. About 8 seconds, one continuous shot, no cuts. From about 0.5 s, Naveen says this line aloud in a calm, warm 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "சட்டைப் பையில, இதுக்குன்னே சேத்த காசு இருக்கு." Meanwhile Dharani keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
+Naveen takes the folded notes from his shirt pocket and says his line, warm and quietly proud, a small smile; Dharani stays still with mouth closed. Exactly one bangle set on the peg. Static locked-off camera. Camera: Static medium shot from the front, Naveen in focus facing the camera, Dharani at the edge of frame. About 4 seconds, one continuous shot, no cuts. From about 0.5 s, Naveen says this line aloud in a calm, warm 29-year-old Tamil man's voice, pronouncing every word exactly in clear standard Tamil, lips and jaw matching every word, the body acting it out, face in view while speaking: "இதுக்குன்னே சேத்த காசு இருக்கு." Meanwhile Dharani keeps their mouth closed and listens. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the spoken line(s) above and the natural sounds of the scene; no music, no other voices.
 ```
 
-**Shot 6** · 26.4–34.4 s · 8 s clip · 12 credits
+**Shot 6** · 26–34 s · 8 s clip · 12 credits
 
 ```
 Naveen slides the green bangles onto Dharani's wrist; then both lift their eyes and look at each other, quietly smiling, nobody speaks. Exactly one bangle set, now on her wrist. Static locked-off camera. Camera: Static medium close two-shot from the front, hands low in frame, faces in view. About 8 seconds, one continuous shot, no cuts. From 0 s to 8 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
-**Shot 7** · 34.4–38.4 s · 4 s clip · 7 credits
+**Shot 7** · 34–40.6 s · 8 s clip · 12 credits
 
 ```
-Dharani shakes her wrist so the green bangles jingle and laughs warmly to camera; Naveen smiles at her. Nobody speaks. Static locked-off camera. Camera: Static medium shot from the front of the stall, matching shot 1: Dharani centre-left facing camera, Naveen at her right shoulder. About 4 seconds, one continuous shot, no cuts. From 0 s to 2 s nobody on screen talks: every mouth stays closed. From 2 s to 4 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
+Dharani shakes her wrist so the green bangles jingle and laughs warmly to camera; Naveen smiles at her. Nobody speaks. Static locked-off camera. Camera: Static medium shot from the front of the stall, matching shot 1: Dharani centre-left facing camera, Naveen at her right shoulder. About 8 seconds, one continuous shot, no cuts. From 0 s to 1 s nobody on screen talks: every mouth stays closed. From 1 s to 4 s nobody on screen talks: every mouth stays closed. From 4 s to 7 s nobody on screen talks: every mouth stays closed. Keep every character's face, hair, clothes and size, the place, the light and every object exactly as in the start frame; nothing appears, disappears or changes colour. No on-screen text. Sound: only the natural sounds of the scene (footsteps, engines, traffic, room tone, wind); no music, and no voice or speech is heard.
 ```
 
 ## YouTube
