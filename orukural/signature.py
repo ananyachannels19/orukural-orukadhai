@@ -159,6 +159,9 @@ def clean_text(s: Settings, line1: str, line2: str, label: str, out_dir: Path, o
     out_dir.mkdir(parents=True, exist_ok=True)
     probe = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
     font = _fit(s, probe, [line1, line2], media.W * 0.86, 66, 40)
+    if max(probe.textlength(x, font=font) for x in (line1, line2)) > media.W * 0.94:
+        # a long verse (K1100) still overflowed at the smallest size: shrink further rather than clip it
+        font = _fit(s, probe, [line1, line2], media.W * 0.92, 40, 26)
     gap = round(font.size * 1.9)
     # "center": the block (label, two lines, underlines) sits in the middle of the frame
     top, bottom = -70 - 34, gap + 25  # label cap height above line 1's baseline; line 2's underline below it

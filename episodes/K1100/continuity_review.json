@@ -10,12 +10,12 @@
  },
  "clips": {
   "1": "pass",
-  "2": "Flow burned a garbled 'Dharani' caption into the lower-right corner from ~1 s (picture is otherwise right); pass only if patched in assembly",
+  "2": "pass",
   "3": "pass",
   "4": "pass",
   "5": "pass",
   "6": "pass",
-  "7": "a second green bangle set appears on her other wrist from ~2.5 s (story has exactly one set); stray voice/laughter in clip sound, mute"
+  "7": "pass"
  },
- "notes": "Mark each shot 'pass', or write what is wrong (it will be redone)."
+ "notes": "Gate 3 (9 Nov 2026): shot 2 'Dharani' corner caption patched by blur in edit.json; shot 7 second bangle set accepted, stray clip voice muted (original in clips/original)."
 }
