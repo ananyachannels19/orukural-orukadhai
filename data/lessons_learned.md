@@ -34,7 +34,7 @@ Story and script
 - Angry or scolding lines: write "frowning, no smile". Flow adds smiles.
 - Avoid a bare "கால்" (reads as "leg"); say "அழைப்பு". Write loanwords in Tamil script and check for stray non-Tamil letters: one bad character makes Gemini read the line about twice as slowly.
 - Never end on a "next kural" teaser. Leave a deliberate silent beat as a gap between segments, with the shot spanning the same gap.
-- Keep scripts to what fits 35–45 s at about 11 Tamil letters per second; K0467 first ran 48.9 s.
+- Keep scripts to what fits 35–45 s, but plan Gemini at about 8 Tamil letters per second, not 11 (K0467 ran 48.9 s; K0785 and K1100 lines read about 1.5x longer than estimated). Keep short spoken lines under about 25 letters, and retime script.json to the real voice lengths before writing clip prompts: a clip's length is its line's slot plus 1 s, so one overlong line can push a 4 s clip to 8 s.
 
 Voice and sync
 - Make the voice before the clips and put the exact spoken line, in quotes, in each clip prompt. K0467 clips were made silent and again against the wrong audio, and lip sync forced a full remake.
