@@ -1,14 +1,16 @@
 episode: K1100
 kural: 1100
-status: draft_built_awaiting_gate_4
+status: final_ready_not_posted
 flow_account: Revathi Satheesh (revathisatheesh2604@gmail.com), chosen by Ananya 2026-11-09
 flow_project: https://flow.google.com/u/2/project/5b659660-6343-4f3c-a6cd-14151e60c0da
 gates:
   script: 2026-11-09
   shots: 2026-11-09
   clips: 2026-11-09
-  draft: null
+  draft: 2026-11-09
 credits:
   planned: 74
   used: 74
   remakes: []
+final: render/K1100_final.mp4
+publish_pack: publish/K1100_post.md
